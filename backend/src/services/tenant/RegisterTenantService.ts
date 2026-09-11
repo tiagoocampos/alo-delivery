@@ -9,6 +9,17 @@ interface RegisterTenantInput {
     password: string;
 }
 
+// O slug é a chave pública da loja (/store/:slug/menu), então precisa sair
+// sem acento, sem espaço e sem caractere especial.
+function slugify(value: string) {
+    return value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
 class RegisterTenantService {
     async execute({ storeName, ownerName, email, password }: RegisterTenantInput) {
         const existingUser = await prismaClient.user.findUnique({
@@ -22,10 +33,21 @@ class RegisterTenantService {
         const passwordHash = await bcrypt.hash(password, 10);
 
         const { tenant, user } = await prismaClient.$transaction(async (tx) => {
+            // Duas lanchonetes podem ter o mesmo nome; o slug é unique, então
+            // desempatamos com sufixo numérico em vez de estourar o constraint.
+            const baseSlug = slugify(storeName) || "loja";
+            let slug = baseSlug;
+            let suffix = 1;
+
+            while (await tx.tenant.findUnique({ where: { slug }, select: { id: true } })) {
+                suffix += 1;
+                slug = `${baseSlug}-${suffix}`;
+            }
+
             const tenant = await tx.tenant.create({
                 data: {
                     name: storeName,
-                    slug: storeName.toLowerCase().replace(/\s+/g, "-"),
+                    slug,
                 },
             });
 

@@ -1,11 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
-import { UserAlreadyExistsError } from '../errors/tenant/TenantErrors.js';
-import { PasswordNotMatchError, UserNotFoundError } from '../errors/user/UserErrors.js';
-import { InvalidToken } from '../errors/InvalidToken.js';
-
-
-
+import { MulterError } from 'multer';
+import { AppError } from '../errors/AppError.js';
 
 export const errorHandler = (
     error: Error,
@@ -23,27 +19,22 @@ export const errorHandler = (
         });
     }
 
-    if (error instanceof UserAlreadyExistsError) {
-        return res.status((error as any).statusCode).json({
-            error: error.message,
-
+    if (error instanceof MulterError) {
+        return res.status(400).json({
+            error: error.code === "LIMIT_FILE_SIZE"
+                ? "A imagem deve ter no máximo 5MB"
+                : "Erro no envio do arquivo",
         });
     }
-    if (error instanceof UserNotFoundError) {
-        return res.status((error as any).statusCode).json({
-            error: error.message
-        })
-    }
-    if (error instanceof PasswordNotMatchError) {
-        return res.status((error as any).statusCode).json({
-            error: error.message
-        })
+
+    // Todo erro de domínio (UserNotFoundError, TenantNotFoundError, OrderNotFoundError...)
+    // estende AppError e carrega o próprio statusCode.
+    if (error instanceof AppError) {
+        return res.status(error.statusCode).json({
+            error: error.message,
+        });
     }
 
-    if (error instanceof InvalidToken) {
-        return res.status((error as any).statusCode).json({
-            error: error.message
-        })
-    }
+    console.error(error);
     return res.status(500).json({ error: "Erro interno" });
 };

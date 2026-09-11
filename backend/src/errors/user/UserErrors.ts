@@ -1,20 +1,17 @@
+import { AppError } from "../AppError.js";
 
-export class UserNotFoundError extends Error {
-    public statusCode: number;
+export class UserNotFoundError extends AppError {
     constructor() {
-        super("Usuário não encontrado");
+        super("Usuário não encontrado", 404);
         this.name = "UserNotFoundError";
-        this.statusCode = 404;
         Object.setPrototypeOf(this, UserNotFoundError.prototype);
     }
 }
 
-export class PasswordNotMatchError extends Error {
-    public statusCode: number;
+export class PasswordNotMatchError extends AppError {
     constructor() {
-        super("Senha incorreta");
+        super("Senha incorreta", 401);
         this.name = "PasswordNotMatchError";
-        this.statusCode = 401;
         Object.setPrototypeOf(this, PasswordNotMatchError.prototype);
     }
 }

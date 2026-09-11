@@ -1,7 +1,8 @@
-export class InvalidToken extends Error {
-    public statusCode: number = 401
+import { AppError } from "./AppError.js";
+
+export class InvalidToken extends AppError {
     constructor() {
-        super("Token inválido");
+        super("Token inválido", 401);
         this.name = "InvalidToken";
         Object.setPrototypeOf(this, InvalidToken.prototype);
     }

@@ -10,4 +10,16 @@ export const tenantSchema =
         })
     })
 
+export const getTenantSchema =
+    z.object({
+        params: z.object({
+            slug: z.string().min(1, { message: "A loja é obrigatória" }),
+        })
+    })
 
+export const getStoreMenuSchema =
+    z.object({
+        params: z.object({
+            slug: z.string().min(1, { message: "A loja é obrigatória" }),
+        })
+    })
