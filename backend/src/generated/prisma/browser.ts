@@ -57,3 +57,13 @@ export type OrderItem = Prisma.OrderItemModel
  * 
  */
 export type LoyaltyPoint = Prisma.LoyaltyPointModel
+/**
+ * Model Customer
+ * 
+ */
+export type Customer = Prisma.CustomerModel
+/**
+ * Model Address
+ * 
+ */
+export type Address = Prisma.AddressModel

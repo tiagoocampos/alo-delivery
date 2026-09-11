@@ -13,7 +13,8 @@ class CreateOrderController {
             customerPhone,
             address,
             paymentMethod,
-            items
+            items,
+            customerAuth: req.customerAuth
         });
 
         return res.status(201).json(order);

@@ -1,6 +1,7 @@
 import { TenantInactiveError, TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
 import { ProductUnavailableError } from "../../errors/order/OrderErrors.js";
 import { ProductVariantNotFoundError } from "../../errors/product/ProductErrors.js";
+import { CustomerTenantMismatchError } from "../../errors/customer/CustomerErrors.js";
 import prismaClient from "../../prisma/index.js";
 import type { PaymentMethod } from "../../generated/prisma/enums.js";
 
@@ -18,6 +19,7 @@ interface CreateOrderServiceProps {
     address: string;
     paymentMethod: PaymentMethod;
     items: CreateOrderItemInput[];
+    customerAuth?: { customerId: string; tenantId: string } | undefined;
 }
 
 class CreateOrderService {
@@ -27,7 +29,8 @@ class CreateOrderService {
         customerPhone,
         address,
         paymentMethod,
-        items
+        items,
+        customerAuth
     }: CreateOrderServiceProps) {
 
         const tenant = await prismaClient.tenant.findUnique({
@@ -47,6 +50,13 @@ class CreateOrderService {
 
         if (!tenant.isActive) {
             throw new TenantInactiveError();
+        }
+
+        // Pedido público aceita tanto convidado (sem customerAuth) quanto
+        // cliente logado — mas nunca vincula o pedido a um cliente de outro
+        // tenant, mesmo que o token seja válido.
+        if (customerAuth && customerAuth.tenantId !== tenant.id) {
+            throw new CustomerTenantMismatchError();
         }
 
         // O preço nunca vem do cliente: buscamos os produtos ativos da loja e
@@ -110,6 +120,7 @@ class CreateOrderService {
         const order = await prismaClient.order.create({
             data: {
                 tenantId: tenant.id,
+                customerId: customerAuth?.customerId ?? null,
                 customerName,
                 customerPhone,
                 address,
@@ -124,6 +135,7 @@ class CreateOrderService {
             select: {
                 id: true,
                 tenantId: true,
+                customerId: true,
                 customerName: true,
                 customerPhone: true,
                 address: true,

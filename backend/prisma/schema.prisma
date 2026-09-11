@@ -49,6 +49,7 @@ model Tenant {
   products       Product[]
   orders         Order[]
   loyaltyPoints  LoyaltyPoint[]
+  customers      Customer[]
 
   @@map("tenants")
 }
@@ -142,6 +143,7 @@ model ProductVariant {
 model Order {
   id             String        @id @default(uuid())
   tenantId       String        @map("tenant_id")
+  customerId     String?       @map("customer_id")
   customerName   String        @map("customer_name")
   customerPhone  String        @map("customer_phone")
   address        String
@@ -153,8 +155,9 @@ model Order {
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
 
-  tenant Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  items  OrderItem[]
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer Customer? @relation(fields: [customerId], references: [id])
+  items    OrderItem[]
 
   @@index([tenantId])
   @@index([tenantId, status])
@@ -198,4 +201,50 @@ model LoyaltyPoint {
   @@unique([tenantId, customerPhone])
   @@index([tenantId])
   @@map("loyalty_points")
+}
+
+// =========================================================
+// CUSTOMER — conta opcional do cliente final (login não é obrigatório
+// para pedir; quem não cria conta continua pedindo como convidado).
+// Conta por loja, igual ao LoyaltyPoint: a mesma pessoa cria uma
+// conta separada em cada tenant, não existe conta global da plataforma.
+// =========================================================
+
+model Customer {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  name         String
+  phone        String
+  email        String?
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  addresses Address[]
+  orders    Order[]
+
+  @@unique([tenantId, phone])
+  @@index([tenantId])
+  @@map("customers")
+}
+
+// =========================================================
+// ADDRESS — endereços salvos na conta do cliente final
+// =========================================================
+
+model Address {
+  id           String  @id @default(uuid())
+  customerId   String  @map("customer_id")
+  label        String? // "Casa", "Trabalho"
+  street       String
+  number       String
+  complement   String?
+  neighborhood String?
+  city         String?
+  isDefault    Boolean @default(false) @map("is_default")
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@index([customerId])
+  @@map("addresses")
 }

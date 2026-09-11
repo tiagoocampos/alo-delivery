@@ -31,6 +31,7 @@ class LoginTenantService {
             email: user.email,
             role: user.role,
             tenantId: user.tenantId,
+            type: "store_user",
         }, process.env.JWT_SECRET as string, {
             subject: user.id,
             expiresIn: "1d"

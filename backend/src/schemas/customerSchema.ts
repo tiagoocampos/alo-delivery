@@ -1,0 +1,77 @@
+import { z } from "zod";
+
+const slugParam = z.object({
+    slug: z.string().min(1, { message: "A loja é obrigatória" }),
+});
+
+export const registerCustomerSchema =
+    z.object({
+        params: slugParam,
+        body: z.object({
+            name: z.string().min(1, { message: "O nome é obrigatório" }),
+            phone: z.string().min(8, { message: "Telefone inválido" }),
+            email: z.string().email({ message: "E-mail inválido" }).optional(),
+            password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres" }),
+        })
+    })
+
+export const loginCustomerSchema =
+    z.object({
+        params: slugParam,
+        body: z.object({
+            phone: z.string().min(8, { message: "Telefone inválido" }),
+            password: z.string().min(6, { message: "A senha deve ter pelo menos 6 caracteres" }),
+        })
+    })
+
+export const getCustomerMeSchema =
+    z.object({
+        params: slugParam
+    })
+
+export const listAddressesSchema =
+    z.object({
+        params: slugParam
+    })
+
+export const createAddressSchema =
+    z.object({
+        params: slugParam,
+        body: z.object({
+            label: z.string().optional(),
+            street: z.string().min(1, { message: "A rua é obrigatória" }),
+            number: z.string().min(1, { message: "O número é obrigatório" }),
+            complement: z.string().optional(),
+            neighborhood: z.string().optional(),
+            city: z.string().optional(),
+            isDefault: z.boolean().optional(),
+        })
+    })
+
+export const updateAddressSchema =
+    z.object({
+        params: slugParam.extend({
+            id: z.string().uuid({ message: "Endereço inválido" }),
+        }),
+        body: z.object({
+            label: z.string().optional(),
+            street: z.string().min(1, { message: "A rua é obrigatória" }).optional(),
+            number: z.string().min(1, { message: "O número é obrigatório" }).optional(),
+            complement: z.string().optional(),
+            neighborhood: z.string().optional(),
+            city: z.string().optional(),
+            isDefault: z.boolean().optional(),
+        })
+    })
+
+export const deleteAddressSchema =
+    z.object({
+        params: slugParam.extend({
+            id: z.string().uuid({ message: "Endereço inválido" }),
+        })
+    })
+
+export const listCustomerOrdersSchema =
+    z.object({
+        params: slugParam
+    })

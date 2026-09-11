@@ -6,6 +6,8 @@ import { validateSchema } from "./middlewares/ValidateSchema.js";
 import { authenticate } from "./middlewares/Authenticate.js";
 import { requireTenant } from "./middlewares/RequireTenant.js";
 import { authorize } from "./middlewares/Authorize.js";
+import { authenticateCustomer } from "./middlewares/AuthenticateCustomer.js";
+import { optionalAuthenticateCustomer } from "./middlewares/OptionalAuthenticateCustomer.js";
 import { authRateLimiter, publicOrderRateLimiter } from "./middlewares/RateLimit.js";
 
 import { RegisterTenantController } from "./controllers/tenant/RegisterTenantController.js";
@@ -24,6 +26,14 @@ import { ListOrdersController } from "./controllers/order/ListOrdersController.j
 import { GetOrderDetailController } from "./controllers/order/GetOrderDetailController.js";
 import { UpdateOrderStatusController } from "./controllers/order/UpdateOrderStatusController.js";
 import { GetLoyaltyPointsController } from "./controllers/loyalty/GetLoyaltyPointsController.js";
+import { RegisterCustomerController } from "./controllers/customer/RegisterCustomerController.js";
+import { LoginCustomerController } from "./controllers/customer/LoginCustomerController.js";
+import { GetCustomerMeController } from "./controllers/customer/GetCustomerMeController.js";
+import { ListAddressesController } from "./controllers/customer/ListAddressesController.js";
+import { CreateAddressController } from "./controllers/customer/CreateAddressController.js";
+import { UpdateAddressController } from "./controllers/customer/UpdateAddressController.js";
+import { DeleteAddressController } from "./controllers/customer/DeleteAddressController.js";
+import { ListCustomerOrdersController } from "./controllers/customer/ListCustomerOrdersController.js";
 
 import { tenantSchema, getTenantSchema, getStoreMenuSchema } from "./schemas/tenantSchema.js";
 import { loginSchema } from "./schemas/loginShema.js";
@@ -42,6 +52,16 @@ import {
     updateOrderStatusSchema
 } from "./schemas/orderSchema.js";
 import { getLoyaltyPointsSchema } from "./schemas/loyaltySchema.js";
+import {
+    registerCustomerSchema,
+    loginCustomerSchema,
+    getCustomerMeSchema,
+    listAddressesSchema,
+    createAddressSchema,
+    updateAddressSchema,
+    deleteAddressSchema,
+    listCustomerOrdersSchema
+} from "./schemas/customerSchema.js";
 
 const router = Router();
 const upload = multer(uploadConfig);
@@ -57,8 +77,25 @@ router.post("/login", authRateLimiter, validateSchema(loginSchema), new LoginTen
  * ------------------------------------------------------------------------ */
 router.get("/tenant/:slug", validateSchema(getTenantSchema), new GetTenantController().handle);
 router.get("/store/:slug/menu", validateSchema(getStoreMenuSchema), new GetStoreMenuController().handle);
-router.post("/store/:slug/orders", publicOrderRateLimiter, validateSchema(createOrderSchema), new CreateOrderController().handle);
+router.post("/store/:slug/orders", publicOrderRateLimiter, optionalAuthenticateCustomer, validateSchema(createOrderSchema), new CreateOrderController().handle);
 router.get("/store/:slug/loyalty", validateSchema(getLoyaltyPointsSchema), new GetLoyaltyPointsController().handle);
+
+/* ---------------------------------------------------------------------------
+ * Conta do cliente final — login opcional. Convidado continua pedindo sem
+ * conta; quem quiser pode se cadastrar e logar para salvar endereço e ver
+ * "Meus Pedidos". Tenant sempre resolvido pelo slug da URL.
+ * ------------------------------------------------------------------------ */
+router.post("/store/:slug/customer/register", authRateLimiter, validateSchema(registerCustomerSchema), new RegisterCustomerController().handle);
+router.post("/store/:slug/customer/login", authRateLimiter, validateSchema(loginCustomerSchema), new LoginCustomerController().handle);
+
+router.get("/store/:slug/customer/me", authenticateCustomer, validateSchema(getCustomerMeSchema), new GetCustomerMeController().handle);
+
+router.get("/store/:slug/customer/addresses", authenticateCustomer, validateSchema(listAddressesSchema), new ListAddressesController().handle);
+router.post("/store/:slug/customer/addresses", authenticateCustomer, validateSchema(createAddressSchema), new CreateAddressController().handle);
+router.put("/store/:slug/customer/addresses/:id", authenticateCustomer, validateSchema(updateAddressSchema), new UpdateAddressController().handle);
+router.delete("/store/:slug/customer/addresses/:id", authenticateCustomer, validateSchema(deleteAddressSchema), new DeleteAddressController().handle);
+
+router.get("/store/:slug/customer/orders", authenticateCustomer, validateSchema(listCustomerOrdersSchema), new ListCustomerOrdersController().handle);
 
 /* ---------------------------------------------------------------------------
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request

@@ -9,5 +9,9 @@ declare module 'express-serve-static-core' {
             tenantId: string | null;
             role: Role;
         };
+        customerAuth?: {
+            customerId: string;
+            tenantId: string;
+        };
     }
 }
