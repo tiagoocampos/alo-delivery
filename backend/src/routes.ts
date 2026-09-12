@@ -13,6 +13,7 @@ import { authRateLimiter, publicOrderRateLimiter } from "./middlewares/RateLimit
 import { RegisterTenantController } from "./controllers/tenant/RegisterTenantController.js";
 import { LoginTenantController } from "./controllers/tenant/LoginTenantController.js";
 import { GetTenantController } from "./controllers/tenant/GetTenantController.js";
+import { GetMyTenantController } from "./controllers/tenant/GetMyTenantController.js";
 import { GetStoreMenuController } from "./controllers/tenant/GetStoreMenuController.js";
 import { CreateCategoryController } from "./controllers/category/CreateCategoryController.js";
 import { ListCategoriesController } from "./controllers/category/ListCategoriesController.js";
@@ -37,7 +38,7 @@ import { ListCustomerOrdersController } from "./controllers/customer/ListCustome
 
 import { tenantSchema, getTenantSchema, getStoreMenuSchema } from "./schemas/tenantSchema.js";
 import { loginSchema } from "./schemas/loginShema.js";
-import { createCategorySchema } from "./schemas/categorySchema.js";
+import { createCategorySchema, updateCategorySchema, deleteCategorySchema } from "./schemas/categorySchema.js";
 import {
     createProductSchema,
     listProductsSchema,
@@ -62,6 +63,8 @@ import {
     deleteAddressSchema,
     listCustomerOrdersSchema
 } from "./schemas/customerSchema.js";
+import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController.js";
+import { UpdateCategoryController } from "./controllers/category/UpdateCategoryController.js";
 
 const router = Router();
 const upload = multer(uploadConfig);
@@ -71,6 +74,11 @@ const upload = multer(uploadConfig);
  * ------------------------------------------------------------------------ */
 router.post("/register", authRateLimiter, validateSchema(tenantSchema), new RegisterTenantController().handle);
 router.post("/login", authRateLimiter, validateSchema(loginSchema), new LoginTenantController().handle);
+
+/* ---------------------------------------------------------------------------
+ * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request
+ * ------------------------------------------------------------------------ */
+router.get("/tenant/me", authenticate, requireTenant, new GetMyTenantController().handle);
 
 /* ---------------------------------------------------------------------------
  * Rotas públicas da loja (cliente final, sem login) — identificadas pelo slug
@@ -102,6 +110,8 @@ router.get("/store/:slug/customer/orders", authenticateCustomer, validateSchema(
  * ------------------------------------------------------------------------ */
 router.post("/categories", authenticate, requireTenant, authorize("store_owner"), validateSchema(createCategorySchema), new CreateCategoryController().handle);
 router.get("/categories", authenticate, requireTenant, new ListCategoriesController().handle);
+router.put("/categories/:categoryId", authenticate, requireTenant, authorize("store_owner"), validateSchema(updateCategorySchema), new UpdateCategoryController().handle);
+router.delete("/categories/:categoryId", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteCategorySchema), new DeleteCategoryController().handle);
 
 router.post("/products", authenticate, requireTenant, authorize("store_owner"), upload.single("file"), validateSchema(createProductSchema), new CreateProductController().handle);
 router.get("/products", authenticate, requireTenant, validateSchema(listProductsSchema), new ListProductsController().handle);
