@@ -14,6 +14,7 @@ import { RegisterTenantController } from "./controllers/tenant/RegisterTenantCon
 import { LoginTenantController } from "./controllers/tenant/LoginTenantController.js";
 import { GetTenantController } from "./controllers/tenant/GetTenantController.js";
 import { GetMyTenantController } from "./controllers/tenant/GetMyTenantController.js";
+import { UpdateMyTenantController } from "./controllers/tenant/UpdateMyTenantController.js";
 import { GetStoreMenuController } from "./controllers/tenant/GetStoreMenuController.js";
 import { CreateCategoryController } from "./controllers/category/CreateCategoryController.js";
 import { ListCategoriesController } from "./controllers/category/ListCategoriesController.js";
@@ -36,7 +37,7 @@ import { UpdateAddressController } from "./controllers/customer/UpdateAddressCon
 import { DeleteAddressController } from "./controllers/customer/DeleteAddressController.js";
 import { ListCustomerOrdersController } from "./controllers/customer/ListCustomerOrdersController.js";
 
-import { tenantSchema, getTenantSchema, getStoreMenuSchema } from "./schemas/tenantSchema.js";
+import { tenantSchema, getTenantSchema, getStoreMenuSchema, updateMyTenantSchema } from "./schemas/tenantSchema.js";
 import { loginSchema } from "./schemas/loginShema.js";
 import { createCategorySchema, updateCategorySchema, deleteCategorySchema } from "./schemas/categorySchema.js";
 import {
@@ -79,6 +80,7 @@ router.post("/login", authRateLimiter, validateSchema(loginSchema), new LoginTen
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request
  * ------------------------------------------------------------------------ */
 router.get("/tenant/me", authenticate, requireTenant, new GetMyTenantController().handle);
+router.put("/tenant/me", authenticate, requireTenant, authorize("store_owner"), validateSchema(updateMyTenantSchema), new UpdateMyTenantController().handle);
 
 /* ---------------------------------------------------------------------------
  * Rotas públicas da loja (cliente final, sem login) — identificadas pelo slug

@@ -23,3 +23,17 @@ export const getStoreMenuSchema =
             slug: z.string().min(1, { message: "A loja é obrigatória" }),
         })
     })
+
+export const updateMyTenantSchema =
+    z.object({
+        body: z.object({
+            name: z.string().min(1, { message: "O nome da loja é obrigatório" }).optional(),
+            slug: z.string()
+                .min(1, { message: "O identificador da loja é obrigatório" })
+                .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, { message: "Use apenas letras minúsculas, números e hífens" })
+                .optional(),
+            phone: z.string().min(1, { message: "Telefone inválido" }).optional(),
+            deliveryFee: z.number().int().min(0, { message: "A taxa de entrega deve ser um inteiro não negativo" }).optional(),
+            isActive: z.boolean().optional(),
+        })
+    })

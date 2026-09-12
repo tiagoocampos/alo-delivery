@@ -23,3 +23,11 @@ export class TenantInactiveError extends AppError {
         Object.setPrototypeOf(this, TenantInactiveError.prototype);
     }
 }
+
+export class TenantSlugAlreadyInUseError extends AppError {
+    constructor() {
+        super("Este identificador de loja já está em uso", 400);
+        this.name = "TenantSlugAlreadyInUseError";
+        Object.setPrototypeOf(this, TenantSlugAlreadyInUseError.prototype);
+    }
+}
