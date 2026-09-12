@@ -15,3 +15,19 @@ export class CategoryHasProductsError extends AppError {
         Object.setPrototypeOf(this, CategoryHasProductsError.prototype);
     }
 }
+
+export class CategorySizeNotFoundError extends AppError {
+    constructor() {
+        super("Tamanho não encontrado para esta categoria", 404);
+        this.name = "CategorySizeNotFoundError";
+        Object.setPrototypeOf(this, CategorySizeNotFoundError.prototype);
+    }
+}
+
+export class CategoryCrustNotFoundError extends AppError {
+    constructor() {
+        super("Borda não encontrada para esta categoria", 404);
+        this.name = "CategoryCrustNotFoundError";
+        Object.setPrototypeOf(this, CategoryCrustNotFoundError.prototype);
+    }
+}

@@ -5,6 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
 import { formatCents } from "@/lib/money"
 import { getOrderStatusLabel } from "@/lib/orderStatus"
+import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
 import { listCustomerOrders } from "@/services/customer"
 import type { CustomerOrder } from "@/types"
 
@@ -69,10 +70,10 @@ export function OrdersSheet({ open, onOpenChange, slug }: OrdersSheetProps) {
                 <div className="flex flex-col gap-0.5">
                   {order.items.map((item) => (
                     <span key={item.id} className="text-xs text-muted-foreground">
-                      {item.quantity}x {item.product.name}
+                      {item.quantity}x {formatOrderItemTitle(item)}
                       {item.variant && ` · ${item.variant.name}`}
-                      {item.selectedFlavors && item.selectedFlavors.length > 0 && ` · ${item.selectedFlavors.join(", ")}`}
-                      {item.crust && ` · Borda: ${item.crust.name}`}
+                      {item.flavors.length > 0 && ` · ${item.flavors.map((f) => f.productName).join(", ")}`}
+                      {item.categoryCrust && ` · Borda: ${item.categoryCrust.name}`}
                     </span>
                   ))}
                 </div>

@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 import { CategoryNotFoundError } from "../../errors/category/CategoryErrors.js";
-import { ImageUploadError, ProductNotFoundError } from "../../errors/product/ProductErrors.js";
+import { ImageUploadError, ProductNotFoundError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 import cloudinary from "../../config/cloudinary.js";
 import type { ProductBadge } from "../../generated/prisma/enums.js";
@@ -43,17 +43,33 @@ class UpdateProductService {
             throw new ProductNotFoundError();
         }
 
-        if (categoryId) {
-            const categoryExists = await prismaClient.category.findFirst({
-                where: {
-                    id: categoryId,
-                    tenantId
-                }
-            });
+        // Categoria "efetiva" após o update: a nova, se estiver sendo trocada,
+        // senão a que o produto já tem.
+        const effectiveCategoryId = categoryId ?? product.categoryId;
 
-            if (!categoryExists) {
-                throw new CategoryNotFoundError();
+        const effectiveCategory = await prismaClient.category.findFirst({
+            where: {
+                id: effectiveCategoryId,
+                tenantId
+            },
+            select: {
+                id: true,
+                _count: {
+                    select: { sizes: true }
+                }
             }
+        });
+
+        if (!effectiveCategory) {
+            throw new CategoryNotFoundError();
+        }
+
+        // Categoria com tamanho: o produto é um "sabor", sem preço próprio.
+        // Categoria sem tamanho: preço final (novo valor, ou o já salvo) precisa existir.
+        const categoryHasSizes = effectiveCategory._count.sizes > 0;
+        const effectiveBasePrice = basePrice === undefined ? product.basePrice : basePrice;
+        if (!categoryHasSizes && (effectiveBasePrice === undefined || effectiveBasePrice === null)) {
+            throw new ProductPriceRequiredError();
         }
 
         let imageUrl: string | undefined;

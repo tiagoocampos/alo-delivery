@@ -1,6 +1,7 @@
 import { TenantInactiveError, TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
 import {
-    InvalidCrustError,
+    InvalidCategoryCrustError,
+    InvalidCategorySizeError,
     InvalidFlavorSelectionError,
     OrderBelowMinimumError,
     ProductUnavailableError
@@ -10,14 +11,22 @@ import { CustomerTenantMismatchError } from "../../errors/customer/CustomerError
 import prismaClient from "../../prisma/index.js";
 import type { PaymentMethod } from "../../generated/prisma/enums.js";
 
-interface CreateOrderItemInput {
+interface NormalOrderItemInput {
     productId: string;
     variantId?: string | undefined;
-    flavorIds?: string[] | undefined;
-    crustId?: string | undefined;
     quantity: number;
     note?: string | undefined;
 }
+
+interface SizeOrderItemInput {
+    categorySizeId: string;
+    flavorProductIds: string[];
+    categoryCrustId?: string | undefined;
+    quantity: number;
+    note?: string | undefined;
+}
+
+type CreateOrderItemInput = NormalOrderItemInput | SizeOrderItemInput;
 
 interface CreateOrderServiceProps {
     slug: string;
@@ -67,13 +76,19 @@ class CreateOrderService {
             throw new CustomerTenantMismatchError();
         }
 
-        // O preço nunca vem do cliente: buscamos os produtos ativos da loja e
-        // recalculamos tudo aqui.
-        const productIds = [...new Set(items.map(item => item.productId))];
+        const normalItems = items.filter((item): item is NormalOrderItemInput => "productId" in item);
+        const sizeItems = items.filter((item): item is SizeOrderItemInput => "categorySizeId" in item);
+
+        // O preço nunca vem do cliente: buscamos tudo que os itens referenciam
+        // (produtos, tamanhos, sabores, bordas) e recalculamos aqui.
+        const normalProductIds = [...new Set(normalItems.map(item => item.productId))];
+        const categorySizeIds = [...new Set(sizeItems.map(item => item.categorySizeId))];
+        const flavorProductIds = [...new Set(sizeItems.flatMap(item => item.flavorProductIds))];
+        const categoryCrustIds = [...new Set(sizeItems.flatMap(item => item.categoryCrustId ? [item.categoryCrustId] : []))];
 
         const products = await prismaClient.product.findMany({
             where: {
-                id: { in: productIds },
+                id: { in: normalProductIds },
                 tenantId: tenant.id,
                 isActive: true
             },
@@ -83,93 +98,148 @@ class CreateOrderService {
                 variants: {
                     select: {
                         id: true,
-                        priceDelta: true,
-                        maxFlavors: true
-                    }
-                },
-                flavors: {
-                    select: {
-                        id: true,
-                        name: true
-                    }
-                },
-                crusts: {
-                    select: {
-                        id: true,
                         priceDelta: true
                     }
                 }
             }
         });
 
+        const categorySizes = await prismaClient.categorySize.findMany({
+            where: {
+                id: { in: categorySizeIds }
+            },
+            select: {
+                id: true,
+                price: true,
+                maxFlavors: true,
+                categoryId: true,
+                category: {
+                    select: {
+                        tenantId: true,
+                        name: true
+                    }
+                }
+            }
+        });
+
+        const flavorProducts = await prismaClient.product.findMany({
+            where: {
+                id: { in: flavorProductIds },
+                isActive: true
+            },
+            select: {
+                id: true,
+                name: true,
+                categoryId: true
+            }
+        });
+
+        const categoryCrusts = await prismaClient.categoryCrust.findMany({
+            where: {
+                id: { in: categoryCrustIds }
+            },
+            select: {
+                id: true,
+                priceDelta: true,
+                categoryId: true
+            }
+        });
+
         const productsById = new Map(products.map(product => [product.id, product]));
+        const categorySizesById = new Map(categorySizes.map(size => [size.id, size]));
+        const flavorProductsById = new Map(flavorProducts.map(product => [product.id, product]));
+        const categoryCrustsById = new Map(categoryCrusts.map(crust => [crust.id, crust]));
 
         let subtotal = 0;
-        const orderItems = items.map(item => {
-            const product = productsById.get(item.productId);
 
-            if (!product) {
-                throw new ProductUnavailableError(item.productId);
-            }
+        const orderItemsData = items.map(item => {
+            if ("productId" in item) {
+                const product = productsById.get(item.productId);
 
-            let variant: (typeof product.variants)[number] | undefined;
-            if (item.variantId) {
-                variant = product.variants.find(v => v.id === item.variantId);
-
-                if (!variant) {
-                    throw new ProductVariantNotFoundError();
-                }
-            }
-
-            let selectedFlavorNames: string[] | undefined;
-            if (product.flavors.length > 0) {
-                if (!variant || variant.maxFlavors === null) {
-                    throw new InvalidFlavorSelectionError("Selecione um tamanho válido para este produto");
+                if (!product) {
+                    throw new ProductUnavailableError(item.productId);
                 }
 
-                const flavorIds = item.flavorIds ?? [];
-
-                if (flavorIds.length < 1 || flavorIds.length > variant.maxFlavors) {
-                    throw new InvalidFlavorSelectionError(
-                        variant.maxFlavors === 1
-                            ? "Esse tamanho permite escolher 1 sabor"
-                            : `Esse tamanho permite no máximo ${variant.maxFlavors} sabores`
-                    );
+                // Um "sabor" (sem preço próprio) não pode ser pedido diretamente
+                // como item normal — só faz sentido dentro do formato tamanho+sabores.
+                if (product.basePrice === null) {
+                    throw new ProductUnavailableError(item.productId);
                 }
 
-                const flavorsById = new Map(product.flavors.map(flavor => [flavor.id, flavor]));
+                let priceDelta = 0;
+                if (item.variantId) {
+                    const variant = product.variants.find(v => v.id === item.variantId);
 
-                selectedFlavorNames = flavorIds.map(flavorId => {
-                    const flavor = flavorsById.get(flavorId);
-
-                    if (!flavor) {
-                        throw new InvalidFlavorSelectionError("Sabor inválido para este produto");
+                    if (!variant) {
+                        throw new ProductVariantNotFoundError();
                     }
 
-                    return flavor.name;
-                });
-            }
-
-            let crust: (typeof product.crusts)[number] | undefined;
-            if (item.crustId) {
-                crust = product.crusts.find(c => c.id === item.crustId);
-
-                if (!crust) {
-                    throw new InvalidCrustError();
+                    priceDelta = variant.priceDelta;
                 }
+
+                const unitPrice = product.basePrice + priceDelta;
+                subtotal += unitPrice * item.quantity;
+
+                return {
+                    productId: product.id,
+                    variantId: item.variantId ?? null,
+                    categorySizeId: null,
+                    categoryCrustId: null,
+                    quantity: item.quantity,
+                    unitPrice,
+                    note: item.note ?? null
+                };
             }
 
-            const unitPrice = product.basePrice + (variant?.priceDelta ?? 0) + (crust?.priceDelta ?? 0);
+            const categorySize = categorySizesById.get(item.categorySizeId);
+
+            if (!categorySize || categorySize.category.tenantId !== tenant.id) {
+                throw new InvalidCategorySizeError();
+            }
+
+            if (item.flavorProductIds.length < 1 || item.flavorProductIds.length > categorySize.maxFlavors) {
+                throw new InvalidFlavorSelectionError(
+                    categorySize.maxFlavors === 1
+                        ? "Esse tamanho permite escolher 1 sabor"
+                        : `Esse tamanho permite no máximo ${categorySize.maxFlavors} sabores`
+                );
+            }
+
+            const flavors = item.flavorProductIds.map(flavorProductId => {
+                const flavor = flavorProductsById.get(flavorProductId);
+
+                if (!flavor || flavor.categoryId !== categorySize.categoryId) {
+                    throw new InvalidFlavorSelectionError("Sabor inválido para este produto");
+                }
+
+                return { productId: flavor.id, productName: flavor.name };
+            });
+
+            let crust: { id: string; priceDelta: number } | undefined;
+            if (item.categoryCrustId) {
+                const found = categoryCrustsById.get(item.categoryCrustId);
+
+                if (!found || found.categoryId !== categorySize.categoryId) {
+                    throw new InvalidCategoryCrustError();
+                }
+
+                crust = found;
+            }
+
+            const unitPrice = categorySize.price + (crust?.priceDelta ?? 0);
             subtotal += unitPrice * item.quantity;
 
             return {
-                productId: product.id,
-                variantId: item.variantId ?? null,
-                crustId: item.crustId ?? null,
+                productId: null,
+                variantId: null,
+                categorySizeId: categorySize.id,
+                categoryCrustId: crust?.id ?? null,
                 quantity: item.quantity,
                 unitPrice,
                 note: item.note ?? null,
-                ...(selectedFlavorNames ? { selectedFlavors: selectedFlavorNames } : {})
+                flavors: {
+                    create: flavors
+                }
             };
         });
 
@@ -192,7 +262,7 @@ class CreateOrderService {
                 deliveryFee,
                 total,
                 items: {
-                    create: orderItems
+                    create: orderItemsData
                 }
             },
             select: {
@@ -214,7 +284,6 @@ class CreateOrderService {
                         quantity: true,
                         unitPrice: true,
                         note: true,
-                        selectedFlavors: true,
                         product: {
                             select: {
                                 id: true,
@@ -227,10 +296,28 @@ class CreateOrderService {
                                 name: true
                             }
                         },
-                        crust: {
+                        categorySize: {
+                            select: {
+                                id: true,
+                                name: true,
+                                category: {
+                                    select: {
+                                        name: true
+                                    }
+                                }
+                            }
+                        },
+                        categoryCrust: {
                             select: {
                                 id: true,
                                 name: true
+                            }
+                        },
+                        flavors: {
+                            select: {
+                                id: true,
+                                productId: true,
+                                productName: true
                             }
                         }
                     }

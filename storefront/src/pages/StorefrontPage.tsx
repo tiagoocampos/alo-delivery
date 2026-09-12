@@ -6,6 +6,7 @@ import { SearchBar } from "@/components/SearchBar"
 import { CategoryList } from "@/components/CategoryList"
 import { ProductList } from "@/components/ProductList"
 import { ProductDetailScreen } from "@/components/ProductDetailScreen"
+import { CategoryOrderScreen } from "@/components/CategoryOrderScreen"
 import { CartBar } from "@/components/CartBar"
 import { CartSheet } from "@/components/CartSheet"
 import { StoreFooter } from "@/components/StoreFooter"
@@ -19,7 +20,7 @@ import { CartProvider } from "@/context/CartContext"
 import { CustomerAuthProvider } from "@/context/CustomerAuthContext"
 import { useCart } from "@/hooks/useCart"
 import { getStoreMenu } from "@/services/storefront"
-import type { Order, Product, StoreMenu } from "@/types"
+import type { Category, Order, Product, StoreMenu } from "@/types"
 
 function StorefrontContent({ slug }: { slug: string }) {
   const [menu, setMenu] = useState<StoreMenu | null>(null)
@@ -32,6 +33,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   const [selectedProduct, setSelectedProduct] = useState<{ product: Product; categoryName: string } | null>(
     null
   )
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
   const [navOpen, setNavOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [loyaltyOpen, setLoyaltyOpen] = useState(false)
@@ -83,27 +85,35 @@ function StorefrontContent({ slug }: { slug: string }) {
 
     return menu.categories
       .filter((category) => activeCategoryId === null || category.id === activeCategoryId)
-      .map((category) => ({
-        ...category,
-        products: category.products.filter((product) => {
-          if (!query) return true
-          return (
-            product.name.toLowerCase().includes(query) ||
-            (product.description ?? "").toLowerCase().includes(query)
-          )
-        }),
-      }))
-      .filter((category) => category.products.length > 0)
+      .map((category) => {
+        // Categorias com tamanho não têm produtos com preço próprio — o card
+        // de chamada aparece sempre, independente da busca por texto.
+        if (category.sizes.length > 0) return category
+
+        return {
+          ...category,
+          products: category.products.filter((product) => {
+            if (!query) return true
+            return (
+              product.name.toLowerCase().includes(query) ||
+              (product.description ?? "").toLowerCase().includes(query)
+            )
+          }),
+        }
+      })
+      .filter((category) => category.sizes.length > 0 || category.products.length > 0)
   }, [menu, activeCategoryId, search])
 
   const mostOrdered = useMemo(() => {
     if (!menu || search.trim() || activeCategoryId !== null) return []
 
-    return menu.categories.flatMap((category) =>
-      category.products
-        .filter((product) => product.badge === "mais_pedido")
-        .map((product) => ({ product, categoryName: category.name }))
-    )
+    return menu.categories
+      .filter((category) => category.sizes.length === 0)
+      .flatMap((category) =>
+        category.products
+          .filter((product) => product.badge === "mais_pedido")
+          .map((product) => ({ product, categoryName: category.name }))
+      )
   }, [menu, activeCategoryId, search])
 
   if (loading) {
@@ -162,6 +172,7 @@ function StorefrontContent({ slug }: { slug: string }) {
           categories={filteredCategories}
           mostOrdered={mostOrdered}
           onSelectProduct={(product, categoryName) => setSelectedProduct({ product, categoryName })}
+          onSelectCategory={setSelectedCategory}
         />
       </main>
 
@@ -174,6 +185,8 @@ function StorefrontContent({ slug }: { slug: string }) {
         categoryName={selectedProduct?.categoryName ?? ""}
         onClose={() => setSelectedProduct(null)}
       />
+
+      <CategoryOrderScreen category={selectedCategory} onClose={() => setSelectedCategory(null)} />
 
       <CartSheet
         open={cartOpen}

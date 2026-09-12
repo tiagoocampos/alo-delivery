@@ -2,18 +2,6 @@ export interface ProductVariant {
   id: string
   name: string
   priceDelta: number
-  maxFlavors: number | null
-}
-
-export interface ProductFlavor {
-  id: string
-  name: string
-}
-
-export interface ProductCrust {
-  id: string
-  name: string
-  priceDelta: number
 }
 
 export type ProductBadge = "mais_pedido" | "promocao" | "novo"
@@ -23,11 +11,22 @@ export interface Product {
   name: string
   description: string | null
   imageUrl: string | null
-  basePrice: number
+  basePrice: number | null
   badge: ProductBadge | null
   variants: ProductVariant[]
-  flavors: ProductFlavor[]
-  crusts: ProductCrust[]
+}
+
+export interface CategorySize {
+  id: string
+  name: string
+  price: number
+  maxFlavors: number
+}
+
+export interface CategoryCrust {
+  id: string
+  name: string
+  priceDelta: number
 }
 
 export interface Category {
@@ -35,6 +34,8 @@ export interface Category {
   name: string
   sortOrder: number
   products: Product[]
+  sizes: CategorySize[]
+  crusts: CategoryCrust[]
 }
 
 export interface BusinessHoursDay {
@@ -69,29 +70,37 @@ export type PaymentMethod = "pix_manual" | "na_entrega"
 
 export interface CartItem {
   key: string
-  productId: string
-  productName: string
+  productId?: string
+  productName?: string
   categoryName: string
   variantId?: string
   variantName?: string
-  flavorIds?: string[]
-  flavorNames?: string[]
-  crustId?: string
-  crustName?: string
+  categorySizeId?: string
+  categorySizeName?: string
+  categoryCrustId?: string
+  categoryCrustName?: string
+  flavorProductIds?: string[]
+  flavorProductNames?: string[]
   unitPrice: number
   quantity: number
   note?: string
   imageUrl: string | null
 }
 
-export interface CreateOrderItemInput {
-  productId: string
-  variantId?: string
-  flavorIds?: string[]
-  crustId?: string
-  quantity: number
-  note?: string
-}
+export type CreateOrderItemInput =
+  | {
+      productId: string
+      variantId?: string
+      quantity: number
+      note?: string
+    }
+  | {
+      categorySizeId: string
+      flavorProductIds: string[]
+      categoryCrustId?: string
+      quantity: number
+      note?: string
+    }
 
 export interface CreateOrderPayload {
   customerName: string
@@ -101,15 +110,22 @@ export interface CreateOrderPayload {
   items: CreateOrderItemInput[]
 }
 
+export interface OrderItemFlavorResult {
+  id: string
+  productId: string
+  productName: string
+}
+
 export interface OrderItemResult {
   id: string
   quantity: number
   unitPrice: number
   note: string | null
-  selectedFlavors: string[] | null
-  product: { id: string; name: string }
+  product: { id: string; name: string } | null
   variant: { id: string; name: string } | null
-  crust: { id: string; name: string } | null
+  categorySize: { id: string; name: string; category: { name: string } } | null
+  categoryCrust: { id: string; name: string } | null
+  flavors: OrderItemFlavorResult[]
 }
 
 export interface Order {

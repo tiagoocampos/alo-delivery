@@ -2,15 +2,17 @@ import { createContext, useMemo, useState, type ReactNode } from "react"
 import type { CartItem } from "@/types"
 
 interface AddItemInput {
-  productId: string
-  productName: string
+  productId?: string
+  productName?: string
   categoryName: string
   variantId?: string
   variantName?: string
-  flavorIds?: string[]
-  flavorNames?: string[]
-  crustId?: string
-  crustName?: string
+  categorySizeId?: string
+  categorySizeName?: string
+  categoryCrustId?: string
+  categoryCrustName?: string
+  flavorProductIds?: string[]
+  flavorProductNames?: string[]
   unitPrice: number
   quantity: number
   note?: string
@@ -27,11 +29,18 @@ interface CartContextValue {
   clear: () => void
 }
 
-function buildKey(productId: string, variantId?: string, flavorIds?: string[], crustId?: string) {
-  const variantPart = variantId ? `:${variantId}` : ""
-  const flavorsPart = flavorIds && flavorIds.length > 0 ? `:f(${[...flavorIds].sort().join(",")})` : ""
-  const crustPart = crustId ? `:c(${crustId})` : ""
-  return `${productId}${variantPart}${flavorsPart}${crustPart}`
+function buildKey(input: AddItemInput) {
+  if (input.categorySizeId) {
+    const flavorsPart =
+      input.flavorProductIds && input.flavorProductIds.length > 0
+        ? `:f(${[...input.flavorProductIds].sort().join(",")})`
+        : ""
+    const crustPart = input.categoryCrustId ? `:c(${input.categoryCrustId})` : ""
+    return `size:${input.categorySizeId}${flavorsPart}${crustPart}`
+  }
+
+  const variantPart = input.variantId ? `:${input.variantId}` : ""
+  return `${input.productId}${variantPart}`
 }
 
 export const CartContext = createContext<CartContextValue | null>(null)
@@ -40,7 +49,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
 
   const addItem = (input: AddItemInput) => {
-    const key = buildKey(input.productId, input.variantId, input.flavorIds, input.crustId)
+    const key = buildKey(input)
 
     setItems((current) => {
       const existing = current.find((item) => item.key === key)

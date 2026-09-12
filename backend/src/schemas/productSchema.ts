@@ -11,7 +11,7 @@ export const createProductSchema =
         body: z.object({
             name: z.string().min(1, { message: "O nome do produto é obrigatório" }),
             description: z.string().optional(),
-            basePrice: centsAsString,
+            basePrice: centsAsString.optional(),
             categoryId: z.string().uuid({ message: "Categoria inválida" }),
             badge: z.enum(["mais_pedido", "promocao", "novo"]).nullable().optional(),
         })
@@ -58,50 +58,5 @@ export const createProductVariantSchema =
                 .number()
                 .int({ message: "A diferença de preço deve ser um inteiro em centavos" })
                 .optional(),
-            maxFlavors: z
-                .number()
-                .int({ message: "O número máximo de sabores deve ser um inteiro" })
-                .positive({ message: "O número máximo de sabores deve ser maior que zero" })
-                .optional(),
-        })
-    })
-
-export const createProductFlavorSchema =
-    z.object({
-        params: z.object({
-            id: z.string().uuid({ message: "Produto inválido" }),
-        }),
-        body: z.object({
-            name: z.string().min(1, { message: "O nome do sabor é obrigatório" }),
-        })
-    })
-
-export const deleteProductFlavorSchema =
-    z.object({
-        params: z.object({
-            id: z.string().uuid({ message: "Produto inválido" }),
-            flavorId: z.string().uuid({ message: "Sabor inválido" }),
-        })
-    })
-
-export const createProductCrustSchema =
-    z.object({
-        params: z.object({
-            id: z.string().uuid({ message: "Produto inválido" }),
-        }),
-        body: z.object({
-            name: z.string().min(1, { message: "O nome da borda é obrigatório" }),
-            priceDelta: z
-                .number()
-                .int({ message: "A diferença de preço deve ser um inteiro em centavos" })
-                .optional(),
-        })
-    })
-
-export const deleteProductCrustSchema =
-    z.object({
-        params: z.object({
-            id: z.string().uuid({ message: "Produto inválido" }),
-            crustId: z.string().uuid({ message: "Borda inválida" }),
         })
     })

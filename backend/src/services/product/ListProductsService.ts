@@ -41,20 +41,6 @@ class ListProductsService {
                     select: {
                         id: true,
                         name: true,
-                        priceDelta: true,
-                        maxFlavors: true
-                    }
-                },
-                flavors: {
-                    select: {
-                        id: true,
-                        name: true
-                    }
-                },
-                crusts: {
-                    select: {
-                        id: true,
-                        name: true,
                         priceDelta: true
                     }
                 }

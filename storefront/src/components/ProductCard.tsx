@@ -37,7 +37,7 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
       productId: product.id,
       productName: product.name,
       categoryName,
-      unitPrice: product.basePrice,
+      unitPrice: product.basePrice ?? 0,
       quantity: 1,
       imageUrl: product.imageUrl,
     })
@@ -86,7 +86,7 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
         )}
         <span className="mt-0.5 text-sm font-semibold text-primary">
           {hasVariants ? "a partir de " : ""}
-          {formatCents(product.basePrice)}
+          {formatCents(product.basePrice ?? 0)}
         </span>
       </div>
     </div>

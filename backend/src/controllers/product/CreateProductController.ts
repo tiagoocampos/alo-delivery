@@ -15,7 +15,7 @@ class CreateProductController {
             tenantId: req.auth.tenantId!,
             name,
             description,
-            basePrice: parseInt(basePrice),
+            basePrice: basePrice === undefined || basePrice === "" ? undefined : parseInt(basePrice),
             categoryId,
             badge,
             imageBuffer: req.file.buffer,

@@ -52,6 +52,21 @@ class GetStoreMenuService {
                 id: true,
                 name: true,
                 sortOrder: true,
+                sizes: {
+                    select: {
+                        id: true,
+                        name: true,
+                        price: true,
+                        maxFlavors: true
+                    }
+                },
+                crusts: {
+                    select: {
+                        id: true,
+                        name: true,
+                        priceDelta: true
+                    }
+                },
                 products: {
                     where: {
                         isActive: true
@@ -67,20 +82,6 @@ class GetStoreMenuService {
                         basePrice: true,
                         badge: true,
                         variants: {
-                            select: {
-                                id: true,
-                                name: true,
-                                priceDelta: true,
-                                maxFlavors: true
-                            }
-                        },
-                        flavors: {
-                            select: {
-                                id: true,
-                                name: true
-                            }
-                        },
-                        crusts: {
                             select: {
                                 id: true,
                                 name: true,

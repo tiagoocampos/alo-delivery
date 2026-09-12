@@ -36,11 +36,19 @@ export class InvalidFlavorSelectionError extends AppError {
     }
 }
 
-export class InvalidCrustError extends AppError {
+export class InvalidCategoryCrustError extends AppError {
     constructor() {
-        super("Borda inválida para este produto", 400);
-        this.name = "InvalidCrustError";
-        Object.setPrototypeOf(this, InvalidCrustError.prototype);
+        super("Borda inválida para esta categoria", 400);
+        this.name = "InvalidCategoryCrustError";
+        Object.setPrototypeOf(this, InvalidCategoryCrustError.prototype);
+    }
+}
+
+export class InvalidCategorySizeError extends AppError {
+    constructor() {
+        super("Tamanho inválido para este pedido", 400);
+        this.name = "InvalidCategorySizeError";
+        Object.setPrototypeOf(this, InvalidCategorySizeError.prototype);
     }
 }
 

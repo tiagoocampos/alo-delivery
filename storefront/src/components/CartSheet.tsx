@@ -63,14 +63,22 @@ export function CartSheet({
     try {
       const order = await createOrder(slug, {
         ...values,
-        items: items.map((item) => ({
-          productId: item.productId,
-          variantId: item.variantId,
-          flavorIds: item.flavorIds,
-          crustId: item.crustId,
-          quantity: item.quantity,
-          note: item.note,
-        })),
+        items: items.map((item) =>
+          item.categorySizeId
+            ? {
+                categorySizeId: item.categorySizeId,
+                flavorProductIds: item.flavorProductIds ?? [],
+                categoryCrustId: item.categoryCrustId,
+                quantity: item.quantity,
+                note: item.note,
+              }
+            : {
+                productId: item.productId!,
+                variantId: item.variantId,
+                quantity: item.quantity,
+                note: item.note,
+              }
+        ),
       })
       clear()
       setStep("cart")
@@ -103,15 +111,17 @@ export function CartSheet({
                 items.map((item) => (
                   <div key={item.key} className="flex gap-3 rounded-xl border border-border p-3">
                     <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                      <span className="truncate text-sm font-medium">{item.productName}</span>
+                      <span className="truncate text-sm font-medium">
+                        {item.categorySizeId ? `${item.categoryName} ${item.categorySizeName}` : item.productName}
+                      </span>
                       {item.variantName && (
                         <span className="text-xs text-muted-foreground">{item.variantName}</span>
                       )}
-                      {item.flavorNames && item.flavorNames.length > 0 && (
-                        <span className="text-xs text-muted-foreground">{item.flavorNames.join(", ")}</span>
+                      {item.flavorProductNames && item.flavorProductNames.length > 0 && (
+                        <span className="text-xs text-muted-foreground">{item.flavorProductNames.join(", ")}</span>
                       )}
-                      {item.crustName && (
-                        <span className="text-xs text-muted-foreground">Borda: {item.crustName}</span>
+                      {item.categoryCrustName && (
+                        <span className="text-xs text-muted-foreground">Borda: {item.categoryCrustName}</span>
                       )}
                       {item.note && <span className="text-xs text-muted-foreground">Obs: {item.note}</span>}
                       <span className="text-sm font-semibold text-primary">

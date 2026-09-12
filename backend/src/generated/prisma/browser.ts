@@ -33,6 +33,16 @@ export type User = Prisma.UserModel
  */
 export type Category = Prisma.CategoryModel
 /**
+ * Model CategorySize
+ * 
+ */
+export type CategorySize = Prisma.CategorySizeModel
+/**
+ * Model CategoryCrust
+ * 
+ */
+export type CategoryCrust = Prisma.CategoryCrustModel
+/**
  * Model Product
  * 
  */
@@ -43,16 +53,6 @@ export type Product = Prisma.ProductModel
  */
 export type ProductVariant = Prisma.ProductVariantModel
 /**
- * Model ProductFlavor
- * 
- */
-export type ProductFlavor = Prisma.ProductFlavorModel
-/**
- * Model ProductCrust
- * 
- */
-export type ProductCrust = Prisma.ProductCrustModel
-/**
  * Model Order
  * 
  */
@@ -62,6 +62,11 @@ export type Order = Prisma.OrderModel
  * 
  */
 export type OrderItem = Prisma.OrderItemModel
+/**
+ * Model OrderItemFlavor
+ * 
+ */
+export type OrderItemFlavor = Prisma.OrderItemFlavorModel
 /**
  * Model LoyaltyPoint
  * 

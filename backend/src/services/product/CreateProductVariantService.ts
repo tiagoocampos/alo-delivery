@@ -6,11 +6,10 @@ interface CreateProductVariantServiceProps {
     productId: string;
     name: string;
     priceDelta?: number | undefined;
-    maxFlavors?: number | undefined;
 }
 
 class CreateProductVariantService {
-    async execute({ tenantId, productId, name, priceDelta, maxFlavors }: CreateProductVariantServiceProps) {
+    async execute({ tenantId, productId, name, priceDelta }: CreateProductVariantServiceProps) {
 
         const product = await prismaClient.product.findFirst({
             where: {
@@ -27,15 +26,13 @@ class CreateProductVariantService {
             data: {
                 productId: product.id,
                 name,
-                priceDelta: priceDelta ?? 0,
-                maxFlavors: maxFlavors ?? null
+                priceDelta: priceDelta ?? 0
             },
             select: {
                 id: true,
                 productId: true,
                 name: true,
-                priceDelta: true,
-                maxFlavors: true
+                priceDelta: true
             }
         });
 

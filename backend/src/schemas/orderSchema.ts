@@ -2,6 +2,23 @@ import { z } from "zod";
 
 const orderStatus = z.enum(["novo", "preparo", "transporte", "entregue", "cancelado"]);
 
+const normalOrderItemSchema = z.object({
+    productId: z.string().uuid({ message: "Produto inválido" }),
+    variantId: z.string().uuid({ message: "Variação inválida" }).optional(),
+    quantity: z.number().int().positive({ message: "A quantidade deve ser maior que zero" }),
+    note: z.string().optional(),
+});
+
+const sizeOrderItemSchema = z.object({
+    categorySizeId: z.string().uuid({ message: "Tamanho inválido" }),
+    flavorProductIds: z
+        .array(z.string().uuid({ message: "Sabor inválido" }))
+        .min(1, { message: "Escolha pelo menos um sabor" }),
+    categoryCrustId: z.string().uuid({ message: "Borda inválida" }).optional(),
+    quantity: z.number().int().positive({ message: "A quantidade deve ser maior que zero" }),
+    note: z.string().optional(),
+});
+
 export const createOrderSchema =
     z.object({
         params: z.object({
@@ -15,14 +32,7 @@ export const createOrderSchema =
                 message: "Forma de pagamento inválida"
             }),
             items: z
-                .array(z.object({
-                    productId: z.string().uuid({ message: "Produto inválido" }),
-                    variantId: z.string().uuid({ message: "Variação inválida" }).optional(),
-                    flavorIds: z.array(z.string().uuid({ message: "Sabor inválido" })).optional(),
-                    crustId: z.string().uuid({ message: "Borda inválida" }).optional(),
-                    quantity: z.number().int().positive({ message: "A quantidade deve ser maior que zero" }),
-                    note: z.string().optional(),
-                }))
+                .array(z.union([normalOrderItemSchema, sizeOrderItemSchema]))
                 .min(1, { message: "O pedido precisa de pelo menos um item" }),
         })
     })

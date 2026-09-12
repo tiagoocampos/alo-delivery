@@ -218,23 +218,6 @@ export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumRoleFilter<$PrismaModel>
 }
 
-export type EnumProductBadgeNullableFilter<$PrismaModel = never> = {
-  equals?: $Enums.ProductBadge | Prisma.EnumProductBadgeFieldRefInput<$PrismaModel> | null
-  in?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel> | $Enums.ProductBadge | null
-}
-
-export type EnumProductBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.ProductBadge | Prisma.EnumProductBadgeFieldRefInput<$PrismaModel> | null
-  in?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumProductBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductBadge | null
-  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
-}
-
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -244,6 +227,13 @@ export type IntNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.IntFieldRefInput<$PrismaModel>
   gte?: number | Prisma.IntFieldRefInput<$PrismaModel>
   not?: Prisma.NestedIntNullableFilter<$PrismaModel> | number | null
+}
+
+export type EnumProductBadgeNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductBadge | Prisma.EnumProductBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel> | $Enums.ProductBadge | null
 }
 
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -260,6 +250,16 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _sum?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _min?: Prisma.NestedIntNullableFilter<$PrismaModel>
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
+}
+
+export type EnumProductBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductBadge | Prisma.EnumProductBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumProductBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductBadge | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
 }
 
 export type EnumOrderStatusFilter<$PrismaModel = never> = {
@@ -493,16 +493,6 @@ export type NestedEnumProductBadgeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel> | $Enums.ProductBadge | null
 }
 
-export type NestedEnumProductBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
-  equals?: $Enums.ProductBadge | Prisma.EnumProductBadgeFieldRefInput<$PrismaModel> | null
-  in?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
-  notIn?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
-  not?: Prisma.NestedEnumProductBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductBadge | null
-  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
-  _min?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
-  _max?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
-}
-
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -528,6 +518,16 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumProductBadgeNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductBadge | Prisma.EnumProductBadgeFieldRefInput<$PrismaModel> | null
+  in?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.ProductBadge[] | Prisma.ListEnumProductBadgeFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumProductBadgeNullableWithAggregatesFilter<$PrismaModel> | $Enums.ProductBadge | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
 }
 
 export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {

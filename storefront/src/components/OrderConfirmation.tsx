@@ -2,6 +2,7 @@ import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { formatCents } from "@/lib/money"
+import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
 import type { Order } from "@/types"
 
 const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
@@ -30,12 +31,14 @@ export function OrderConfirmation({ order, onNewOrder }: OrderConfirmationProps)
           {order.items.map((item) => (
             <div key={item.id} className="flex justify-between text-sm">
               <span>
-                {item.quantity}x {item.product.name}
+                {item.quantity}x {formatOrderItemTitle(item)}
                 {item.variant && <span className="text-muted-foreground"> · {item.variant.name}</span>}
-                {item.selectedFlavors && item.selectedFlavors.length > 0 && (
-                  <span className="text-muted-foreground"> · {item.selectedFlavors.join(", ")}</span>
+                {item.flavors.length > 0 && (
+                  <span className="text-muted-foreground"> · {item.flavors.map((f) => f.productName).join(", ")}</span>
                 )}
-                {item.crust && <span className="text-muted-foreground"> · Borda: {item.crust.name}</span>}
+                {item.categoryCrust && (
+                  <span className="text-muted-foreground"> · Borda: {item.categoryCrust.name}</span>
+                )}
               </span>
               <span className="text-muted-foreground">{formatCents(item.unitPrice * item.quantity)}</span>
             </div>

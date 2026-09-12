@@ -54,12 +54,13 @@ export const ModelName = {
   Tenant: 'Tenant',
   User: 'User',
   Category: 'Category',
+  CategorySize: 'CategorySize',
+  CategoryCrust: 'CategoryCrust',
   Product: 'Product',
   ProductVariant: 'ProductVariant',
-  ProductFlavor: 'ProductFlavor',
-  ProductCrust: 'ProductCrust',
   Order: 'Order',
   OrderItem: 'OrderItem',
+  OrderItemFlavor: 'OrderItemFlavor',
   LoyaltyPoint: 'LoyaltyPoint',
   Customer: 'Customer',
   Address: 'Address'
@@ -129,6 +130,27 @@ export const CategoryScalarFieldEnum = {
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
 
 
+export const CategorySizeScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  name: 'name',
+  price: 'price',
+  maxFlavors: 'maxFlavors'
+} as const
+
+export type CategorySizeScalarFieldEnum = (typeof CategorySizeScalarFieldEnum)[keyof typeof CategorySizeScalarFieldEnum]
+
+
+export const CategoryCrustScalarFieldEnum = {
+  id: 'id',
+  categoryId: 'categoryId',
+  name: 'name',
+  priceDelta: 'priceDelta'
+} as const
+
+export type CategoryCrustScalarFieldEnum = (typeof CategoryCrustScalarFieldEnum)[keyof typeof CategoryCrustScalarFieldEnum]
+
+
 export const ProductScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -150,30 +172,10 @@ export const ProductVariantScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
   name: 'name',
-  priceDelta: 'priceDelta',
-  maxFlavors: 'maxFlavors'
-} as const
-
-export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
-
-
-export const ProductFlavorScalarFieldEnum = {
-  id: 'id',
-  productId: 'productId',
-  name: 'name'
-} as const
-
-export type ProductFlavorScalarFieldEnum = (typeof ProductFlavorScalarFieldEnum)[keyof typeof ProductFlavorScalarFieldEnum]
-
-
-export const ProductCrustScalarFieldEnum = {
-  id: 'id',
-  productId: 'productId',
-  name: 'name',
   priceDelta: 'priceDelta'
 } as const
 
-export type ProductCrustScalarFieldEnum = (typeof ProductCrustScalarFieldEnum)[keyof typeof ProductCrustScalarFieldEnum]
+export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
 
 
 export const OrderScalarFieldEnum = {
@@ -200,14 +202,24 @@ export const OrderItemScalarFieldEnum = {
   orderId: 'orderId',
   productId: 'productId',
   variantId: 'variantId',
-  crustId: 'crustId',
+  categorySizeId: 'categorySizeId',
+  categoryCrustId: 'categoryCrustId',
   quantity: 'quantity',
   unitPrice: 'unitPrice',
-  note: 'note',
-  selectedFlavors: 'selectedFlavors'
+  note: 'note'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
+
+
+export const OrderItemFlavorScalarFieldEnum = {
+  id: 'id',
+  orderItemId: 'orderItemId',
+  productId: 'productId',
+  productName: 'productName'
+} as const
+
+export type OrderItemFlavorScalarFieldEnum = (typeof OrderItemFlavorScalarFieldEnum)[keyof typeof OrderItemFlavorScalarFieldEnum]
 
 
 export const LoyaltyPointScalarFieldEnum = {
