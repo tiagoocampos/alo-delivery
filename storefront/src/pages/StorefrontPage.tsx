@@ -93,7 +93,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   if (notFound || !menu) {
     return (
       <div className="flex min-h-svh flex-col items-center justify-center gap-2 p-6 text-center">
-        <h1 className="text-lg font-semibold text-foreground">Loja não encontrada</h1>
+        <h1 className="font-heading text-lg font-semibold text-foreground">Loja não encontrada</h1>
         <p className="text-sm text-muted-foreground">
           Verifique o link ou entre em contato com a loja.
         </p>

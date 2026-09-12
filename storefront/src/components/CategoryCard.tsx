@@ -18,18 +18,18 @@ export function CategoryCard({ category, active, onClick }: CategoryCardProps) {
       type="button"
       onClick={onClick}
       className={cn(
-        "relative flex h-28 w-full items-center justify-center overflow-hidden bg-neutral-900 text-center",
+        "relative flex h-28 w-full items-center justify-center overflow-hidden bg-brand text-center",
         active && "outline-2 -outline-offset-2 outline-primary"
       )}
     >
       {thumbnail && <img src={thumbnail} alt="" className="absolute inset-0 size-full object-cover" />}
 
-      <div className={cn("absolute inset-0", thumbnail ? "bg-black/40" : "bg-transparent")} />
+      <div className={cn("absolute inset-0", thumbnail ? "bg-brand/50" : "bg-transparent")} />
 
       <div className="relative flex flex-col items-center gap-0.5 px-4">
-        {!thumbnail && <Icon className="mb-1 size-6 text-white/50" strokeWidth={1.5} />}
-        <span className="text-base font-bold uppercase tracking-wide text-white">{category.name}</span>
-        <span className="text-xs text-white/75">
+        {!thumbnail && <Icon className="mb-1 size-6 text-brand-foreground/50" strokeWidth={1.5} />}
+        <span className="font-heading text-base font-bold uppercase tracking-wide text-brand-foreground">{category.name}</span>
+        <span className="text-xs text-brand-foreground/75">
           {itemCount} {itemCount === 1 ? "item" : "itens"}
         </span>
       </div>

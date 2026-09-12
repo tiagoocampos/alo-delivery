@@ -19,7 +19,7 @@ export function ProductList({ categories, onSelectProduct }: ProductListProps) {
     <div className="flex flex-col">
       {categories.map((category) => (
         <section key={category.id} className="flex flex-col px-3">
-          <h2 className="pt-3 pb-1 text-sm font-bold uppercase tracking-wide text-foreground">
+          <h2 className="pt-3 pb-1 font-heading text-sm font-bold uppercase tracking-wide text-foreground">
             {category.name}
           </h2>
           <div className="flex flex-col">

@@ -28,20 +28,20 @@ export function NavMenuSheet({
   const close = () => onOpenChange(false)
 
   const itemClass =
-    "flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-100 transition-colors hover:bg-white/10"
+    "flex items-center gap-3 px-4 py-2.5 text-sm text-brand-foreground/90 transition-colors hover:bg-brand-foreground/10"
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="left"
         showCloseButton={false}
-        className="flex w-full flex-col border-none bg-neutral-950 text-neutral-100 sm:max-w-xs"
+        className="flex w-full flex-col border-none bg-brand text-brand-foreground sm:max-w-xs"
       >
-        <SheetHeader className="flex-row items-center gap-2.5 border-b border-white/10 px-4 py-3">
+        <SheetHeader className="flex-row items-center gap-2.5 border-b border-brand-foreground/10 px-4 py-3">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-primary text-xs font-bold text-primary-foreground">
             {getInitials(tenant.name)}
           </span>
-          <SheetTitle className="text-sm font-semibold text-white">{tenant.name}</SheetTitle>
+          <SheetTitle className="text-sm font-semibold text-brand-foreground">{tenant.name}</SheetTitle>
         </SheetHeader>
 
         <nav className="flex flex-1 flex-col py-1">
@@ -74,7 +74,7 @@ export function NavMenuSheet({
             Programa de fidelidade
           </button>
 
-          <Separator className="my-1 bg-white/10" />
+          <Separator className="my-1 bg-brand-foreground/10" />
 
           <button
             type="button"
@@ -108,7 +108,7 @@ export function NavMenuSheet({
 
           {tenant.phone && (
             <>
-              <Separator className="my-1 bg-white/10" />
+              <Separator className="my-1 bg-brand-foreground/10" />
               <a href={`tel:${tenant.phone}`} className={itemClass}>
                 <Phone className="size-4.5" strokeWidth={1.75} />
                 {tenant.phone}
@@ -117,7 +117,7 @@ export function NavMenuSheet({
           )}
         </nav>
 
-        <div className="border-t border-white/10 px-4 py-2.5 text-center text-[11px] text-neutral-500">
+        <div className="border-t border-brand-foreground/10 px-4 py-2.5 text-center text-[11px] text-brand-foreground/50">
           Alô Delivery
         </div>
       </SheetContent>

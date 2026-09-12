@@ -19,13 +19,13 @@ export function OrderConfirmation({ order, onNewOrder }: OrderConfirmationProps)
     <div className="mx-auto flex w-full max-w-md flex-col gap-4 p-3">
       <div className="flex flex-col items-center gap-1.5 pt-4 text-center">
         <CheckCircle2 className="size-9 text-primary" />
-        <h1 className="text-lg font-semibold text-foreground">Pedido enviado!</h1>
+        <h1 className="font-heading text-lg font-semibold text-foreground">Pedido enviado!</h1>
         <p className="text-sm text-muted-foreground">
           A loja já recebeu seu pedido e vai confirmar em instantes.
         </p>
       </div>
 
-      <div className="flex flex-col gap-3 border border-border p-3">
+      <div className="flex flex-col gap-3 rounded-xl border border-border p-3">
         <div className="flex flex-col gap-1">
           {order.items.map((item) => (
             <div key={item.id} className="flex justify-between text-sm">

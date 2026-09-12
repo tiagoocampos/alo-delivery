@@ -14,15 +14,15 @@ interface StoreHeaderProps {
 export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: StoreHeaderProps) {
   return (
     <header className="sticky top-0 z-40">
-      <div className="flex items-center justify-between gap-2 bg-neutral-950 px-2 py-2.5 text-white">
-        <Button variant="ghost" size="icon" onClick={onOpenMenu} aria-label="Abrir menu" className="text-white hover:bg-white/10 hover:text-white">
+      <div className="flex items-center justify-between gap-2 bg-brand px-2 py-2.5 text-brand-foreground">
+        <Button variant="ghost" size="icon" onClick={onOpenMenu} aria-label="Abrir menu" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">
           <Menu />
         </Button>
 
-        <span className="truncate text-sm font-semibold uppercase tracking-wide">{tenant.name}</span>
+        <span className="truncate font-heading text-sm font-semibold uppercase tracking-wide">{tenant.name}</span>
 
         <div className="flex items-center gap-0.5">
-          <ThemeToggle className="text-white hover:bg-white/10 hover:text-white" />
+          <ThemeToggle className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground" />
           <Button
             variant="ghost"
             size="icon"

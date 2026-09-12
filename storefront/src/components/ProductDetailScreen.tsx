@@ -76,11 +76,11 @@ function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDe
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex items-center gap-3 bg-neutral-950 px-2 py-2.5 text-white">
-        <Button variant="ghost" size="icon" onClick={onBack} aria-label="Voltar" className="text-white hover:bg-white/10 hover:text-white">
+      <div className="sticky top-0 z-10 flex items-center gap-3 bg-brand px-2 py-2.5 text-brand-foreground">
+        <Button variant="ghost" size="icon" onClick={onBack} aria-label="Voltar" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">
           <ArrowLeft />
         </Button>
-        <span className="truncate text-sm font-semibold">{product.name}</span>
+        <span className="truncate font-heading text-sm font-semibold">{product.name}</span>
       </div>
 
       {product.imageUrl && (
@@ -89,7 +89,7 @@ function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDe
 
       <div className="flex flex-1 flex-col gap-5 p-4 pb-28">
         <div className="flex flex-col gap-1.5">
-          <h1 className="text-xl font-bold text-foreground">{product.name}</h1>
+          <h1 className="font-heading text-xl font-bold text-foreground">{product.name}</h1>
           {product.description && <p className="text-sm text-muted-foreground">{product.description}</p>}
           <span className="text-lg font-bold text-primary">{formatCents(product.basePrice)}</span>
         </div>
@@ -104,7 +104,7 @@ function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDe
                   type="button"
                   onClick={() => setVariantId(variant.id)}
                   className={cn(
-                    "flex items-center justify-between border px-3 py-2.5 text-sm transition-colors",
+                    "flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors",
                     variantId === variant.id
                       ? "border-primary bg-accent text-accent-foreground"
                       : "border-border text-foreground"

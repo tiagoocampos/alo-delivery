@@ -16,12 +16,12 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
     <button
       type="button"
       onClick={onSelect}
-      className="flex w-full items-center gap-3 border-b border-border py-3 text-left last:border-b-0"
+      className="flex w-full items-center gap-3 border-b border-border py-3 text-left transition-colors last:border-b-0 hover:bg-muted/50"
     >
       {product.imageUrl ? (
-        <img src={product.imageUrl} alt="" className="size-16 shrink-0 rounded-sm object-cover" />
+        <img src={product.imageUrl} alt="" className="size-16 shrink-0 rounded-xl object-cover" />
       ) : (
-        <span className="flex size-16 shrink-0 items-center justify-center rounded-sm bg-muted">
+        <span className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-muted">
           <Icon className="size-6 text-muted-foreground" strokeWidth={1.5} />
         </span>
       )}
