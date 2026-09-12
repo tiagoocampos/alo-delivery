@@ -1,18 +1,23 @@
 import prismaClient from "../../prisma/index.js";
+import { getDayRange } from "../../utils/dateRange.js";
 import type { OrderStatus } from "../../generated/prisma/enums.js";
 
 interface ListOrdersServiceProps {
     tenantId: string;
     status?: OrderStatus | undefined;
+    date?: string | undefined;
 }
 
 class ListOrdersService {
-    async execute({ tenantId, status }: ListOrdersServiceProps) {
+    async execute({ tenantId, status, date }: ListOrdersServiceProps) {
+
+        const dateRange = date ? getDayRange(date) : undefined;
 
         const orders = await prismaClient.order.findMany({
             where: {
                 tenantId,
-                ...(status ? { status } : {})
+                ...(status ? { status } : {}),
+                ...(dateRange ? { createdAt: { gte: dateRange.start, lte: dateRange.end } } : {})
             },
             orderBy: {
                 createdAt: "desc"

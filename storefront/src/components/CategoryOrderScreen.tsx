@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { formatCents } from "@/lib/money"
+import { getCategoryIcon } from "@/lib/categoryVisuals"
 import { useCart } from "@/hooks/useCart"
 import { toast } from "sonner"
 import type { Category } from "@/types"
@@ -57,6 +58,7 @@ function CategoryOrderBody({ category, onAdded, onBack }: CategoryOrderBodyProps
   const selectedSize = category.sizes.find((size) => size.id === sizeId)
   const selectedCrust = category.crusts.find((crust) => crust.id === crustId)
   const maxFlavors = selectedSize?.maxFlavors
+  const FlavorIcon = getCategoryIcon(category.name)
 
   // Se o tamanho mudar para um limite menor, mantém só os primeiros sabores já marcados.
   useEffect(() => {
@@ -153,15 +155,27 @@ function CategoryOrderBody({ category, onAdded, onBack }: CategoryOrderBodyProps
                     disabled={disabled}
                     onClick={() => toggleFlavor(product.id)}
                     className={cn(
-                      "flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors",
+                      "flex items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors",
                       checked
                         ? "border-primary bg-accent text-accent-foreground"
                         : "border-border text-foreground",
                       disabled && "opacity-40"
                     )}
                   >
-                    <span>{product.name}</span>
-                    {checked && <Check className="size-4" />}
+                    {product.imageUrl ? (
+                      <img src={product.imageUrl} alt="" className="size-12 shrink-0 rounded-lg object-cover" />
+                    ) : (
+                      <span className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-muted">
+                        <FlavorIcon className="size-5 text-muted-foreground" strokeWidth={1.5} />
+                      </span>
+                    )}
+                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                      <span className="truncate font-medium">{product.name}</span>
+                      {product.description && (
+                        <span className="line-clamp-1 text-xs text-muted-foreground">{product.description}</span>
+                      )}
+                    </span>
+                    {checked && <Check className="size-4 shrink-0" />}
                   </button>
                 )
               })}

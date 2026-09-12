@@ -37,10 +37,20 @@ export const createOrderSchema =
         })
     })
 
+const dateOnly = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Data inválida, use o formato AAAA-MM-DD" });
+
 export const listOrdersSchema =
     z.object({
         query: z.object({
             status: orderStatus.optional(),
+            date: dateOnly.optional(),
+        })
+    })
+
+export const getOrdersSummarySchema =
+    z.object({
+        query: z.object({
+            date: dateOnly.optional(),
         })
     })
 

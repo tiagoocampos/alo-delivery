@@ -73,6 +73,11 @@ function StorefrontContent({ slug }: { slug: string }) {
     }
   }, [menu?.tenant.faviconUrl])
 
+  useEffect(() => {
+    if (!menu?.tenant.name) return
+    document.title = menu.tenant.name
+  }, [menu?.tenant.name])
+
   const activeCategoryName = useMemo(
     () => menu?.categories.find((category) => category.id === activeCategoryId)?.name ?? null,
     [menu, activeCategoryId]

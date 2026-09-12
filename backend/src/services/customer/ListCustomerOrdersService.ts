@@ -63,6 +63,30 @@ class ListCustomerOrdersService {
                                 id: true,
                                 name: true
                             }
+                        },
+                        categorySize: {
+                            select: {
+                                id: true,
+                                name: true,
+                                category: {
+                                    select: {
+                                        name: true
+                                    }
+                                }
+                            }
+                        },
+                        categoryCrust: {
+                            select: {
+                                id: true,
+                                name: true
+                            }
+                        },
+                        flavors: {
+                            select: {
+                                id: true,
+                                productId: true,
+                                productName: true
+                            }
                         }
                     }
                 }

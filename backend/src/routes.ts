@@ -31,8 +31,12 @@ import { UpdateCategoryCrustController } from "./controllers/category/UpdateCate
 import { DeleteCategoryCrustController } from "./controllers/category/DeleteCategoryCrustController.js";
 import { CreateOrderController } from "./controllers/order/CreateOrderController.js";
 import { ListOrdersController } from "./controllers/order/ListOrdersController.js";
+import { GetOrdersSummaryController } from "./controllers/order/GetOrdersSummaryController.js";
 import { GetOrderDetailController } from "./controllers/order/GetOrderDetailController.js";
 import { UpdateOrderStatusController } from "./controllers/order/UpdateOrderStatusController.js";
+import { GetDashboardRevenueController } from "./controllers/dashboard/GetDashboardRevenueController.js";
+import { GetDashboardSummaryController } from "./controllers/dashboard/GetDashboardSummaryController.js";
+import { GetDashboardTopProductsController } from "./controllers/dashboard/GetDashboardTopProductsController.js";
 import { GetLoyaltyPointsController } from "./controllers/loyalty/GetLoyaltyPointsController.js";
 import { RegisterCustomerController } from "./controllers/customer/RegisterCustomerController.js";
 import { LoginCustomerController } from "./controllers/customer/LoginCustomerController.js";
@@ -66,9 +70,15 @@ import {
 import {
     createOrderSchema,
     listOrdersSchema,
+    getOrdersSummarySchema,
     getOrderDetailSchema,
     updateOrderStatusSchema
 } from "./schemas/orderSchema.js";
+import {
+    getDashboardRevenueSchema,
+    getDashboardSummarySchema,
+    getDashboardTopProductsSchema
+} from "./schemas/dashboardSchema.js";
 import { getLoyaltyPointsSchema } from "./schemas/loyaltySchema.js";
 import {
     registerCustomerSchema,
@@ -158,7 +168,15 @@ router.delete("/products/:id", authenticate, requireTenant, authorize("store_own
 router.post("/products/:id/variants", authenticate, requireTenant, authorize("store_owner"), validateSchema(createProductVariantSchema), new CreateProductVariantController().handle);
 
 router.get("/orders", authenticate, requireTenant, validateSchema(listOrdersSchema), new ListOrdersController().handle);
+router.get("/orders/summary", authenticate, requireTenant, validateSchema(getOrdersSummarySchema), new GetOrdersSummaryController().handle);
 router.get("/orders/:id", authenticate, requireTenant, validateSchema(getOrderDetailSchema), new GetOrderDetailController().handle);
 router.patch("/orders/:id/status", authenticate, requireTenant, authorize("store_owner", "store_staff"), validateSchema(updateOrderStatusSchema), new UpdateOrderStatusController().handle);
+
+/* ---------------------------------------------------------------------------
+ * Dashboard — só store_owner (visão gerencial, não operacional)
+ * ------------------------------------------------------------------------ */
+router.get("/dashboard/revenue", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardRevenueSchema), new GetDashboardRevenueController().handle);
+router.get("/dashboard/summary", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardSummarySchema), new GetDashboardSummaryController().handle);
+router.get("/dashboard/top-products", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardTopProductsSchema), new GetDashboardTopProductsController().handle);
 
 export { router };
