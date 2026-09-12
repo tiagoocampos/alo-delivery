@@ -23,6 +23,10 @@ import { ListProductsController } from "./controllers/product/ListProductsContro
 import { UpdateProductController } from "./controllers/product/UpdateProductController.js";
 import { DeleteProductController } from "./controllers/product/DeleteProductController.js";
 import { CreateProductVariantController } from "./controllers/product/CreateProductVariantController.js";
+import { CreateProductFlavorController } from "./controllers/product/CreateProductFlavorController.js";
+import { DeleteProductFlavorController } from "./controllers/product/DeleteProductFlavorController.js";
+import { CreateProductCrustController } from "./controllers/product/CreateProductCrustController.js";
+import { DeleteProductCrustController } from "./controllers/product/DeleteProductCrustController.js";
 import { CreateOrderController } from "./controllers/order/CreateOrderController.js";
 import { ListOrdersController } from "./controllers/order/ListOrdersController.js";
 import { GetOrderDetailController } from "./controllers/order/GetOrderDetailController.js";
@@ -45,7 +49,11 @@ import {
     listProductsSchema,
     updateProductSchema,
     deleteProductSchema,
-    createProductVariantSchema
+    createProductVariantSchema,
+    createProductFlavorSchema,
+    deleteProductFlavorSchema,
+    createProductCrustSchema,
+    deleteProductCrustSchema
 } from "./schemas/productSchema.js";
 import {
     createOrderSchema,
@@ -80,7 +88,19 @@ router.post("/login", authRateLimiter, validateSchema(loginSchema), new LoginTen
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request
  * ------------------------------------------------------------------------ */
 router.get("/tenant/me", authenticate, requireTenant, new GetMyTenantController().handle);
-router.put("/tenant/me", authenticate, requireTenant, authorize("store_owner"), validateSchema(updateMyTenantSchema), new UpdateMyTenantController().handle);
+router.put(
+    "/tenant/me",
+    authenticate,
+    requireTenant,
+    authorize("store_owner"),
+    upload.fields([
+        { name: "logo", maxCount: 1 },
+        { name: "banner", maxCount: 1 },
+        { name: "favicon", maxCount: 1 }
+    ]),
+    validateSchema(updateMyTenantSchema),
+    new UpdateMyTenantController().handle
+);
 
 /* ---------------------------------------------------------------------------
  * Rotas públicas da loja (cliente final, sem login) — identificadas pelo slug
@@ -120,6 +140,12 @@ router.get("/products", authenticate, requireTenant, validateSchema(listProducts
 router.put("/products/:id", authenticate, requireTenant, authorize("store_owner"), upload.single("file"), validateSchema(updateProductSchema), new UpdateProductController().handle);
 router.delete("/products/:id", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteProductSchema), new DeleteProductController().handle);
 router.post("/products/:id/variants", authenticate, requireTenant, authorize("store_owner"), validateSchema(createProductVariantSchema), new CreateProductVariantController().handle);
+
+router.post("/products/:id/flavors", authenticate, requireTenant, authorize("store_owner"), validateSchema(createProductFlavorSchema), new CreateProductFlavorController().handle);
+router.delete("/products/:id/flavors/:flavorId", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteProductFlavorSchema), new DeleteProductFlavorController().handle);
+
+router.post("/products/:id/crusts", authenticate, requireTenant, authorize("store_owner"), validateSchema(createProductCrustSchema), new CreateProductCrustController().handle);
+router.delete("/products/:id/crusts/:crustId", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteProductCrustSchema), new DeleteProductCrustController().handle);
 
 router.get("/orders", authenticate, requireTenant, validateSchema(listOrdersSchema), new ListOrdersController().handle);
 router.get("/orders/:id", authenticate, requireTenant, validateSchema(getOrderDetailSchema), new GetOrderDetailController().handle);

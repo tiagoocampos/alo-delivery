@@ -16,6 +16,22 @@ export class ProductVariantNotFoundError extends AppError {
     }
 }
 
+export class ProductFlavorNotFoundError extends AppError {
+    constructor() {
+        super("Sabor não encontrado para este produto", 404);
+        this.name = "ProductFlavorNotFoundError";
+        Object.setPrototypeOf(this, ProductFlavorNotFoundError.prototype);
+    }
+}
+
+export class ProductCrustNotFoundError extends AppError {
+    constructor() {
+        super("Borda não encontrada para este produto", 404);
+        this.name = "ProductCrustNotFoundError";
+        Object.setPrototypeOf(this, ProductCrustNotFoundError.prototype);
+    }
+}
+
 export class ProductImageRequiredError extends AppError {
     constructor() {
         super("A imagem do produto é obrigatória", 400);

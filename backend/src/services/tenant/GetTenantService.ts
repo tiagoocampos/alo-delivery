@@ -19,6 +19,14 @@ class GetTenantService {
                 phone: true,
                 deliveryFee: true,
                 isActive: true,
+                logoUrl: true,
+                bannerUrl: true,
+                faviconUrl: true,
+                description: true,
+                address: true,
+                instagramUrl: true,
+                minimumOrderValue: true,
+                businessHours: true,
                 createdAt: true,
                 updatedAt: true
             }

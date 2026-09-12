@@ -2,7 +2,21 @@ export interface ProductVariant {
   id: string
   name: string
   priceDelta: number
+  maxFlavors: number | null
 }
+
+export interface ProductFlavor {
+  id: string
+  name: string
+}
+
+export interface ProductCrust {
+  id: string
+  name: string
+  priceDelta: number
+}
+
+export type ProductBadge = "mais_pedido" | "promocao" | "novo"
 
 export interface Product {
   id: string
@@ -10,7 +24,10 @@ export interface Product {
   description: string | null
   imageUrl: string | null
   basePrice: number
+  badge: ProductBadge | null
   variants: ProductVariant[]
+  flavors: ProductFlavor[]
+  crusts: ProductCrust[]
 }
 
 export interface Category {
@@ -20,12 +37,27 @@ export interface Category {
   products: Product[]
 }
 
+export interface BusinessHoursDay {
+  dayOfWeek: number
+  isClosed: boolean
+  opensAt: string | null
+  closesAt: string | null
+}
+
 export interface Tenant {
   id: string
   name: string
   slug: string
   phone: string | null
   deliveryFee: number
+  logoUrl: string | null
+  bannerUrl: string | null
+  faviconUrl: string | null
+  description: string | null
+  address: string | null
+  instagramUrl: string | null
+  minimumOrderValue: number
+  businessHours: BusinessHoursDay[] | null
 }
 
 export interface StoreMenu {
@@ -42,6 +74,10 @@ export interface CartItem {
   categoryName: string
   variantId?: string
   variantName?: string
+  flavorIds?: string[]
+  flavorNames?: string[]
+  crustId?: string
+  crustName?: string
   unitPrice: number
   quantity: number
   note?: string
@@ -51,6 +87,8 @@ export interface CartItem {
 export interface CreateOrderItemInput {
   productId: string
   variantId?: string
+  flavorIds?: string[]
+  crustId?: string
   quantity: number
   note?: string
 }
@@ -68,8 +106,10 @@ export interface OrderItemResult {
   quantity: number
   unitPrice: number
   note: string | null
+  selectedFlavors: string[] | null
   product: { id: string; name: string }
   variant: { id: string; name: string } | null
+  crust: { id: string; name: string } | null
 }
 
 export interface Order {

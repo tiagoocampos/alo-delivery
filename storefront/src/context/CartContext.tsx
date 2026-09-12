@@ -7,6 +7,10 @@ interface AddItemInput {
   categoryName: string
   variantId?: string
   variantName?: string
+  flavorIds?: string[]
+  flavorNames?: string[]
+  crustId?: string
+  crustName?: string
   unitPrice: number
   quantity: number
   note?: string
@@ -23,8 +27,11 @@ interface CartContextValue {
   clear: () => void
 }
 
-function buildKey(productId: string, variantId?: string) {
-  return variantId ? `${productId}:${variantId}` : productId
+function buildKey(productId: string, variantId?: string, flavorIds?: string[], crustId?: string) {
+  const variantPart = variantId ? `:${variantId}` : ""
+  const flavorsPart = flavorIds && flavorIds.length > 0 ? `:f(${[...flavorIds].sort().join(",")})` : ""
+  const crustPart = crustId ? `:c(${crustId})` : ""
+  return `${productId}${variantPart}${flavorsPart}${crustPart}`
 }
 
 export const CartContext = createContext<CartContextValue | null>(null)
@@ -33,7 +40,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
 
   const addItem = (input: AddItemInput) => {
-    const key = buildKey(input.productId, input.variantId)
+    const key = buildKey(input.productId, input.variantId, input.flavorIds, input.crustId)
 
     setItems((current) => {
       const existing = current.find((item) => item.key === key)

@@ -27,6 +27,7 @@ class ListProductsService {
                 imageUrl: true,
                 basePrice: true,
                 isActive: true,
+                badge: true,
                 createdAt: true,
                 updatedAt: true,
                 category: {
@@ -37,6 +38,20 @@ class ListProductsService {
                     }
                 },
                 variants: {
+                    select: {
+                        id: true,
+                        name: true,
+                        priceDelta: true,
+                        maxFlavors: true
+                    }
+                },
+                flavors: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                crusts: {
                     select: {
                         id: true,
                         name: true,

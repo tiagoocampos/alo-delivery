@@ -1,5 +1,10 @@
 import { TenantInactiveError, TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
-import { ProductUnavailableError } from "../../errors/order/OrderErrors.js";
+import {
+    InvalidCrustError,
+    InvalidFlavorSelectionError,
+    OrderBelowMinimumError,
+    ProductUnavailableError
+} from "../../errors/order/OrderErrors.js";
 import { ProductVariantNotFoundError } from "../../errors/product/ProductErrors.js";
 import { CustomerTenantMismatchError } from "../../errors/customer/CustomerErrors.js";
 import prismaClient from "../../prisma/index.js";
@@ -8,6 +13,8 @@ import type { PaymentMethod } from "../../generated/prisma/enums.js";
 interface CreateOrderItemInput {
     productId: string;
     variantId?: string | undefined;
+    flavorIds?: string[] | undefined;
+    crustId?: string | undefined;
     quantity: number;
     note?: string | undefined;
 }
@@ -40,7 +47,8 @@ class CreateOrderService {
             select: {
                 id: true,
                 deliveryFee: true,
-                isActive: true
+                isActive: true,
+                minimumOrderValue: true
             }
         });
 
@@ -75,6 +83,19 @@ class CreateOrderService {
                 variants: {
                     select: {
                         id: true,
+                        priceDelta: true,
+                        maxFlavors: true
+                    }
+                },
+                flavors: {
+                    select: {
+                        id: true,
+                        name: true
+                    }
+                },
+                crusts: {
+                    select: {
+                        id: true,
                         priceDelta: true
                     }
                 }
@@ -91,28 +112,70 @@ class CreateOrderService {
                 throw new ProductUnavailableError(item.productId);
             }
 
-            let priceDelta = 0;
+            let variant: (typeof product.variants)[number] | undefined;
             if (item.variantId) {
-                const variant = product.variants.find(v => v.id === item.variantId);
+                variant = product.variants.find(v => v.id === item.variantId);
 
                 if (!variant) {
                     throw new ProductVariantNotFoundError();
                 }
-
-                priceDelta = variant.priceDelta;
             }
 
-            const unitPrice = product.basePrice + priceDelta;
+            let selectedFlavorNames: string[] | undefined;
+            if (product.flavors.length > 0) {
+                if (!variant || variant.maxFlavors === null) {
+                    throw new InvalidFlavorSelectionError("Selecione um tamanho válido para este produto");
+                }
+
+                const flavorIds = item.flavorIds ?? [];
+
+                if (flavorIds.length < 1 || flavorIds.length > variant.maxFlavors) {
+                    throw new InvalidFlavorSelectionError(
+                        variant.maxFlavors === 1
+                            ? "Esse tamanho permite escolher 1 sabor"
+                            : `Esse tamanho permite no máximo ${variant.maxFlavors} sabores`
+                    );
+                }
+
+                const flavorsById = new Map(product.flavors.map(flavor => [flavor.id, flavor]));
+
+                selectedFlavorNames = flavorIds.map(flavorId => {
+                    const flavor = flavorsById.get(flavorId);
+
+                    if (!flavor) {
+                        throw new InvalidFlavorSelectionError("Sabor inválido para este produto");
+                    }
+
+                    return flavor.name;
+                });
+            }
+
+            let crust: (typeof product.crusts)[number] | undefined;
+            if (item.crustId) {
+                crust = product.crusts.find(c => c.id === item.crustId);
+
+                if (!crust) {
+                    throw new InvalidCrustError();
+                }
+            }
+
+            const unitPrice = product.basePrice + (variant?.priceDelta ?? 0) + (crust?.priceDelta ?? 0);
             subtotal += unitPrice * item.quantity;
 
             return {
                 productId: product.id,
                 variantId: item.variantId ?? null,
+                crustId: item.crustId ?? null,
                 quantity: item.quantity,
                 unitPrice,
-                note: item.note ?? null
+                note: item.note ?? null,
+                ...(selectedFlavorNames ? { selectedFlavors: selectedFlavorNames } : {})
             };
         });
+
+        if (subtotal < tenant.minimumOrderValue) {
+            throw new OrderBelowMinimumError(tenant.minimumOrderValue);
+        }
 
         const deliveryFee = tenant.deliveryFee;
         const total = subtotal + deliveryFee;
@@ -151,6 +214,7 @@ class CreateOrderService {
                         quantity: true,
                         unitPrice: true,
                         note: true,
+                        selectedFlavors: true,
                         product: {
                             select: {
                                 id: true,
@@ -158,6 +222,12 @@ class CreateOrderService {
                             }
                         },
                         variant: {
+                            select: {
+                                id: true,
+                                name: true
+                            }
+                        },
+                        crust: {
                             select: {
                                 id: true,
                                 name: true

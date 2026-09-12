@@ -35,3 +35,12 @@ export const PaymentMethod = {
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const ProductBadge = {
+  mais_pedido: 'mais_pedido',
+  promocao: 'promocao',
+  novo: 'novo'
+} as const
+
+export type ProductBadge = (typeof ProductBadge)[keyof typeof ProductBadge]

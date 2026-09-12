@@ -4,7 +4,7 @@ import { UpdateProductService } from '../../services/product/UpdateProductServic
 class UpdateProductController {
     async handle(req: Request, res: Response) {
         const id = req.params.id as string;
-        const { name, description, basePrice, categoryId, isActive } = req.body;
+        const { name, description, basePrice, categoryId, isActive, badge } = req.body;
 
         const updateProductService = new UpdateProductService();
         const product = await updateProductService.execute({
@@ -15,6 +15,7 @@ class UpdateProductController {
             basePrice: basePrice === undefined ? undefined : parseInt(basePrice),
             categoryId,
             isActive: isActive === undefined ? undefined : isActive === "true",
+            badge,
             imageBuffer: req.file?.buffer,
             imageName: req.file?.originalname
         });

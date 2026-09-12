@@ -26,9 +26,39 @@ export function NavMenuSheet({
 }: NavMenuSheetProps) {
   const { isAuthenticated } = useCustomerAuth()
   const close = () => onOpenChange(false)
+  const hasBanner = Boolean(tenant.bannerUrl)
 
   const itemClass =
     "flex items-center gap-3 px-4 py-2.5 text-sm text-brand-foreground/90 transition-colors hover:bg-brand-foreground/10"
+
+  const avatar = tenant.logoUrl ? (
+    <img
+      src={tenant.logoUrl}
+      alt=""
+      className="size-8 shrink-0 rounded-full object-cover ring-2 ring-white/30"
+    />
+  ) : (
+    <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-primary text-xs font-bold text-primary-foreground">
+      {getInitials(tenant.name)}
+    </span>
+  )
+
+  const titleRow = (
+    <SheetHeader
+      className={
+        hasBanner
+          ? "flex-row items-center gap-2.5 px-4 py-3"
+          : "flex-row items-center gap-2.5 border-b border-brand-foreground/10 px-4 py-3"
+      }
+    >
+      {avatar}
+      <SheetTitle
+        className={hasBanner ? "text-sm font-semibold text-white" : "text-sm font-semibold text-brand-foreground"}
+      >
+        {tenant.name}
+      </SheetTitle>
+    </SheetHeader>
+  )
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -37,12 +67,14 @@ export function NavMenuSheet({
         showCloseButton={false}
         className="flex w-full flex-col border-none bg-brand text-brand-foreground sm:max-w-xs"
       >
-        <SheetHeader className="flex-row items-center gap-2.5 border-b border-brand-foreground/10 px-4 py-3">
-          <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-primary text-xs font-bold text-primary-foreground">
-            {getInitials(tenant.name)}
-          </span>
-          <SheetTitle className="text-sm font-semibold text-brand-foreground">{tenant.name}</SheetTitle>
-        </SheetHeader>
+        {hasBanner ? (
+          <div className="relative w-full border-b border-brand-foreground/10">
+            <img src={tenant.bannerUrl!} alt="" className="h-28 w-full object-cover" />
+            <div className="absolute inset-x-0 top-0 bg-linear-to-b from-black/60 to-transparent">{titleRow}</div>
+          </div>
+        ) : (
+          titleRow
+        )}
 
         <nav className="flex flex-1 flex-col py-1">
           <button type="button" onClick={close} className={itemClass}>

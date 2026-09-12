@@ -19,7 +19,10 @@ export function CartBar({ count, subtotal, onClick }: CartBarProps) {
       <span className="flex items-center gap-2 text-sm font-semibold">
         <span className="relative">
           <ShoppingCart className="size-5" />
-          <span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-primary-foreground text-[10px] font-bold text-primary">
+          <span
+            key={count}
+            className="absolute -right-1.5 -top-1.5 flex size-4 animate-in items-center justify-center rounded-full bg-primary-foreground text-[10px] font-bold text-primary zoom-in-50 duration-200"
+          >
             {count}
           </span>
         </span>

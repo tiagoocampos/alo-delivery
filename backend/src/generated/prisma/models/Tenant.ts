@@ -28,10 +28,12 @@ export type AggregateTenant = {
 
 export type TenantAvgAggregateOutputType = {
   deliveryFee: number | null
+  minimumOrderValue: number | null
 }
 
 export type TenantSumAggregateOutputType = {
   deliveryFee: number | null
+  minimumOrderValue: number | null
 }
 
 export type TenantMinAggregateOutputType = {
@@ -41,6 +43,13 @@ export type TenantMinAggregateOutputType = {
   phone: string | null
   deliveryFee: number | null
   isActive: boolean | null
+  logoUrl: string | null
+  bannerUrl: string | null
+  faviconUrl: string | null
+  description: string | null
+  address: string | null
+  instagramUrl: string | null
+  minimumOrderValue: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -52,6 +61,13 @@ export type TenantMaxAggregateOutputType = {
   phone: string | null
   deliveryFee: number | null
   isActive: boolean | null
+  logoUrl: string | null
+  bannerUrl: string | null
+  faviconUrl: string | null
+  description: string | null
+  address: string | null
+  instagramUrl: string | null
+  minimumOrderValue: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -63,6 +79,14 @@ export type TenantCountAggregateOutputType = {
   phone: number
   deliveryFee: number
   isActive: number
+  logoUrl: number
+  bannerUrl: number
+  faviconUrl: number
+  description: number
+  address: number
+  instagramUrl: number
+  minimumOrderValue: number
+  businessHours: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -71,10 +95,12 @@ export type TenantCountAggregateOutputType = {
 
 export type TenantAvgAggregateInputType = {
   deliveryFee?: true
+  minimumOrderValue?: true
 }
 
 export type TenantSumAggregateInputType = {
   deliveryFee?: true
+  minimumOrderValue?: true
 }
 
 export type TenantMinAggregateInputType = {
@@ -84,6 +110,13 @@ export type TenantMinAggregateInputType = {
   phone?: true
   deliveryFee?: true
   isActive?: true
+  logoUrl?: true
+  bannerUrl?: true
+  faviconUrl?: true
+  description?: true
+  address?: true
+  instagramUrl?: true
+  minimumOrderValue?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -95,6 +128,13 @@ export type TenantMaxAggregateInputType = {
   phone?: true
   deliveryFee?: true
   isActive?: true
+  logoUrl?: true
+  bannerUrl?: true
+  faviconUrl?: true
+  description?: true
+  address?: true
+  instagramUrl?: true
+  minimumOrderValue?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +146,14 @@ export type TenantCountAggregateInputType = {
   phone?: true
   deliveryFee?: true
   isActive?: true
+  logoUrl?: true
+  bannerUrl?: true
+  faviconUrl?: true
+  description?: true
+  address?: true
+  instagramUrl?: true
+  minimumOrderValue?: true
+  businessHours?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -204,6 +252,14 @@ export type TenantGroupByOutputType = {
   phone: string | null
   deliveryFee: number
   isActive: boolean
+  logoUrl: string | null
+  bannerUrl: string | null
+  faviconUrl: string | null
+  description: string | null
+  address: string | null
+  instagramUrl: string | null
+  minimumOrderValue: number
+  businessHours: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
   _count: TenantCountAggregateOutputType | null
@@ -238,6 +294,14 @@ export type TenantWhereInput = {
   phone?: Prisma.StringNullableFilter<"Tenant"> | string | null
   deliveryFee?: Prisma.IntFilter<"Tenant"> | number
   isActive?: Prisma.BoolFilter<"Tenant"> | boolean
+  logoUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  bannerUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  faviconUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  description?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  address?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  instagramUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  minimumOrderValue?: Prisma.IntFilter<"Tenant"> | number
+  businessHours?: Prisma.JsonNullableFilter<"Tenant">
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -255,6 +319,14 @@ export type TenantOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  bannerUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  faviconUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  minimumOrderValue?: Prisma.SortOrder
+  businessHours?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   users?: Prisma.UserOrderByRelationAggregateInput
@@ -275,6 +347,14 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"Tenant"> | string | null
   deliveryFee?: Prisma.IntFilter<"Tenant"> | number
   isActive?: Prisma.BoolFilter<"Tenant"> | boolean
+  logoUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  bannerUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  faviconUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  description?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  address?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  instagramUrl?: Prisma.StringNullableFilter<"Tenant"> | string | null
+  minimumOrderValue?: Prisma.IntFilter<"Tenant"> | number
+  businessHours?: Prisma.JsonNullableFilter<"Tenant">
   createdAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Tenant"> | Date | string
   users?: Prisma.UserListRelationFilter
@@ -292,6 +372,14 @@ export type TenantOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  bannerUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  faviconUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  minimumOrderValue?: Prisma.SortOrder
+  businessHours?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TenantCountOrderByAggregateInput
@@ -311,6 +399,14 @@ export type TenantScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
   deliveryFee?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
   isActive?: Prisma.BoolWithAggregatesFilter<"Tenant"> | boolean
+  logoUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  bannerUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  faviconUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  description?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  address?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  instagramUrl?: Prisma.StringNullableWithAggregatesFilter<"Tenant"> | string | null
+  minimumOrderValue?: Prisma.IntWithAggregatesFilter<"Tenant"> | number
+  businessHours?: Prisma.JsonNullableWithAggregatesFilter<"Tenant">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Tenant"> | Date | string
 }
@@ -322,6 +418,14 @@ export type TenantCreateInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
@@ -339,6 +443,14 @@ export type TenantUncheckedCreateInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
@@ -356,6 +468,14 @@ export type TenantUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
@@ -373,6 +493,14 @@ export type TenantUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -390,6 +518,14 @@ export type TenantCreateManyInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -401,6 +537,14 @@ export type TenantUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -412,6 +556,14 @@ export type TenantUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -423,12 +575,21 @@ export type TenantCountOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrder
+  bannerUrl?: Prisma.SortOrder
+  faviconUrl?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrder
+  minimumOrderValue?: Prisma.SortOrder
+  businessHours?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type TenantAvgOrderByAggregateInput = {
   deliveryFee?: Prisma.SortOrder
+  minimumOrderValue?: Prisma.SortOrder
 }
 
 export type TenantMaxOrderByAggregateInput = {
@@ -438,6 +599,13 @@ export type TenantMaxOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrder
+  bannerUrl?: Prisma.SortOrder
+  faviconUrl?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrder
+  minimumOrderValue?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -449,12 +617,20 @@ export type TenantMinOrderByAggregateInput = {
   phone?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
+  logoUrl?: Prisma.SortOrder
+  bannerUrl?: Prisma.SortOrder
+  faviconUrl?: Prisma.SortOrder
+  description?: Prisma.SortOrder
+  address?: Prisma.SortOrder
+  instagramUrl?: Prisma.SortOrder
+  minimumOrderValue?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type TenantSumOrderByAggregateInput = {
   deliveryFee?: Prisma.SortOrder
+  minimumOrderValue?: Prisma.SortOrder
 }
 
 export type TenantNullableScalarRelationFilter = {
@@ -584,6 +760,14 @@ export type TenantCreateWithoutUsersInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryCreateNestedManyWithoutTenantInput
@@ -600,6 +784,14 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   categories?: Prisma.CategoryUncheckedCreateNestedManyWithoutTenantInput
@@ -632,6 +824,14 @@ export type TenantUpdateWithoutUsersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUpdateManyWithoutTenantNestedInput
@@ -648,6 +848,14 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.CategoryUncheckedUpdateManyWithoutTenantNestedInput
@@ -664,6 +872,14 @@ export type TenantCreateWithoutCategoriesInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
@@ -680,6 +896,14 @@ export type TenantUncheckedCreateWithoutCategoriesInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
@@ -712,6 +936,14 @@ export type TenantUpdateWithoutCategoriesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
@@ -728,6 +960,14 @@ export type TenantUncheckedUpdateWithoutCategoriesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -744,6 +984,14 @@ export type TenantCreateWithoutProductsInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
@@ -760,6 +1008,14 @@ export type TenantUncheckedCreateWithoutProductsInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
@@ -792,6 +1048,14 @@ export type TenantUpdateWithoutProductsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
@@ -808,6 +1072,14 @@ export type TenantUncheckedUpdateWithoutProductsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -824,6 +1096,14 @@ export type TenantCreateWithoutOrdersInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
@@ -840,6 +1120,14 @@ export type TenantUncheckedCreateWithoutOrdersInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
@@ -872,6 +1160,14 @@ export type TenantUpdateWithoutOrdersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
@@ -888,6 +1184,14 @@ export type TenantUncheckedUpdateWithoutOrdersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -904,6 +1208,14 @@ export type TenantCreateWithoutLoyaltyPointsInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
@@ -920,6 +1232,14 @@ export type TenantUncheckedCreateWithoutLoyaltyPointsInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
@@ -952,6 +1272,14 @@ export type TenantUpdateWithoutLoyaltyPointsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
@@ -968,6 +1296,14 @@ export type TenantUncheckedUpdateWithoutLoyaltyPointsInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -984,6 +1320,14 @@ export type TenantCreateWithoutCustomersInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
@@ -1000,6 +1344,14 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   phone?: string | null
   deliveryFee?: number
   isActive?: boolean
+  logoUrl?: string | null
+  bannerUrl?: string | null
+  faviconUrl?: string | null
+  description?: string | null
+  address?: string | null
+  instagramUrl?: string | null
+  minimumOrderValue?: number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
@@ -1032,6 +1384,14 @@ export type TenantUpdateWithoutCustomersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
@@ -1048,6 +1408,14 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bannerUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faviconUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagramUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  minimumOrderValue?: Prisma.IntFieldUpdateOperationsInput | number
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -1140,6 +1508,14 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   phone?: boolean
   deliveryFee?: boolean
   isActive?: boolean
+  logoUrl?: boolean
+  bannerUrl?: boolean
+  faviconUrl?: boolean
+  description?: boolean
+  address?: boolean
+  instagramUrl?: boolean
+  minimumOrderValue?: boolean
+  businessHours?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
@@ -1158,6 +1534,14 @@ export type TenantSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   phone?: boolean
   deliveryFee?: boolean
   isActive?: boolean
+  logoUrl?: boolean
+  bannerUrl?: boolean
+  faviconUrl?: boolean
+  description?: boolean
+  address?: boolean
+  instagramUrl?: boolean
+  minimumOrderValue?: boolean
+  businessHours?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["tenant"]>
@@ -1169,6 +1553,14 @@ export type TenantSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   phone?: boolean
   deliveryFee?: boolean
   isActive?: boolean
+  logoUrl?: boolean
+  bannerUrl?: boolean
+  faviconUrl?: boolean
+  description?: boolean
+  address?: boolean
+  instagramUrl?: boolean
+  minimumOrderValue?: boolean
+  businessHours?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["tenant"]>
@@ -1180,11 +1572,19 @@ export type TenantSelectScalar = {
   phone?: boolean
   deliveryFee?: boolean
   isActive?: boolean
+  logoUrl?: boolean
+  bannerUrl?: boolean
+  faviconUrl?: boolean
+  description?: boolean
+  address?: boolean
+  instagramUrl?: boolean
+  minimumOrderValue?: boolean
+  businessHours?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "phone" | "deliveryFee" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
+export type TenantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "phone" | "deliveryFee" | "isActive" | "logoUrl" | "bannerUrl" | "faviconUrl" | "description" | "address" | "instagramUrl" | "minimumOrderValue" | "businessHours" | "createdAt" | "updatedAt", ExtArgs["result"]["tenant"]>
 export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   categories?: boolean | Prisma.Tenant$categoriesArgs<ExtArgs>
@@ -1214,6 +1614,14 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     phone: string | null
     deliveryFee: number
     isActive: boolean
+    logoUrl: string | null
+    bannerUrl: string | null
+    faviconUrl: string | null
+    description: string | null
+    address: string | null
+    instagramUrl: string | null
+    minimumOrderValue: number
+    businessHours: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["tenant"]>
@@ -1651,6 +2059,14 @@ export interface TenantFieldRefs {
   readonly phone: Prisma.FieldRef<"Tenant", 'String'>
   readonly deliveryFee: Prisma.FieldRef<"Tenant", 'Int'>
   readonly isActive: Prisma.FieldRef<"Tenant", 'Boolean'>
+  readonly logoUrl: Prisma.FieldRef<"Tenant", 'String'>
+  readonly bannerUrl: Prisma.FieldRef<"Tenant", 'String'>
+  readonly faviconUrl: Prisma.FieldRef<"Tenant", 'String'>
+  readonly description: Prisma.FieldRef<"Tenant", 'String'>
+  readonly address: Prisma.FieldRef<"Tenant", 'String'>
+  readonly instagramUrl: Prisma.FieldRef<"Tenant", 'String'>
+  readonly minimumOrderValue: Prisma.FieldRef<"Tenant", 'Int'>
+  readonly businessHours: Prisma.FieldRef<"Tenant", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Tenant", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Tenant", 'DateTime'>
 }

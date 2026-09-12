@@ -30,6 +30,12 @@ enum PaymentMethod {
   na_entrega
 }
 
+enum ProductBadge {
+  mais_pedido
+  promocao
+  novo
+}
+
 // =========================================================
 // TENANT — cada lojista
 // =========================================================
@@ -41,6 +47,14 @@ model Tenant {
   phone        String?
   deliveryFee  Int      @default(0) @map("delivery_fee") // centavos
   isActive     Boolean  @default(true) @map("is_active")
+  logoUrl      String?  @map("logo_url")
+  bannerUrl    String?  @map("banner_url")
+  faviconUrl   String?  @map("favicon_url")
+  description        String?
+  address             String?
+  instagramUrl        String?  @map("instagram_url")
+  minimumOrderValue   Int      @default(0) @map("minimum_order_value") // centavos
+  businessHours       Json?    @map("business_hours")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
@@ -106,12 +120,15 @@ model Product {
   imageUrl    String?  @map("image_url")
   basePrice   Int      @map("base_price") // centavos
   isActive    Boolean  @default(true) @map("is_active")
+  badge       ProductBadge?
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   tenant     Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   category   Category         @relation(fields: [categoryId], references: [id])
   variants   ProductVariant[]
+  flavors    ProductFlavor[]
+  crusts     ProductCrust[]
   orderItems OrderItem[]
 
   @@index([tenantId])
@@ -128,12 +145,47 @@ model ProductVariant {
   productId  String @map("product_id")
   name       String // "Pequena", "Grande", "Com bacon"
   priceDelta Int    @default(0) @map("price_delta") // soma/subtrai do basePrice, em centavos
+  maxFlavors Int?   @map("max_flavors") // null = produto não usa sabores múltiplos; número = quantos sabores essa variante permite
 
   product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
   orderItems OrderItem[]
 
   @@index([productId])
   @@map("product_variants")
+}
+
+// =========================================================
+// PRODUCT FLAVOR — sabores disponíveis para um produto (ex: pizza).
+// Escolhidos no pedido, mas congelados como texto em OrderItem.selectedFlavors,
+// não como referência — por isso não há relação de volta para OrderItem aqui.
+// =========================================================
+
+model ProductFlavor {
+  id        String @id @default(uuid())
+  productId String @map("product_id")
+  name      String
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_flavors")
+}
+
+// =========================================================
+// PRODUCT CRUST — borda opcional, com preço próprio, independente do tamanho
+// =========================================================
+
+model ProductCrust {
+  id         String @id @default(uuid())
+  productId  String @map("product_id")
+  name       String
+  priceDelta Int    @default(0) @map("price_delta") // centavos
+
+  product    Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems OrderItem[]
+
+  @@index([productId])
+  @@map("product_crusts")
 }
 
 // =========================================================
@@ -169,17 +221,20 @@ model Order {
 // =========================================================
 
 model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String  @map("order_id")
-  productId String  @map("product_id")
-  variantId String? @map("variant_id")
-  quantity  Int
-  unitPrice Int     @map("unit_price") // centavos — preço travado no momento do pedido
-  note      String?
+  id              String  @id @default(uuid())
+  orderId         String  @map("order_id")
+  productId       String  @map("product_id")
+  variantId       String? @map("variant_id")
+  crustId         String? @map("crust_id")
+  quantity        Int
+  unitPrice       Int     @map("unit_price") // centavos — preço travado no momento do pedido
+  note            String?
+  selectedFlavors Json?   @map("selected_flavors") // array de nomes (strings), congelado no momento do pedido
 
   order   Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product         @relation(fields: [productId], references: [id])
   variant ProductVariant? @relation(fields: [variantId], references: [id])
+  crust   ProductCrust?   @relation(fields: [crustId], references: [id])
 
   @@index([orderId])
   @@map("order_items")

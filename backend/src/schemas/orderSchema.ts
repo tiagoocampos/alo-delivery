@@ -18,6 +18,8 @@ export const createOrderSchema =
                 .array(z.object({
                     productId: z.string().uuid({ message: "Produto inválido" }),
                     variantId: z.string().uuid({ message: "Variação inválida" }).optional(),
+                    flavorIds: z.array(z.string().uuid({ message: "Sabor inválido" })).optional(),
+                    crustId: z.string().uuid({ message: "Borda inválida" }).optional(),
                     quantity: z.number().int().positive({ message: "A quantidade deve ser maior que zero" }),
                     note: z.string().optional(),
                 }))

@@ -35,6 +35,7 @@ class ListOrdersService {
                         quantity: true,
                         unitPrice: true,
                         note: true,
+                        selectedFlavors: true,
                         product: {
                             select: {
                                 id: true,
@@ -42,6 +43,12 @@ class ListOrdersService {
                             }
                         },
                         variant: {
+                            select: {
+                                id: true,
+                                name: true
+                            }
+                        },
+                        crust: {
                             select: {
                                 id: true,
                                 name: true

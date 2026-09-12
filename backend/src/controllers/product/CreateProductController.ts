@@ -4,7 +4,7 @@ import { ProductImageRequiredError } from '../../errors/product/ProductErrors.js
 
 class CreateProductController {
     async handle(req: Request, res: Response) {
-        const { name, description, basePrice, categoryId } = req.body;
+        const { name, description, basePrice, categoryId, badge } = req.body;
 
         if (!req.file) {
             throw new ProductImageRequiredError();
@@ -17,6 +17,7 @@ class CreateProductController {
             description,
             basePrice: parseInt(basePrice),
             categoryId,
+            badge,
             imageBuffer: req.file.buffer,
             imageName: req.file.originalname
         });

@@ -28,10 +28,12 @@ export type AggregateProductVariant = {
 
 export type ProductVariantAvgAggregateOutputType = {
   priceDelta: number | null
+  maxFlavors: number | null
 }
 
 export type ProductVariantSumAggregateOutputType = {
   priceDelta: number | null
+  maxFlavors: number | null
 }
 
 export type ProductVariantMinAggregateOutputType = {
@@ -39,6 +41,7 @@ export type ProductVariantMinAggregateOutputType = {
   productId: string | null
   name: string | null
   priceDelta: number | null
+  maxFlavors: number | null
 }
 
 export type ProductVariantMaxAggregateOutputType = {
@@ -46,6 +49,7 @@ export type ProductVariantMaxAggregateOutputType = {
   productId: string | null
   name: string | null
   priceDelta: number | null
+  maxFlavors: number | null
 }
 
 export type ProductVariantCountAggregateOutputType = {
@@ -53,16 +57,19 @@ export type ProductVariantCountAggregateOutputType = {
   productId: number
   name: number
   priceDelta: number
+  maxFlavors: number
   _all: number
 }
 
 
 export type ProductVariantAvgAggregateInputType = {
   priceDelta?: true
+  maxFlavors?: true
 }
 
 export type ProductVariantSumAggregateInputType = {
   priceDelta?: true
+  maxFlavors?: true
 }
 
 export type ProductVariantMinAggregateInputType = {
@@ -70,6 +77,7 @@ export type ProductVariantMinAggregateInputType = {
   productId?: true
   name?: true
   priceDelta?: true
+  maxFlavors?: true
 }
 
 export type ProductVariantMaxAggregateInputType = {
@@ -77,6 +85,7 @@ export type ProductVariantMaxAggregateInputType = {
   productId?: true
   name?: true
   priceDelta?: true
+  maxFlavors?: true
 }
 
 export type ProductVariantCountAggregateInputType = {
@@ -84,6 +93,7 @@ export type ProductVariantCountAggregateInputType = {
   productId?: true
   name?: true
   priceDelta?: true
+  maxFlavors?: true
   _all?: true
 }
 
@@ -178,6 +188,7 @@ export type ProductVariantGroupByOutputType = {
   productId: string
   name: string
   priceDelta: number
+  maxFlavors: number | null
   _count: ProductVariantCountAggregateOutputType | null
   _avg: ProductVariantAvgAggregateOutputType | null
   _sum: ProductVariantSumAggregateOutputType | null
@@ -208,6 +219,7 @@ export type ProductVariantWhereInput = {
   productId?: Prisma.StringFilter<"ProductVariant"> | string
   name?: Prisma.StringFilter<"ProductVariant"> | string
   priceDelta?: Prisma.IntFilter<"ProductVariant"> | number
+  maxFlavors?: Prisma.IntNullableFilter<"ProductVariant"> | number | null
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   orderItems?: Prisma.OrderItemListRelationFilter
 }
@@ -217,6 +229,7 @@ export type ProductVariantOrderByWithRelationInput = {
   productId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   priceDelta?: Prisma.SortOrder
+  maxFlavors?: Prisma.SortOrderInput | Prisma.SortOrder
   product?: Prisma.ProductOrderByWithRelationInput
   orderItems?: Prisma.OrderItemOrderByRelationAggregateInput
 }
@@ -229,6 +242,7 @@ export type ProductVariantWhereUniqueInput = Prisma.AtLeast<{
   productId?: Prisma.StringFilter<"ProductVariant"> | string
   name?: Prisma.StringFilter<"ProductVariant"> | string
   priceDelta?: Prisma.IntFilter<"ProductVariant"> | number
+  maxFlavors?: Prisma.IntNullableFilter<"ProductVariant"> | number | null
   product?: Prisma.XOR<Prisma.ProductScalarRelationFilter, Prisma.ProductWhereInput>
   orderItems?: Prisma.OrderItemListRelationFilter
 }, "id">
@@ -238,6 +252,7 @@ export type ProductVariantOrderByWithAggregationInput = {
   productId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   priceDelta?: Prisma.SortOrder
+  maxFlavors?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProductVariantCountOrderByAggregateInput
   _avg?: Prisma.ProductVariantAvgOrderByAggregateInput
   _max?: Prisma.ProductVariantMaxOrderByAggregateInput
@@ -253,12 +268,14 @@ export type ProductVariantScalarWhereWithAggregatesInput = {
   productId?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
   name?: Prisma.StringWithAggregatesFilter<"ProductVariant"> | string
   priceDelta?: Prisma.IntWithAggregatesFilter<"ProductVariant"> | number
+  maxFlavors?: Prisma.IntNullableWithAggregatesFilter<"ProductVariant"> | number | null
 }
 
 export type ProductVariantCreateInput = {
   id?: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
   product: Prisma.ProductCreateNestedOneWithoutVariantsInput
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutVariantInput
 }
@@ -268,6 +285,7 @@ export type ProductVariantUncheckedCreateInput = {
   productId: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutVariantInput
 }
 
@@ -275,6 +293,7 @@ export type ProductVariantUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput
   orderItems?: Prisma.OrderItemUpdateManyWithoutVariantNestedInput
 }
@@ -284,6 +303,7 @@ export type ProductVariantUncheckedUpdateInput = {
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutVariantNestedInput
 }
 
@@ -292,12 +312,14 @@ export type ProductVariantCreateManyInput = {
   productId: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
 }
 
 export type ProductVariantUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type ProductVariantUncheckedUpdateManyInput = {
@@ -305,6 +327,7 @@ export type ProductVariantUncheckedUpdateManyInput = {
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type ProductVariantListRelationFilter = {
@@ -322,10 +345,12 @@ export type ProductVariantCountOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   priceDelta?: Prisma.SortOrder
+  maxFlavors?: Prisma.SortOrder
 }
 
 export type ProductVariantAvgOrderByAggregateInput = {
   priceDelta?: Prisma.SortOrder
+  maxFlavors?: Prisma.SortOrder
 }
 
 export type ProductVariantMaxOrderByAggregateInput = {
@@ -333,6 +358,7 @@ export type ProductVariantMaxOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   priceDelta?: Prisma.SortOrder
+  maxFlavors?: Prisma.SortOrder
 }
 
 export type ProductVariantMinOrderByAggregateInput = {
@@ -340,10 +366,12 @@ export type ProductVariantMinOrderByAggregateInput = {
   productId?: Prisma.SortOrder
   name?: Prisma.SortOrder
   priceDelta?: Prisma.SortOrder
+  maxFlavors?: Prisma.SortOrder
 }
 
 export type ProductVariantSumOrderByAggregateInput = {
   priceDelta?: Prisma.SortOrder
+  maxFlavors?: Prisma.SortOrder
 }
 
 export type ProductVariantNullableScalarRelationFilter = {
@@ -393,6 +421,14 @@ export type ProductVariantUncheckedUpdateManyWithoutProductNestedInput = {
   deleteMany?: Prisma.ProductVariantScalarWhereInput | Prisma.ProductVariantScalarWhereInput[]
 }
 
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type ProductVariantCreateNestedOneWithoutOrderItemsInput = {
   create?: Prisma.XOR<Prisma.ProductVariantCreateWithoutOrderItemsInput, Prisma.ProductVariantUncheckedCreateWithoutOrderItemsInput>
   connectOrCreate?: Prisma.ProductVariantCreateOrConnectWithoutOrderItemsInput
@@ -413,6 +449,7 @@ export type ProductVariantCreateWithoutProductInput = {
   id?: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
   orderItems?: Prisma.OrderItemCreateNestedManyWithoutVariantInput
 }
 
@@ -420,6 +457,7 @@ export type ProductVariantUncheckedCreateWithoutProductInput = {
   id?: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
   orderItems?: Prisma.OrderItemUncheckedCreateNestedManyWithoutVariantInput
 }
 
@@ -457,12 +495,14 @@ export type ProductVariantScalarWhereInput = {
   productId?: Prisma.StringFilter<"ProductVariant"> | string
   name?: Prisma.StringFilter<"ProductVariant"> | string
   priceDelta?: Prisma.IntFilter<"ProductVariant"> | number
+  maxFlavors?: Prisma.IntNullableFilter<"ProductVariant"> | number | null
 }
 
 export type ProductVariantCreateWithoutOrderItemsInput = {
   id?: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
   product: Prisma.ProductCreateNestedOneWithoutVariantsInput
 }
 
@@ -471,6 +511,7 @@ export type ProductVariantUncheckedCreateWithoutOrderItemsInput = {
   productId: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
 }
 
 export type ProductVariantCreateOrConnectWithoutOrderItemsInput = {
@@ -493,6 +534,7 @@ export type ProductVariantUpdateWithoutOrderItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   product?: Prisma.ProductUpdateOneRequiredWithoutVariantsNestedInput
 }
 
@@ -501,18 +543,21 @@ export type ProductVariantUncheckedUpdateWithoutOrderItemsInput = {
   productId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 export type ProductVariantCreateManyProductInput = {
   id?: string
   name: string
   priceDelta?: number
+  maxFlavors?: number | null
 }
 
 export type ProductVariantUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   orderItems?: Prisma.OrderItemUpdateManyWithoutVariantNestedInput
 }
 
@@ -520,6 +565,7 @@ export type ProductVariantUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   orderItems?: Prisma.OrderItemUncheckedUpdateManyWithoutVariantNestedInput
 }
 
@@ -527,6 +573,7 @@ export type ProductVariantUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   priceDelta?: Prisma.IntFieldUpdateOperationsInput | number
+  maxFlavors?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -565,6 +612,7 @@ export type ProductVariantSelect<ExtArgs extends runtime.Types.Extensions.Intern
   productId?: boolean
   name?: boolean
   priceDelta?: boolean
+  maxFlavors?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   orderItems?: boolean | Prisma.ProductVariant$orderItemsArgs<ExtArgs>
   _count?: boolean | Prisma.ProductVariantCountOutputTypeDefaultArgs<ExtArgs>
@@ -575,6 +623,7 @@ export type ProductVariantSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   productId?: boolean
   name?: boolean
   priceDelta?: boolean
+  maxFlavors?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productVariant"]>
 
@@ -583,6 +632,7 @@ export type ProductVariantSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   productId?: boolean
   name?: boolean
   priceDelta?: boolean
+  maxFlavors?: boolean
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["productVariant"]>
 
@@ -591,9 +641,10 @@ export type ProductVariantSelectScalar = {
   productId?: boolean
   name?: boolean
   priceDelta?: boolean
+  maxFlavors?: boolean
 }
 
-export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "name" | "priceDelta", ExtArgs["result"]["productVariant"]>
+export type ProductVariantOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "productId" | "name" | "priceDelta" | "maxFlavors", ExtArgs["result"]["productVariant"]>
 export type ProductVariantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   product?: boolean | Prisma.ProductDefaultArgs<ExtArgs>
   orderItems?: boolean | Prisma.ProductVariant$orderItemsArgs<ExtArgs>
@@ -617,6 +668,7 @@ export type $ProductVariantPayload<ExtArgs extends runtime.Types.Extensions.Inte
     productId: string
     name: string
     priceDelta: number
+    maxFlavors: number | null
   }, ExtArgs["result"]["productVariant"]>
   composites: {}
 }
@@ -1046,6 +1098,7 @@ export interface ProductVariantFieldRefs {
   readonly productId: Prisma.FieldRef<"ProductVariant", 'String'>
   readonly name: Prisma.FieldRef<"ProductVariant", 'String'>
   readonly priceDelta: Prisma.FieldRef<"ProductVariant", 'Int'>
+  readonly maxFlavors: Prisma.FieldRef<"ProductVariant", 'Int'>
 }
     
 

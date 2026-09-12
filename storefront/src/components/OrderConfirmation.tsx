@@ -32,6 +32,10 @@ export function OrderConfirmation({ order, onNewOrder }: OrderConfirmationProps)
               <span>
                 {item.quantity}x {item.product.name}
                 {item.variant && <span className="text-muted-foreground"> · {item.variant.name}</span>}
+                {item.selectedFlavors && item.selectedFlavors.length > 0 && (
+                  <span className="text-muted-foreground"> · {item.selectedFlavors.join(", ")}</span>
+                )}
+                {item.crust && <span className="text-muted-foreground"> · Borda: {item.crust.name}</span>}
               </span>
               <span className="text-muted-foreground">{formatCents(item.unitPrice * item.quantity)}</span>
             </div>

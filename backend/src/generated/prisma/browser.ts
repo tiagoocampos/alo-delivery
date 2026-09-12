@@ -43,6 +43,16 @@ export type Product = Prisma.ProductModel
  */
 export type ProductVariant = Prisma.ProductVariantModel
 /**
+ * Model ProductFlavor
+ * 
+ */
+export type ProductFlavor = Prisma.ProductFlavorModel
+/**
+ * Model ProductCrust
+ * 
+ */
+export type ProductCrust = Prisma.ProductCrustModel
+/**
  * Model Order
  * 
  */

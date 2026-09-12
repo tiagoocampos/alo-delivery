@@ -8,6 +8,7 @@ import { ProductList } from "@/components/ProductList"
 import { ProductDetailScreen } from "@/components/ProductDetailScreen"
 import { CartBar } from "@/components/CartBar"
 import { CartSheet } from "@/components/CartSheet"
+import { StoreFooter } from "@/components/StoreFooter"
 import { NavMenuSheet } from "@/components/NavMenuSheet"
 import { LoyaltySheet } from "@/components/LoyaltySheet"
 import { AccountSheet } from "@/components/AccountSheet"
@@ -61,6 +62,15 @@ function StorefrontContent({ slug }: { slug: string }) {
     }
   }, [slug])
 
+  useEffect(() => {
+    if (!menu?.tenant.faviconUrl) return
+
+    const link = document.querySelector<HTMLLinkElement>("link[rel='icon']")
+    if (link) {
+      link.href = menu.tenant.faviconUrl
+    }
+  }, [menu?.tenant.faviconUrl])
+
   const activeCategoryName = useMemo(
     () => menu?.categories.find((category) => category.id === activeCategoryId)?.name ?? null,
     [menu, activeCategoryId]
@@ -84,6 +94,16 @@ function StorefrontContent({ slug }: { slug: string }) {
         }),
       }))
       .filter((category) => category.products.length > 0)
+  }, [menu, activeCategoryId, search])
+
+  const mostOrdered = useMemo(() => {
+    if (!menu || search.trim() || activeCategoryId !== null) return []
+
+    return menu.categories.flatMap((category) =>
+      category.products
+        .filter((product) => product.badge === "mais_pedido")
+        .map((product) => ({ product, categoryName: category.name }))
+    )
   }, [menu, activeCategoryId, search])
 
   if (loading) {
@@ -115,7 +135,7 @@ function StorefrontContent({ slug }: { slug: string }) {
       />
 
       <main className="flex flex-1 flex-col">
-        <div className="p-3">
+        <div className="p-4">
           <SearchBar value={search} onChange={setSearch} />
         </div>
 
@@ -140,9 +160,12 @@ function StorefrontContent({ slug }: { slug: string }) {
 
         <ProductList
           categories={filteredCategories}
+          mostOrdered={mostOrdered}
           onSelectProduct={(product, categoryName) => setSelectedProduct({ product, categoryName })}
         />
       </main>
+
+      <StoreFooter tenant={menu.tenant} />
 
       <CartBar count={totalCount} subtotal={subtotal} onClick={() => setCartOpen(true)} />
 
@@ -157,6 +180,7 @@ function StorefrontContent({ slug }: { slug: string }) {
         onOpenChange={setCartOpen}
         slug={slug}
         deliveryFee={menu.tenant.deliveryFee}
+        minimumOrderValue={menu.tenant.minimumOrderValue}
         onOrderCreated={setCompletedOrder}
       />
 

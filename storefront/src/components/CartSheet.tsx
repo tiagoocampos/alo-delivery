@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Minus, Plus, Trash2 } from "lucide-react"
+import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
 import {
   Sheet,
   SheetContent,
@@ -23,12 +23,21 @@ interface CartSheetProps {
   onOpenChange: (open: boolean) => void
   slug: string
   deliveryFee: number
+  minimumOrderValue: number
   onOrderCreated: (order: Order) => void
 }
 
-export function CartSheet({ open, onOpenChange, slug, deliveryFee, onOrderCreated }: CartSheetProps) {
+export function CartSheet({
+  open,
+  onOpenChange,
+  slug,
+  deliveryFee,
+  minimumOrderValue,
+  onOrderCreated,
+}: CartSheetProps) {
   const { items, subtotal, updateQuantity, removeItem, clear } = useCart()
   const { customer, isAuthenticated } = useCustomerAuth()
+  const remainingForMinimum = Math.max(0, minimumOrderValue - subtotal)
   const [step, setStep] = useState<"cart" | "checkout">("cart")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [defaultAddressLine, setDefaultAddressLine] = useState<string | undefined>(undefined)
@@ -57,6 +66,8 @@ export function CartSheet({ open, onOpenChange, slug, deliveryFee, onOrderCreate
         items: items.map((item) => ({
           productId: item.productId,
           variantId: item.variantId,
+          flavorIds: item.flavorIds,
+          crustId: item.crustId,
           quantity: item.quantity,
           note: item.note,
         })),
@@ -83,9 +94,11 @@ export function CartSheet({ open, onOpenChange, slug, deliveryFee, onOrderCreate
           <>
             <div className="flex flex-1 flex-col gap-3 px-4">
               {items.length === 0 ? (
-                <p className="py-10 text-center text-sm text-muted-foreground">
-                  Seu carrinho está vazio.
-                </p>
+                <div className="flex flex-col items-center gap-2 py-10 text-center">
+                  <ShoppingBag className="size-10 text-muted-foreground/50" strokeWidth={1.5} />
+                  <p className="text-sm font-medium text-foreground">Seu carrinho está vazio</p>
+                  <p className="text-xs text-muted-foreground">Adicione itens do cardápio para começar</p>
+                </div>
               ) : (
                 items.map((item) => (
                   <div key={item.key} className="flex gap-3 rounded-xl border border-border p-3">
@@ -93,6 +106,12 @@ export function CartSheet({ open, onOpenChange, slug, deliveryFee, onOrderCreate
                       <span className="truncate text-sm font-medium">{item.productName}</span>
                       {item.variantName && (
                         <span className="text-xs text-muted-foreground">{item.variantName}</span>
+                      )}
+                      {item.flavorNames && item.flavorNames.length > 0 && (
+                        <span className="text-xs text-muted-foreground">{item.flavorNames.join(", ")}</span>
+                      )}
+                      {item.crustName && (
+                        <span className="text-xs text-muted-foreground">Borda: {item.crustName}</span>
                       )}
                       {item.note && <span className="text-xs text-muted-foreground">Obs: {item.note}</span>}
                       <span className="text-sm font-semibold text-primary">
@@ -151,7 +170,17 @@ export function CartSheet({ open, onOpenChange, slug, deliveryFee, onOrderCreate
                     <span>{formatCents(subtotal + deliveryFee)}</span>
                   </div>
                 </div>
-                <Button size="lg" className="w-full" onClick={() => setStep("checkout")}>
+                {remainingForMinimum > 0 && (
+                  <p className="text-xs text-destructive">
+                    Faltam {formatCents(remainingForMinimum)} para o pedido mínimo de {formatCents(minimumOrderValue)}
+                  </p>
+                )}
+                <Button
+                  size="lg"
+                  className="w-full"
+                  disabled={remainingForMinimum > 0}
+                  onClick={() => setStep("checkout")}
+                >
                   Continuar
                 </Button>
               </SheetFooter>

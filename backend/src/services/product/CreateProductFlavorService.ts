@@ -1,16 +1,14 @@
 import { ProductNotFoundError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 
-interface CreateProductVariantServiceProps {
+interface CreateProductFlavorServiceProps {
     tenantId: string;
     productId: string;
     name: string;
-    priceDelta?: number | undefined;
-    maxFlavors?: number | undefined;
 }
 
-class CreateProductVariantService {
-    async execute({ tenantId, productId, name, priceDelta, maxFlavors }: CreateProductVariantServiceProps) {
+class CreateProductFlavorService {
+    async execute({ tenantId, productId, name }: CreateProductFlavorServiceProps) {
 
         const product = await prismaClient.product.findFirst({
             where: {
@@ -23,24 +21,20 @@ class CreateProductVariantService {
             throw new ProductNotFoundError();
         }
 
-        const variant = await prismaClient.productVariant.create({
+        const flavor = await prismaClient.productFlavor.create({
             data: {
                 productId: product.id,
-                name,
-                priceDelta: priceDelta ?? 0,
-                maxFlavors: maxFlavors ?? null
+                name
             },
             select: {
                 id: true,
                 productId: true,
-                name: true,
-                priceDelta: true,
-                maxFlavors: true
+                name: true
             }
         });
 
-        return variant;
+        return flavor;
     }
 }
 
-export { CreateProductVariantService };
+export { CreateProductFlavorService };

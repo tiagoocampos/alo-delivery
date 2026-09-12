@@ -71,6 +71,8 @@ export function OrdersSheet({ open, onOpenChange, slug }: OrdersSheetProps) {
                     <span key={item.id} className="text-xs text-muted-foreground">
                       {item.quantity}x {item.product.name}
                       {item.variant && ` · ${item.variant.name}`}
+                      {item.selectedFlavors && item.selectedFlavors.length > 0 && ` · ${item.selectedFlavors.join(", ")}`}
+                      {item.crust && ` · Borda: ${item.crust.name}`}
                     </span>
                   ))}
                 </div>

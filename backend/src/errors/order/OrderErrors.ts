@@ -1,5 +1,17 @@
 import { AppError } from "../AppError.js";
 
+function formatCentsToBRL(cents: number): string {
+    return (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+export class OrderBelowMinimumError extends AppError {
+    constructor(minimumOrderValue: number) {
+        super(`O pedido mínimo desta loja é de ${formatCentsToBRL(minimumOrderValue)}`, 422);
+        this.name = "OrderBelowMinimumError";
+        Object.setPrototypeOf(this, OrderBelowMinimumError.prototype);
+    }
+}
+
 export class OrderNotFoundError extends AppError {
     constructor() {
         super("Pedido não encontrado", 404);
@@ -13,6 +25,22 @@ export class ProductUnavailableError extends AppError {
         super(`O produto ${productId} não está disponível nesta loja`, 400);
         this.name = "ProductUnavailableError";
         Object.setPrototypeOf(this, ProductUnavailableError.prototype);
+    }
+}
+
+export class InvalidFlavorSelectionError extends AppError {
+    constructor(message: string) {
+        super(message, 400);
+        this.name = "InvalidFlavorSelectionError";
+        Object.setPrototypeOf(this, InvalidFlavorSelectionError.prototype);
+    }
+}
+
+export class InvalidCrustError extends AppError {
+    constructor() {
+        super("Borda inválida para este produto", 400);
+        this.name = "InvalidCrustError";
+        Object.setPrototypeOf(this, InvalidCrustError.prototype);
     }
 }
 

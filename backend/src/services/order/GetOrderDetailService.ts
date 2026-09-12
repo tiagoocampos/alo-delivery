@@ -33,6 +33,7 @@ class GetOrderDetailService {
                         quantity: true,
                         unitPrice: true,
                         note: true,
+                        selectedFlavors: true,
                         product: {
                             select: {
                                 id: true,
@@ -41,6 +42,13 @@ class GetOrderDetailService {
                             }
                         },
                         variant: {
+                            select: {
+                                id: true,
+                                name: true,
+                                priceDelta: true
+                            }
+                        },
+                        crust: {
                             select: {
                                 id: true,
                                 name: true,

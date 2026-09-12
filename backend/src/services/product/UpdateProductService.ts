@@ -3,6 +3,7 @@ import { CategoryNotFoundError } from "../../errors/category/CategoryErrors.js";
 import { ImageUploadError, ProductNotFoundError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 import cloudinary from "../../config/cloudinary.js";
+import type { ProductBadge } from "../../generated/prisma/enums.js";
 
 interface UpdateProductServiceProps {
     tenantId: string;
@@ -12,6 +13,7 @@ interface UpdateProductServiceProps {
     basePrice?: number | undefined;
     categoryId?: string | undefined;
     isActive?: boolean | undefined;
+    badge?: ProductBadge | null | undefined;
     imageBuffer?: Buffer | undefined;
     imageName?: string | undefined;
 }
@@ -25,6 +27,7 @@ class UpdateProductService {
         basePrice,
         categoryId,
         isActive,
+        badge,
         imageBuffer,
         imageName
     }: UpdateProductServiceProps) {
@@ -92,6 +95,7 @@ class UpdateProductService {
                 ...(basePrice === undefined ? {} : { basePrice }),
                 ...(categoryId === undefined ? {} : { categoryId }),
                 ...(isActive === undefined ? {} : { isActive }),
+                ...(badge === undefined ? {} : { badge }),
                 ...(imageUrl === undefined ? {} : { imageUrl }),
             },
             select: {
@@ -103,6 +107,7 @@ class UpdateProductService {
                 imageUrl: true,
                 basePrice: true,
                 isActive: true,
+                badge: true,
                 createdAt: true,
                 updatedAt: true
             }

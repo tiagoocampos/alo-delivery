@@ -18,7 +18,15 @@ class GetStoreMenuService {
                 slug: true,
                 phone: true,
                 deliveryFee: true,
-                isActive: true
+                isActive: true,
+                logoUrl: true,
+                bannerUrl: true,
+                faviconUrl: true,
+                description: true,
+                address: true,
+                instagramUrl: true,
+                minimumOrderValue: true,
+                businessHours: true
             }
         });
 
@@ -57,7 +65,22 @@ class GetStoreMenuService {
                         description: true,
                         imageUrl: true,
                         basePrice: true,
+                        badge: true,
                         variants: {
+                            select: {
+                                id: true,
+                                name: true,
+                                priceDelta: true,
+                                maxFlavors: true
+                            }
+                        },
+                        flavors: {
+                            select: {
+                                id: true,
+                                name: true
+                            }
+                        },
+                        crusts: {
                             select: {
                                 id: true,
                                 name: true,
@@ -75,7 +98,15 @@ class GetStoreMenuService {
                 name: tenant.name,
                 slug: tenant.slug,
                 phone: tenant.phone,
-                deliveryFee: tenant.deliveryFee
+                deliveryFee: tenant.deliveryFee,
+                logoUrl: tenant.logoUrl,
+                bannerUrl: tenant.bannerUrl,
+                faviconUrl: tenant.faviconUrl,
+                description: tenant.description,
+                address: tenant.address,
+                instagramUrl: tenant.instagramUrl,
+                minimumOrderValue: tenant.minimumOrderValue,
+                businessHours: tenant.businessHours
             },
             categories
         };

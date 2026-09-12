@@ -3,6 +3,7 @@ import { CategoryNotFoundError } from "../../errors/category/CategoryErrors.js";
 import { ImageUploadError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 import cloudinary from "../../config/cloudinary.js";
+import type { ProductBadge } from "../../generated/prisma/enums.js";
 
 interface CreateProductServiceProps {
     tenantId: string;
@@ -10,6 +11,7 @@ interface CreateProductServiceProps {
     description?: string | undefined;
     basePrice: number;
     categoryId: string;
+    badge?: ProductBadge | null | undefined;
     imageBuffer: Buffer;
     imageName: string;
 }
@@ -21,6 +23,7 @@ class CreateProductService {
         description,
         basePrice,
         categoryId,
+        badge,
         imageBuffer,
         imageName
     }: CreateProductServiceProps) {
@@ -72,7 +75,8 @@ class CreateProductService {
                 name,
                 description: description ?? null,
                 imageUrl,
-                basePrice
+                basePrice,
+                badge: badge ?? null
             },
             select: {
                 id: true,
@@ -83,6 +87,7 @@ class CreateProductService {
                 imageUrl: true,
                 basePrice: true,
                 isActive: true,
+                badge: true,
                 createdAt: true
             }
         });

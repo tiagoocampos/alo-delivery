@@ -56,6 +56,8 @@ export const ModelName = {
   Category: 'Category',
   Product: 'Product',
   ProductVariant: 'ProductVariant',
+  ProductFlavor: 'ProductFlavor',
+  ProductCrust: 'ProductCrust',
   Order: 'Order',
   OrderItem: 'OrderItem',
   LoyaltyPoint: 'LoyaltyPoint',
@@ -86,6 +88,14 @@ export const TenantScalarFieldEnum = {
   phone: 'phone',
   deliveryFee: 'deliveryFee',
   isActive: 'isActive',
+  logoUrl: 'logoUrl',
+  bannerUrl: 'bannerUrl',
+  faviconUrl: 'faviconUrl',
+  description: 'description',
+  address: 'address',
+  instagramUrl: 'instagramUrl',
+  minimumOrderValue: 'minimumOrderValue',
+  businessHours: 'businessHours',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -128,6 +138,7 @@ export const ProductScalarFieldEnum = {
   imageUrl: 'imageUrl',
   basePrice: 'basePrice',
   isActive: 'isActive',
+  badge: 'badge',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -139,10 +150,30 @@ export const ProductVariantScalarFieldEnum = {
   id: 'id',
   productId: 'productId',
   name: 'name',
-  priceDelta: 'priceDelta'
+  priceDelta: 'priceDelta',
+  maxFlavors: 'maxFlavors'
 } as const
 
 export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
+
+
+export const ProductFlavorScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  name: 'name'
+} as const
+
+export type ProductFlavorScalarFieldEnum = (typeof ProductFlavorScalarFieldEnum)[keyof typeof ProductFlavorScalarFieldEnum]
+
+
+export const ProductCrustScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  name: 'name',
+  priceDelta: 'priceDelta'
+} as const
+
+export type ProductCrustScalarFieldEnum = (typeof ProductCrustScalarFieldEnum)[keyof typeof ProductCrustScalarFieldEnum]
 
 
 export const OrderScalarFieldEnum = {
@@ -169,9 +200,11 @@ export const OrderItemScalarFieldEnum = {
   orderId: 'orderId',
   productId: 'productId',
   variantId: 'variantId',
+  crustId: 'crustId',
   quantity: 'quantity',
   unitPrice: 'unitPrice',
-  note: 'note'
+  note: 'note',
+  selectedFlavors: 'selectedFlavors'
 } as const
 
 export type OrderItemScalarFieldEnum = (typeof OrderItemScalarFieldEnum)[keyof typeof OrderItemScalarFieldEnum]
@@ -224,12 +257,29 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 export const NullsOrder = {
