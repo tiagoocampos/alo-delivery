@@ -46,6 +46,17 @@ import { CreateAddressController } from "./controllers/customer/CreateAddressCon
 import { UpdateAddressController } from "./controllers/customer/UpdateAddressController.js";
 import { DeleteAddressController } from "./controllers/customer/DeleteAddressController.js";
 import { ListCustomerOrdersController } from "./controllers/customer/ListCustomerOrdersController.js";
+import { ListAdminTenantsController } from "./controllers/admin/ListAdminTenantsController.js";
+import { GetAdminTenantDetailController } from "./controllers/admin/GetAdminTenantDetailController.js";
+import { UpsertSubscriptionController } from "./controllers/admin/UpsertSubscriptionController.js";
+import { ListPlatformPaymentsController } from "./controllers/admin/ListPlatformPaymentsController.js";
+import { CreatePlatformPaymentController } from "./controllers/admin/CreatePlatformPaymentController.js";
+import { ListPlatformExpensesController } from "./controllers/admin/ListPlatformExpensesController.js";
+import { CreatePlatformExpenseController } from "./controllers/admin/CreatePlatformExpenseController.js";
+import { UpdatePlatformExpenseController } from "./controllers/admin/UpdatePlatformExpenseController.js";
+import { DeletePlatformExpenseController } from "./controllers/admin/DeletePlatformExpenseController.js";
+import { GetAdminRevenueController } from "./controllers/admin/GetAdminRevenueController.js";
+import { GetAdminSummaryController } from "./controllers/admin/GetAdminSummaryController.js";
 
 import { tenantSchema, getTenantSchema, getStoreMenuSchema, updateMyTenantSchema } from "./schemas/tenantSchema.js";
 import { loginSchema } from "./schemas/loginShema.js";
@@ -79,6 +90,17 @@ import {
     getDashboardSummarySchema,
     getDashboardTopProductsSchema
 } from "./schemas/dashboardSchema.js";
+import {
+    getAdminTenantDetailSchema,
+    upsertSubscriptionSchema,
+    listPlatformPaymentsSchema,
+    createPlatformPaymentSchema,
+    listPlatformExpensesSchema,
+    createPlatformExpenseSchema,
+    updatePlatformExpenseSchema,
+    deletePlatformExpenseSchema,
+    getAdminRevenueSchema
+} from "./schemas/adminSchema.js";
 import { getLoyaltyPointsSchema } from "./schemas/loyaltySchema.js";
 import {
     registerCustomerSchema,
@@ -178,5 +200,23 @@ router.patch("/orders/:id/status", authenticate, requireTenant, authorize("store
 router.get("/dashboard/revenue", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardRevenueSchema), new GetDashboardRevenueController().handle);
 router.get("/dashboard/summary", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardSummarySchema), new GetDashboardSummaryController().handle);
 router.get("/dashboard/top-products", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardTopProductsSchema), new GetDashboardTopProductsController().handle);
+
+/* ---------------------------------------------------------------------------
+ * Admin da plataforma — só platform_admin (não tem tenantId, sem requireTenant)
+ * ------------------------------------------------------------------------ */
+router.get("/admin/tenants", authenticate, authorize("platform_admin"), new ListAdminTenantsController().handle);
+router.get("/admin/tenants/:id", authenticate, authorize("platform_admin"), validateSchema(getAdminTenantDetailSchema), new GetAdminTenantDetailController().handle);
+router.post("/admin/tenants/:id/subscription", authenticate, authorize("platform_admin"), validateSchema(upsertSubscriptionSchema), new UpsertSubscriptionController().handle);
+
+router.get("/admin/payments", authenticate, authorize("platform_admin"), validateSchema(listPlatformPaymentsSchema), new ListPlatformPaymentsController().handle);
+router.post("/admin/payments", authenticate, authorize("platform_admin"), validateSchema(createPlatformPaymentSchema), new CreatePlatformPaymentController().handle);
+
+router.get("/admin/expenses", authenticate, authorize("platform_admin"), validateSchema(listPlatformExpensesSchema), new ListPlatformExpensesController().handle);
+router.post("/admin/expenses", authenticate, authorize("platform_admin"), validateSchema(createPlatformExpenseSchema), new CreatePlatformExpenseController().handle);
+router.put("/admin/expenses/:id", authenticate, authorize("platform_admin"), validateSchema(updatePlatformExpenseSchema), new UpdatePlatformExpenseController().handle);
+router.delete("/admin/expenses/:id", authenticate, authorize("platform_admin"), validateSchema(deletePlatformExpenseSchema), new DeletePlatformExpenseController().handle);
+
+router.get("/admin/revenue", authenticate, authorize("platform_admin"), validateSchema(getAdminRevenueSchema), new GetAdminRevenueController().handle);
+router.get("/admin/summary", authenticate, authorize("platform_admin"), new GetAdminSummaryController().handle);
 
 export { router };

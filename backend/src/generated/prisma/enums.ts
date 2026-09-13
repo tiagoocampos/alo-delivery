@@ -44,3 +44,13 @@ export const ProductBadge = {
 } as const
 
 export type ProductBadge = (typeof ProductBadge)[keyof typeof ProductBadge]
+
+
+export const SubscriptionStatus = {
+  trial: 'trial',
+  active: 'active',
+  overdue: 'overdue',
+  canceled: 'canceled'
+} as const
+
+export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]

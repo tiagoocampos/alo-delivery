@@ -52,6 +52,9 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   Tenant: 'Tenant',
+  Subscription: 'Subscription',
+  PlatformPayment: 'PlatformPayment',
+  PlatformExpense: 'PlatformExpense',
   User: 'User',
   Category: 'Category',
   CategorySize: 'CategorySize',
@@ -102,6 +105,42 @@ export const TenantScalarFieldEnum = {
 } as const
 
 export type TenantScalarFieldEnum = (typeof TenantScalarFieldEnum)[keyof typeof TenantScalarFieldEnum]
+
+
+export const SubscriptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  planName: 'planName',
+  monthlyPrice: 'monthlyPrice',
+  status: 'status',
+  startedAt: 'startedAt',
+  canceledAt: 'canceledAt'
+} as const
+
+export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const PlatformPaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  amount: 'amount',
+  paidAt: 'paidAt',
+  note: 'note'
+} as const
+
+export type PlatformPaymentScalarFieldEnum = (typeof PlatformPaymentScalarFieldEnum)[keyof typeof PlatformPaymentScalarFieldEnum]
+
+
+export const PlatformExpenseScalarFieldEnum = {
+  id: 'id',
+  description: 'description',
+  category: 'category',
+  amount: 'amount',
+  date: 'date',
+  isRecurring: 'isRecurring'
+} as const
+
+export type PlatformExpenseScalarFieldEnum = (typeof PlatformExpenseScalarFieldEnum)[keyof typeof PlatformExpenseScalarFieldEnum]
 
 
 export const UserScalarFieldEnum = {

@@ -28,3 +28,17 @@ export function getMonthRange(monthsAgo: number, reference: Date = new Date()): 
     const end = new Date(year, month + 1, 0, 23, 59, 59, 999); // dia 0 do mês seguinte = último dia deste mês
     return { start, end };
 }
+
+// Mês explícito, no formato "YYYY-MM" (ex: filtro vindo de query param).
+export function getMonthRangeFromString(value: string): { start: Date; end: Date } {
+    const [year, month] = value.split("-").map(Number);
+    const start = new Date(year!, month! - 1, 1, 0, 0, 0, 0);
+    const end = new Date(year!, month!, 0, 23, 59, 59, 999);
+    return { start, end };
+}
+
+export function formatMonthOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}`;
+}

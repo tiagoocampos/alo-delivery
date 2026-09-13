@@ -9,6 +9,9 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/Tenant.js'
+export type * from './models/Subscription.js'
+export type * from './models/PlatformPayment.js'
+export type * from './models/PlatformExpense.js'
 export type * from './models/User.js'
 export type * from './models/Category.js'
 export type * from './models/CategorySize.js'
