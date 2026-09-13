@@ -76,3 +76,13 @@ export const listCustomerOrdersSchema =
     z.object({
         params: slugParam
     })
+
+export const cancelCustomerOrderSchema =
+    z.object({
+        params: slugParam.extend({
+            orderId: z.string().uuid({ message: "Pedido inválido" }),
+        }),
+        body: z.object({
+            reason: z.string().min(1, { message: "Informe o motivo do cancelamento" }),
+        })
+    })

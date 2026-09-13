@@ -37,6 +37,14 @@ export const PaymentMethod = {
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
 
+export const CanceledBy = {
+  customer: 'customer',
+  store: 'store'
+} as const
+
+export type CanceledBy = (typeof CanceledBy)[keyof typeof CanceledBy]
+
+
 export const ProductBadge = {
   mais_pedido: 'mais_pedido',
   promocao: 'promocao',

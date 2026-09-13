@@ -75,3 +75,16 @@ export async function listCustomerOrders(slug: string): Promise<CustomerOrder[]>
   })
   return data
 }
+
+export async function cancelCustomerOrder(
+  slug: string,
+  orderId: string,
+  reason: string
+): Promise<CustomerOrder> {
+  const { data } = await api.patch<CustomerOrder>(
+    `/store/${slug}/customer/orders/${orderId}/cancel`,
+    { reason },
+    { headers: authHeaders(slug) }
+  )
+  return data
+}

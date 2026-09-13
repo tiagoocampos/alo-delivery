@@ -47,6 +47,7 @@ import { CreateAddressController } from "./controllers/customer/CreateAddressCon
 import { UpdateAddressController } from "./controllers/customer/UpdateAddressController.js";
 import { DeleteAddressController } from "./controllers/customer/DeleteAddressController.js";
 import { ListCustomerOrdersController } from "./controllers/customer/ListCustomerOrdersController.js";
+import { CancelCustomerOrderController } from "./controllers/customer/CancelCustomerOrderController.js";
 import { ListAdminTenantsController } from "./controllers/admin/ListAdminTenantsController.js";
 import { GetAdminTenantDetailController } from "./controllers/admin/GetAdminTenantDetailController.js";
 import { UpsertSubscriptionController } from "./controllers/admin/UpsertSubscriptionController.js";
@@ -112,7 +113,8 @@ import {
     createAddressSchema,
     updateAddressSchema,
     deleteAddressSchema,
-    listCustomerOrdersSchema
+    listCustomerOrdersSchema,
+    cancelCustomerOrderSchema
 } from "./schemas/customerSchema.js";
 import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController.js";
 import { UpdateCategoryController } from "./controllers/category/UpdateCategoryController.js";
@@ -169,6 +171,7 @@ router.put("/store/:slug/customer/addresses/:id", authenticateCustomer, validate
 router.delete("/store/:slug/customer/addresses/:id", authenticateCustomer, validateSchema(deleteAddressSchema), new DeleteAddressController().handle);
 
 router.get("/store/:slug/customer/orders", authenticateCustomer, validateSchema(listCustomerOrdersSchema), new ListCustomerOrdersController().handle);
+router.patch("/store/:slug/customer/orders/:orderId/cancel", authenticateCustomer, validateSchema(cancelCustomerOrderSchema), new CancelCustomerOrderController().handle);
 
 /* ---------------------------------------------------------------------------
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request

@@ -50,6 +50,8 @@ export type OrderMinAggregateOutputType = {
   deliveryFee: number | null
   total: number | null
   paymentMethod: $Enums.PaymentMethod | null
+  cancelReason: string | null
+  canceledBy: $Enums.CanceledBy | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +68,8 @@ export type OrderMaxAggregateOutputType = {
   deliveryFee: number | null
   total: number | null
   paymentMethod: $Enums.PaymentMethod | null
+  cancelReason: string | null
+  canceledBy: $Enums.CanceledBy | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -82,6 +86,8 @@ export type OrderCountAggregateOutputType = {
   deliveryFee: number
   total: number
   paymentMethod: number
+  cancelReason: number
+  canceledBy: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -112,6 +118,8 @@ export type OrderMinAggregateInputType = {
   deliveryFee?: true
   total?: true
   paymentMethod?: true
+  cancelReason?: true
+  canceledBy?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -128,6 +136,8 @@ export type OrderMaxAggregateInputType = {
   deliveryFee?: true
   total?: true
   paymentMethod?: true
+  cancelReason?: true
+  canceledBy?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -144,6 +154,8 @@ export type OrderCountAggregateInputType = {
   deliveryFee?: true
   total?: true
   paymentMethod?: true
+  cancelReason?: true
+  canceledBy?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -247,6 +259,8 @@ export type OrderGroupByOutputType = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason: string | null
+  canceledBy: $Enums.CanceledBy | null
   createdAt: Date
   updatedAt: Date
   _count: OrderCountAggregateOutputType | null
@@ -286,6 +300,8 @@ export type OrderWhereInput = {
   deliveryFee?: Prisma.IntFilter<"Order"> | number
   total?: Prisma.IntFilter<"Order"> | number
   paymentMethod?: Prisma.EnumPaymentMethodFilter<"Order"> | $Enums.PaymentMethod
+  cancelReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  canceledBy?: Prisma.EnumCanceledByNullableFilter<"Order"> | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -306,6 +322,8 @@ export type OrderOrderByWithRelationInput = {
   deliveryFee?: Prisma.SortOrder
   total?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  canceledBy?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -329,6 +347,8 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   deliveryFee?: Prisma.IntFilter<"Order"> | number
   total?: Prisma.IntFilter<"Order"> | number
   paymentMethod?: Prisma.EnumPaymentMethodFilter<"Order"> | $Enums.PaymentMethod
+  cancelReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  canceledBy?: Prisma.EnumCanceledByNullableFilter<"Order"> | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -349,6 +369,8 @@ export type OrderOrderByWithAggregationInput = {
   deliveryFee?: Prisma.SortOrder
   total?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  cancelReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  canceledBy?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.OrderCountOrderByAggregateInput
@@ -373,6 +395,8 @@ export type OrderScalarWhereWithAggregatesInput = {
   deliveryFee?: Prisma.IntWithAggregatesFilter<"Order"> | number
   total?: Prisma.IntWithAggregatesFilter<"Order"> | number
   paymentMethod?: Prisma.EnumPaymentMethodWithAggregatesFilter<"Order"> | $Enums.PaymentMethod
+  cancelReason?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  canceledBy?: Prisma.EnumCanceledByNullableWithAggregatesFilter<"Order"> | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
 }
@@ -387,6 +411,8 @@ export type OrderCreateInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
@@ -407,6 +433,8 @@ export type OrderUncheckedCreateInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -423,6 +451,8 @@ export type OrderUpdateInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
@@ -443,6 +473,8 @@ export type OrderUncheckedUpdateInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -461,6 +493,8 @@ export type OrderCreateManyInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -475,6 +509,8 @@ export type OrderUpdateManyMutationInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -491,6 +527,8 @@ export type OrderUncheckedUpdateManyInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -517,6 +555,8 @@ export type OrderCountOrderByAggregateInput = {
   deliveryFee?: Prisma.SortOrder
   total?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  cancelReason?: Prisma.SortOrder
+  canceledBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -539,6 +579,8 @@ export type OrderMaxOrderByAggregateInput = {
   deliveryFee?: Prisma.SortOrder
   total?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  cancelReason?: Prisma.SortOrder
+  canceledBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -555,6 +597,8 @@ export type OrderMinOrderByAggregateInput = {
   deliveryFee?: Prisma.SortOrder
   total?: Prisma.SortOrder
   paymentMethod?: Prisma.SortOrder
+  cancelReason?: Prisma.SortOrder
+  canceledBy?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -618,6 +662,10 @@ export type EnumOrderStatusFieldUpdateOperationsInput = {
 
 export type EnumPaymentMethodFieldUpdateOperationsInput = {
   set?: $Enums.PaymentMethod
+}
+
+export type NullableEnumCanceledByFieldUpdateOperationsInput = {
+  set?: $Enums.CanceledBy | null
 }
 
 export type OrderCreateNestedOneWithoutPushSubscriptionsInput = {
@@ -700,6 +748,8 @@ export type OrderCreateWithoutTenantInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   customer?: Prisma.CustomerCreateNestedOneWithoutOrdersInput
@@ -718,6 +768,8 @@ export type OrderUncheckedCreateWithoutTenantInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -765,6 +817,8 @@ export type OrderScalarWhereInput = {
   deliveryFee?: Prisma.IntFilter<"Order"> | number
   total?: Prisma.IntFilter<"Order"> | number
   paymentMethod?: Prisma.EnumPaymentMethodFilter<"Order"> | $Enums.PaymentMethod
+  cancelReason?: Prisma.StringNullableFilter<"Order"> | string | null
+  canceledBy?: Prisma.EnumCanceledByNullableFilter<"Order"> | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
 }
@@ -779,6 +833,8 @@ export type OrderCreateWithoutPushSubscriptionsInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
@@ -798,6 +854,8 @@ export type OrderUncheckedCreateWithoutPushSubscriptionsInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -829,6 +887,8 @@ export type OrderUpdateWithoutPushSubscriptionsInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
@@ -848,6 +908,8 @@ export type OrderUncheckedUpdateWithoutPushSubscriptionsInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -863,6 +925,8 @@ export type OrderCreateWithoutItemsInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
@@ -882,6 +946,8 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   pushSubscriptions?: Prisma.OrderPushSubscriptionUncheckedCreateNestedManyWithoutOrderInput
@@ -913,6 +979,8 @@ export type OrderUpdateWithoutItemsInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
@@ -932,6 +1000,8 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   pushSubscriptions?: Prisma.OrderPushSubscriptionUncheckedUpdateManyWithoutOrderNestedInput
@@ -947,6 +1017,8 @@ export type OrderCreateWithoutCustomerInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutOrdersInput
@@ -965,6 +1037,8 @@ export type OrderUncheckedCreateWithoutCustomerInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -1008,6 +1082,8 @@ export type OrderCreateManyTenantInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1022,6 +1098,8 @@ export type OrderUpdateWithoutTenantInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customer?: Prisma.CustomerUpdateOneWithoutOrdersNestedInput
@@ -1040,6 +1118,8 @@ export type OrderUncheckedUpdateWithoutTenantInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -1057,6 +1137,8 @@ export type OrderUncheckedUpdateManyWithoutTenantInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1072,6 +1154,8 @@ export type OrderCreateManyCustomerInput = {
   deliveryFee: number
   total: number
   paymentMethod: $Enums.PaymentMethod
+  cancelReason?: string | null
+  canceledBy?: $Enums.CanceledBy | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1086,6 +1170,8 @@ export type OrderUpdateWithoutCustomerInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutOrdersNestedInput
@@ -1104,6 +1190,8 @@ export type OrderUncheckedUpdateWithoutCustomerInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -1121,6 +1209,8 @@ export type OrderUncheckedUpdateManyWithoutCustomerInput = {
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
   total?: Prisma.IntFieldUpdateOperationsInput | number
   paymentMethod?: Prisma.EnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  canceledBy?: Prisma.NullableEnumCanceledByFieldUpdateOperationsInput | $Enums.CanceledBy | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1177,6 +1267,8 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   deliveryFee?: boolean
   total?: boolean
   paymentMethod?: boolean
+  cancelReason?: boolean
+  canceledBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1198,6 +1290,8 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   deliveryFee?: boolean
   total?: boolean
   paymentMethod?: boolean
+  cancelReason?: boolean
+  canceledBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1216,6 +1310,8 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   deliveryFee?: boolean
   total?: boolean
   paymentMethod?: boolean
+  cancelReason?: boolean
+  canceledBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1234,11 +1330,13 @@ export type OrderSelectScalar = {
   deliveryFee?: boolean
   total?: boolean
   paymentMethod?: boolean
+  cancelReason?: boolean
+  canceledBy?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "customerName" | "customerPhone" | "address" | "status" | "subtotal" | "deliveryFee" | "total" | "paymentMethod" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "customerName" | "customerPhone" | "address" | "status" | "subtotal" | "deliveryFee" | "total" | "paymentMethod" | "cancelReason" | "canceledBy" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.Order$customerArgs<ExtArgs>
@@ -1275,6 +1373,8 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     deliveryFee: number
     total: number
     paymentMethod: $Enums.PaymentMethod
+    cancelReason: string | null
+    canceledBy: $Enums.CanceledBy | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["order"]>
@@ -1715,6 +1815,8 @@ export interface OrderFieldRefs {
   readonly deliveryFee: Prisma.FieldRef<"Order", 'Int'>
   readonly total: Prisma.FieldRef<"Order", 'Int'>
   readonly paymentMethod: Prisma.FieldRef<"Order", 'PaymentMethod'>
+  readonly cancelReason: Prisma.FieldRef<"Order", 'String'>
+  readonly canceledBy: Prisma.FieldRef<"Order", 'CanceledBy'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>
 }

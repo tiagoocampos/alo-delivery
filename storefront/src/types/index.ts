@@ -196,6 +196,8 @@ export interface AddressPayload {
   isDefault?: boolean
 }
 
+export type CanceledBy = "customer" | "store"
+
 export interface CustomerOrder {
   id: string
   customerName: string
@@ -206,6 +208,8 @@ export interface CustomerOrder {
   deliveryFee: number
   total: number
   paymentMethod: PaymentMethod
+  cancelReason: string | null
+  canceledBy: CanceledBy | null
   createdAt: string
   updatedAt: string
   items: OrderItemResult[]

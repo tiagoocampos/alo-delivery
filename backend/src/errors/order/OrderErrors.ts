@@ -59,3 +59,18 @@ export class InvalidOrderStatusTransitionError extends AppError {
         Object.setPrototypeOf(this, InvalidOrderStatusTransitionError.prototype);
     }
 }
+
+const STATUS_LABELS: Record<string, string> = {
+    preparo: "em preparo",
+    transporte: "a caminho",
+    entregue: "entregue",
+    cancelado: "cancelado"
+};
+
+export class OrderCannotBeCanceledError extends AppError {
+    constructor(status: string) {
+        super(`Esse pedido já está ${STATUS_LABELS[status] ?? status} — entre em contato com a loja para cancelar`, 422);
+        this.name = "OrderCannotBeCanceledError";
+        Object.setPrototypeOf(this, OrderCannotBeCanceledError.prototype);
+    }
+}

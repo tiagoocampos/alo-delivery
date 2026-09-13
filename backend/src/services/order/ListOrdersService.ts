@@ -32,6 +32,8 @@ class ListOrdersService {
                 deliveryFee: true,
                 total: true,
                 paymentMethod: true,
+                cancelReason: true,
+                canceledBy: true,
                 createdAt: true,
                 updatedAt: true,
                 items: {

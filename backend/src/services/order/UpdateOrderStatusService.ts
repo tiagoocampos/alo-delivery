@@ -108,7 +108,12 @@ class UpdateOrderStatusService {
 
         const updated = await prismaClient.order.update({
             where: { id: order.id },
-            data: { status },
+            data: {
+                status,
+                // Cancelamento pelo painel não pede motivo (ainda) — só marca
+                // quem cancelou, pra diferenciar de cancelamento pelo cliente.
+                ...(status === "cancelado" ? { canceledBy: "store" as const } : {})
+            },
             select: orderSelect
         });
 
