@@ -20,6 +20,7 @@ import { CartProvider } from "@/context/CartContext"
 import { CustomerAuthProvider } from "@/context/CustomerAuthContext"
 import { useCart } from "@/hooks/useCart"
 import { getStoreMenu } from "@/services/storefront"
+import { applyTenantManifest } from "@/lib/pwaManifest"
 import type { Category, Order, Product, StoreMenu } from "@/types"
 
 function StorefrontContent({ slug }: { slug: string }) {
@@ -77,6 +78,26 @@ function StorefrontContent({ slug }: { slug: string }) {
     if (!menu?.tenant.name) return
     document.title = menu.tenant.name
   }, [menu?.tenant.name])
+
+  useEffect(() => {
+    if (!menu?.tenant) return
+
+    let cleanup: (() => void) | undefined
+    let cancelled = false
+
+    applyTenantManifest(menu.tenant, slug).then((revoke) => {
+      if (cancelled) {
+        revoke()
+      } else {
+        cleanup = revoke
+      }
+    })
+
+    return () => {
+      cancelled = true
+      cleanup?.()
+    }
+  }, [menu?.tenant, slug])
 
   const activeCategoryName = useMemo(
     () => menu?.categories.find((category) => category.id === activeCategoryId)?.name ?? null,

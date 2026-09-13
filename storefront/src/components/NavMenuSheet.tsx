@@ -1,8 +1,9 @@
-import { Award, ListOrdered, LogIn, Phone, ShoppingCart, User, UtensilsCrossed } from "lucide-react"
+import { Award, Download, ListOrdered, LogIn, Phone, ShoppingCart, User, UtensilsCrossed } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import { getInitials } from "@/lib/text"
 import { useCustomerAuth } from "@/hooks/useCustomerAuth"
+import { useInstallPrompt } from "@/hooks/useInstallPrompt"
 import type { Tenant } from "@/types"
 
 interface NavMenuSheetProps {
@@ -25,6 +26,7 @@ export function NavMenuSheet({
   onOpenOrders,
 }: NavMenuSheetProps) {
   const { isAuthenticated } = useCustomerAuth()
+  const { canInstall, promptInstall } = useInstallPrompt()
   const close = () => onOpenChange(false)
   const hasBanner = Boolean(tenant.bannerUrl)
 
@@ -81,6 +83,13 @@ export function NavMenuSheet({
             <UtensilsCrossed className="size-4.5" strokeWidth={1.75} />
             Cardápio
           </button>
+
+          {canInstall && (
+            <button type="button" onClick={promptInstall} className={itemClass}>
+              <Download className="size-4.5" strokeWidth={1.75} />
+              Instalar app
+            </button>
+          )}
 
           <button
             type="button"
