@@ -14,6 +14,8 @@ class CreatePlatformExpenseController {
             isRecurring
         });
 
+        //console.log(expense)
+
         return res.status(201).json(expense);
     }
 }
