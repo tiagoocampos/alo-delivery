@@ -1,5 +1,6 @@
 import { InvalidOrderStatusTransitionError, OrderNotFoundError } from "../../errors/order/OrderErrors.js";
 import prismaClient from "../../prisma/index.js";
+import { SendOrderStatusPushService } from "./SendOrderStatusPushService.js";
 import type { OrderStatus } from "../../generated/prisma/enums.js";
 
 // Máquina de estados do pedido: só avança um passo por vez.
@@ -94,6 +95,8 @@ class UpdateOrderStatusService {
                 return { updated, loyalty };
             });
 
+            await this.notify(order.id, status);
+
             return {
                 ...updated,
                 loyalty: {
@@ -109,7 +112,19 @@ class UpdateOrderStatusService {
             select: orderSelect
         });
 
+        await this.notify(order.id, status);
+
         return updated;
+    }
+
+    // Roda depois que o status já foi salvo — falha ao notificar nunca pode
+    // impedir a troca de status, que já aconteceu nesse ponto.
+    private async notify(orderId: string, status: OrderStatus) {
+        try {
+            await new SendOrderStatusPushService().execute({ orderId, status });
+        } catch {
+            // best-effort — nada a fazer aqui além de não propagar.
+        }
     }
 }
 

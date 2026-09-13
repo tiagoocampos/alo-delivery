@@ -275,13 +275,33 @@ model Order {
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt @map("updated_at")
 
-  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  customer Customer?   @relation(fields: [customerId], references: [id])
-  items    OrderItem[]
+  tenant            Tenant                   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer          Customer?                @relation(fields: [customerId], references: [id])
+  items             OrderItem[]
+  pushSubscriptions OrderPushSubscription[]
 
   @@index([tenantId])
   @@index([tenantId, status])
   @@map("orders")
+}
+
+// =========================================================
+// ORDER PUSH SUBSCRIPTION — inscrição de notificação push vinculada a um
+// pedido específico (não a uma conta de cliente — funciona pra convidado também).
+// =========================================================
+
+model OrderPushSubscription {
+  id        String   @id @default(uuid())
+  orderId   String   @map("order_id")
+  endpoint  String
+  p256dhKey String   @map("p256dh_key")
+  authKey   String   @map("auth_key")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@map("order_push_subscriptions")
 }
 
 // =========================================================

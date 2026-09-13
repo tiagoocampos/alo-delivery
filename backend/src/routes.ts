@@ -34,6 +34,7 @@ import { ListOrdersController } from "./controllers/order/ListOrdersController.j
 import { GetOrdersSummaryController } from "./controllers/order/GetOrdersSummaryController.js";
 import { GetOrderDetailController } from "./controllers/order/GetOrderDetailController.js";
 import { UpdateOrderStatusController } from "./controllers/order/UpdateOrderStatusController.js";
+import { CreateOrderPushSubscriptionController } from "./controllers/order/CreateOrderPushSubscriptionController.js";
 import { GetDashboardRevenueController } from "./controllers/dashboard/GetDashboardRevenueController.js";
 import { GetDashboardSummaryController } from "./controllers/dashboard/GetDashboardSummaryController.js";
 import { GetDashboardTopProductsController } from "./controllers/dashboard/GetDashboardTopProductsController.js";
@@ -83,7 +84,8 @@ import {
     listOrdersSchema,
     getOrdersSummarySchema,
     getOrderDetailSchema,
-    updateOrderStatusSchema
+    updateOrderStatusSchema,
+    createOrderPushSubscriptionSchema
 } from "./schemas/orderSchema.js";
 import {
     getDashboardRevenueSchema,
@@ -148,6 +150,7 @@ router.put(
 router.get("/tenant/:slug", validateSchema(getTenantSchema), new GetTenantController().handle);
 router.get("/store/:slug/menu", validateSchema(getStoreMenuSchema), new GetStoreMenuController().handle);
 router.post("/store/:slug/orders", publicOrderRateLimiter, optionalAuthenticateCustomer, validateSchema(createOrderSchema), new CreateOrderController().handle);
+router.post("/store/:slug/orders/:orderId/push-subscription", validateSchema(createOrderPushSubscriptionSchema), new CreateOrderPushSubscriptionController().handle);
 router.get("/store/:slug/loyalty", validateSchema(getLoyaltyPointsSchema), new GetLoyaltyPointsController().handle);
 
 /* ---------------------------------------------------------------------------

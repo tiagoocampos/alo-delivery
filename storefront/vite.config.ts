@@ -12,6 +12,9 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: false, // manifest controlado na mão por loja, ver StorefrontPage.tsx
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.ts",
     }),
   ],
   resolve: {

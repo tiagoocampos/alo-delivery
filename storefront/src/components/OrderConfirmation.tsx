@@ -1,8 +1,10 @@
-import { CheckCircle2 } from "lucide-react"
+import { useState } from "react"
+import { Bell, BellRing, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { formatCents } from "@/lib/money"
 import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
+import { isPushSupported, subscribeToOrderPush } from "@/lib/pushSubscription"
 import type { Order } from "@/types"
 
 const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
@@ -12,10 +14,24 @@ const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
 
 interface OrderConfirmationProps {
   order: Order
+  slug: string
   onNewOrder: () => void
 }
 
-export function OrderConfirmation({ order, onNewOrder }: OrderConfirmationProps) {
+export function OrderConfirmation({ order, slug, onNewOrder }: OrderConfirmationProps) {
+  const [pushState, setPushState] = useState<"idle" | "loading" | "subscribed">("idle")
+
+  async function handleSubscribe() {
+    setPushState("loading")
+
+    try {
+      await subscribeToOrderPush(slug, order.id)
+      setPushState("subscribed")
+    } catch {
+      setPushState("idle")
+    }
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4 p-3">
       <div className="flex flex-col items-center gap-1.5 pt-4 text-center">
@@ -69,6 +85,28 @@ export function OrderConfirmation({ order, onNewOrder }: OrderConfirmationProps)
           <span>Entrega: {order.address}</span>
         </div>
       </div>
+
+      {isPushSupported() && (
+        <Button
+          onClick={handleSubscribe}
+          disabled={pushState !== "idle"}
+          variant="secondary"
+          size="lg"
+          className="w-full"
+        >
+          {pushState === "subscribed" ? (
+            <>
+              <BellRing className="size-4" />
+              Você vai ser avisado por notificação
+            </>
+          ) : (
+            <>
+              <Bell className="size-4" />
+              {pushState === "loading" ? "Ativando..." : "Avisar quando o pedido atualizar"}
+            </>
+          )}
+        </Button>
+      )}
 
       <Button onClick={onNewOrder} variant="outline" size="lg" className="w-full">
         Fazer novo pedido
