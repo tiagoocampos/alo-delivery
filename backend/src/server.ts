@@ -22,5 +22,5 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-    console.log(`Server is running on port http://localhost:${PORT}`);
+    console.log(`Server is running na port http://localhost:${PORT}`);
 })
