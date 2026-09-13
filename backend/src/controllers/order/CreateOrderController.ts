@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateOrderService } from '../../services/order/CreateOrderService.js';
+import { normalizePhone } from '../../utils/phone.js';
 
 class CreateOrderController {
     async handle(req: Request, res: Response) {
@@ -10,7 +11,7 @@ class CreateOrderController {
         const order = await createOrderService.execute({
             slug,
             customerName,
-            customerPhone,
+            customerPhone: normalizePhone(customerPhone),
             address,
             paymentMethod,
             items,

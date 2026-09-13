@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UpdateMyTenantService } from "../../services/tenant/UpdateMyTenantService.js";
+import { normalizePhone } from "../../utils/phone.js";
 
 class UpdateMyTenantController {
     async handle(req: Request, res: Response) {
@@ -29,7 +30,7 @@ class UpdateMyTenantController {
             tenantId,
             name,
             slug,
-            phone,
+            phone: phone === undefined ? phone : normalizePhone(phone),
             deliveryFee,
             isActive,
             description,

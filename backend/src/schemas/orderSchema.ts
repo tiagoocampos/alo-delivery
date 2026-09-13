@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { phoneSchema } from "./sharedSchema.js";
 
 const orderStatus = z.enum(["novo", "preparo", "transporte", "entregue", "cancelado"]);
 
@@ -26,7 +27,7 @@ export const createOrderSchema =
         }),
         body: z.object({
             customerName: z.string().min(1, { message: "O nome do cliente é obrigatório" }),
-            customerPhone: z.string().min(8, { message: "Telefone inválido" }),
+            customerPhone: phoneSchema,
             address: z.string().min(1, { message: "O endereço de entrega é obrigatório" }),
             paymentMethod: z.enum(["pix_manual", "na_entrega"], {
                 message: "Forma de pagamento inválida"

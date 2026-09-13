@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
+import { formatPhoneInput } from "@/lib/phone"
 import type { PaymentMethod } from "@/types"
 
 const checkoutSchema = z.object({
@@ -33,6 +34,7 @@ const PAYMENT_OPTIONS: { value: PaymentMethod; label: string }[] = [
 export function CheckoutForm({ onSubmit, isSubmitting, defaultValues }: CheckoutFormProps) {
   const {
     register,
+    control,
     handleSubmit,
     watch,
     setValue,
@@ -56,7 +58,19 @@ export function CheckoutForm({ onSubmit, isSubmitting, defaultValues }: Checkout
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="customerPhone">Telefone</Label>
-        <Input id="customerPhone" {...register("customerPhone")} placeholder="(00) 00000-0000" />
+        <Controller
+          control={control}
+          name="customerPhone"
+          render={({ field }) => (
+            <Input
+              id="customerPhone"
+              value={field.value ?? ""}
+              onChange={(event) => field.onChange(formatPhoneInput(event.target.value))}
+              onBlur={field.onBlur}
+              placeholder="(00) 00000-0000"
+            />
+          )}
+        />
         {errors.customerPhone && (
           <span className="text-xs text-destructive">{errors.customerPhone.message}</span>
         )}

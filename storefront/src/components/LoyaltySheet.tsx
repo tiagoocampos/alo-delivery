@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { getLoyaltyPoints } from "@/services/storefront"
+import { formatPhoneInput } from "@/lib/phone"
 import type { LoyaltyInfo } from "@/types"
 
 interface LoyaltySheetProps {
@@ -61,7 +62,7 @@ export function LoyaltySheet({ open, onOpenChange, slug }: LoyaltySheetProps) {
             <Input
               id="loyaltyPhone"
               value={phone}
-              onChange={(event) => setPhone(event.target.value)}
+              onChange={(event) => setPhone(formatPhoneInput(event.target.value))}
               placeholder="(00) 00000-0000"
             />
           </div>

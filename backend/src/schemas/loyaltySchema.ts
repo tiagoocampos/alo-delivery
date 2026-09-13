@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { phoneSchema } from "./sharedSchema.js";
 
 export const getLoyaltyPointsSchema =
     z.object({
@@ -6,6 +7,6 @@ export const getLoyaltyPointsSchema =
             slug: z.string().min(1, { message: "A loja é obrigatória" }),
         }),
         query: z.object({
-            customerPhone: z.string().min(8, { message: "Telefone inválido" }),
+            customerPhone: phoneSchema,
         })
     })

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { phoneSchema } from "./sharedSchema.js";
 
 export const tenantSchema =
     z.object({
@@ -43,7 +44,7 @@ export const updateMyTenantSchema =
                 .min(1, { message: "O identificador da loja é obrigatório" })
                 .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, { message: "Use apenas letras minúsculas, números e hífens" })
                 .optional(),
-            phone: z.string().min(1, { message: "Telefone inválido" }).optional(),
+            phone: phoneSchema.optional(),
             deliveryFee: z.number().int().min(0, { message: "A taxa de entrega deve ser um inteiro não negativo" }).optional(),
             isActive: z.boolean().optional(),
             description: z.string().optional(),

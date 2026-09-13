@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { formatPhoneInput } from "@/lib/phone"
 import type { RegisterCustomerPayload } from "@/types"
 
 const registerSchema = z.object({
@@ -22,6 +23,7 @@ interface CustomerRegisterFormProps {
 export function CustomerRegisterForm({ onSubmit }: CustomerRegisterFormProps) {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormValues>({ resolver: zodResolver(registerSchema) })
@@ -39,7 +41,19 @@ export function CustomerRegisterForm({ onSubmit }: CustomerRegisterFormProps) {
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="registerPhone">Telefone</Label>
-        <Input id="registerPhone" {...register("phone")} placeholder="(00) 00000-0000" />
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field }) => (
+            <Input
+              id="registerPhone"
+              value={field.value ?? ""}
+              onChange={(event) => field.onChange(formatPhoneInput(event.target.value))}
+              onBlur={field.onBlur}
+              placeholder="(00) 00000-0000"
+            />
+          )}
+        />
         {errors.phone && <span className="text-xs text-destructive">{errors.phone.message}</span>}
       </div>
 

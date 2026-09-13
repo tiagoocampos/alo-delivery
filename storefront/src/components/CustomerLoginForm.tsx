@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { formatPhoneInput } from "@/lib/phone"
 import type { LoginCustomerPayload } from "@/types"
 
 const loginSchema = z.object({
@@ -18,6 +19,7 @@ interface CustomerLoginFormProps {
 export function CustomerLoginForm({ onSubmit }: CustomerLoginFormProps) {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginCustomerPayload>({ resolver: zodResolver(loginSchema) })
@@ -26,7 +28,19 @@ export function CustomerLoginForm({ onSubmit }: CustomerLoginFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="loginPhone">Telefone</Label>
-        <Input id="loginPhone" {...register("phone")} placeholder="(00) 00000-0000" />
+        <Controller
+          control={control}
+          name="phone"
+          render={({ field }) => (
+            <Input
+              id="loginPhone"
+              value={field.value ?? ""}
+              onChange={(event) => field.onChange(formatPhoneInput(event.target.value))}
+              onBlur={field.onBlur}
+              placeholder="(00) 00000-0000"
+            />
+          )}
+        />
         {errors.phone && <span className="text-xs text-destructive">{errors.phone.message}</span>}
       </div>
 

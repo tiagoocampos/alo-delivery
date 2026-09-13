@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { RegisterCustomerService } from '../../services/customer/RegisterCustomerService.js';
+import { normalizePhone } from '../../utils/phone.js';
 
 class RegisterCustomerController {
     async handle(req: Request, res: Response) {
@@ -10,7 +11,7 @@ class RegisterCustomerController {
         const result = await registerCustomerService.execute({
             slug,
             name,
-            phone,
+            phone: normalizePhone(phone),
             email,
             password
         });
