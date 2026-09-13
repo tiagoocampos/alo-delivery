@@ -408,7 +408,6 @@ export const ModelName = {
   Product: 'Product',
   ProductVariant: 'ProductVariant',
   Order: 'Order',
-  OrderPushSubscription: 'OrderPushSubscription',
   OrderItem: 'OrderItem',
   OrderItemFlavor: 'OrderItemFlavor',
   LoyaltyPoint: 'LoyaltyPoint',
@@ -429,7 +428,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "subscription" | "platformPayment" | "platformExpense" | "user" | "category" | "categorySize" | "categoryCrust" | "product" | "productVariant" | "order" | "orderPushSubscription" | "orderItem" | "orderItemFlavor" | "loyaltyPoint" | "customer" | "address"
+    modelProps: "tenant" | "subscription" | "platformPayment" | "platformExpense" | "user" | "category" | "categorySize" | "categoryCrust" | "product" | "productVariant" | "order" | "orderItem" | "orderItemFlavor" | "loyaltyPoint" | "customer" | "address"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1247,80 +1246,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    OrderPushSubscription: {
-      payload: Prisma.$OrderPushSubscriptionPayload<ExtArgs>
-      fields: Prisma.OrderPushSubscriptionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.OrderPushSubscriptionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.OrderPushSubscriptionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>
-        }
-        findFirst: {
-          args: Prisma.OrderPushSubscriptionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.OrderPushSubscriptionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>
-        }
-        findMany: {
-          args: Prisma.OrderPushSubscriptionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>[]
-        }
-        create: {
-          args: Prisma.OrderPushSubscriptionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>
-        }
-        createMany: {
-          args: Prisma.OrderPushSubscriptionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.OrderPushSubscriptionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>[]
-        }
-        delete: {
-          args: Prisma.OrderPushSubscriptionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>
-        }
-        update: {
-          args: Prisma.OrderPushSubscriptionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>
-        }
-        deleteMany: {
-          args: Prisma.OrderPushSubscriptionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.OrderPushSubscriptionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.OrderPushSubscriptionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>[]
-        }
-        upsert: {
-          args: Prisma.OrderPushSubscriptionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$OrderPushSubscriptionPayload>
-        }
-        aggregate: {
-          args: Prisma.OrderPushSubscriptionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateOrderPushSubscription>
-        }
-        groupBy: {
-          args: Prisma.OrderPushSubscriptionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.OrderPushSubscriptionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.OrderPushSubscriptionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.OrderPushSubscriptionCountAggregateOutputType> | number
-        }
-      }
-    }
     OrderItem: {
       payload: Prisma.$OrderItemPayload<ExtArgs>
       fields: Prisma.OrderItemFieldRefs
@@ -1881,18 +1806,6 @@ export const OrderScalarFieldEnum = {
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
 
 
-export const OrderPushSubscriptionScalarFieldEnum = {
-  id: 'id',
-  orderId: 'orderId',
-  endpoint: 'endpoint',
-  p256dhKey: 'p256dhKey',
-  authKey: 'authKey',
-  createdAt: 'createdAt'
-} as const
-
-export type OrderPushSubscriptionScalarFieldEnum = (typeof OrderPushSubscriptionScalarFieldEnum)[keyof typeof OrderPushSubscriptionScalarFieldEnum]
-
-
 export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
@@ -2312,7 +2225,6 @@ export type GlobalOmitConfig = {
   product?: Prisma.ProductOmit
   productVariant?: Prisma.ProductVariantOmit
   order?: Prisma.OrderOmit
-  orderPushSubscription?: Prisma.OrderPushSubscriptionOmit
   orderItem?: Prisma.OrderItemOmit
   orderItemFlavor?: Prisma.OrderItemFlavorOmit
   loyaltyPoint?: Prisma.LoyaltyPointOmit

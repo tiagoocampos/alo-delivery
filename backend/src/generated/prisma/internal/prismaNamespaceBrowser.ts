@@ -62,7 +62,6 @@ export const ModelName = {
   Product: 'Product',
   ProductVariant: 'ProductVariant',
   Order: 'Order',
-  OrderPushSubscription: 'OrderPushSubscription',
   OrderItem: 'OrderItem',
   OrderItemFlavor: 'OrderItemFlavor',
   LoyaltyPoint: 'LoyaltyPoint',
@@ -235,18 +234,6 @@ export const OrderScalarFieldEnum = {
 } as const
 
 export type OrderScalarFieldEnum = (typeof OrderScalarFieldEnum)[keyof typeof OrderScalarFieldEnum]
-
-
-export const OrderPushSubscriptionScalarFieldEnum = {
-  id: 'id',
-  orderId: 'orderId',
-  endpoint: 'endpoint',
-  p256dhKey: 'p256dhKey',
-  authKey: 'authKey',
-  createdAt: 'createdAt'
-} as const
-
-export type OrderPushSubscriptionScalarFieldEnum = (typeof OrderPushSubscriptionScalarFieldEnum)[keyof typeof OrderPushSubscriptionScalarFieldEnum]
 
 
 export const OrderItemScalarFieldEnum = {

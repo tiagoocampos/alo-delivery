@@ -1,10 +1,8 @@
-import { useState } from "react"
-import { Bell, BellRing, CheckCircle2 } from "lucide-react"
+import { CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { formatCents } from "@/lib/money"
 import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
-import { subscribeToOrderPush, supportsPush } from "@/lib/pushSubscription"
 import type { Order } from "@/types"
 
 const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
@@ -14,24 +12,10 @@ const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
 
 interface OrderConfirmationProps {
   order: Order
-  slug: string
   onNewOrder: () => void
 }
 
-export function OrderConfirmation({ order, slug, onNewOrder }: OrderConfirmationProps) {
-  const [pushState, setPushState] = useState<"idle" | "subscribing" | "subscribed">("idle")
-  const canOfferPush = supportsPush()
-
-  const handleActivatePush = async () => {
-    setPushState("subscribing")
-    try {
-      const subscribed = await subscribeToOrderPush(slug, order.id)
-      setPushState(subscribed ? "subscribed" : "idle")
-    } catch {
-      setPushState("idle")
-    }
-  }
-
+export function OrderConfirmation({ order, onNewOrder }: OrderConfirmationProps) {
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4 p-3">
       <div className="flex flex-col items-center gap-1.5 pt-4 text-center">
@@ -85,25 +69,6 @@ export function OrderConfirmation({ order, slug, onNewOrder }: OrderConfirmation
           <span>Entrega: {order.address}</span>
         </div>
       </div>
-
-      {canOfferPush &&
-        (pushState === "subscribed" ? (
-          <p className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
-            <BellRing className="size-4" />
-            Você vai receber notificações deste pedido
-          </p>
-        ) : (
-          <Button
-            onClick={handleActivatePush}
-            disabled={pushState === "subscribing"}
-            variant="outline"
-            size="lg"
-            className="w-full"
-          >
-            <Bell />
-            {pushState === "subscribing" ? "Ativando..." : "Ativar notificações deste pedido"}
-          </Button>
-        ))}
 
       <Button onClick={onNewOrder} variant="outline" size="lg" className="w-full">
         Fazer novo pedido

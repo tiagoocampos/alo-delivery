@@ -158,7 +158,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   }
 
   if (completedOrder) {
-    return <OrderConfirmation order={completedOrder} slug={slug} onNewOrder={() => setCompletedOrder(null)} />
+    return <OrderConfirmation order={completedOrder} onNewOrder={() => setCompletedOrder(null)} />
   }
 
   return (

@@ -97,11 +97,6 @@ export type ProductVariant = Prisma.ProductVariantModel
  */
 export type Order = Prisma.OrderModel
 /**
- * Model OrderPushSubscription
- * 
- */
-export type OrderPushSubscription = Prisma.OrderPushSubscriptionModel
-/**
  * Model OrderItem
  * 
  */

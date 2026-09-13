@@ -30,7 +30,6 @@ import { CreateCategoryCrustController } from "./controllers/category/CreateCate
 import { UpdateCategoryCrustController } from "./controllers/category/UpdateCategoryCrustController.js";
 import { DeleteCategoryCrustController } from "./controllers/category/DeleteCategoryCrustController.js";
 import { CreateOrderController } from "./controllers/order/CreateOrderController.js";
-import { CreateOrderPushSubscriptionController } from "./controllers/order/CreateOrderPushSubscriptionController.js";
 import { ListOrdersController } from "./controllers/order/ListOrdersController.js";
 import { GetOrdersSummaryController } from "./controllers/order/GetOrdersSummaryController.js";
 import { GetOrderDetailController } from "./controllers/order/GetOrderDetailController.js";
@@ -81,7 +80,6 @@ import {
 } from "./schemas/productSchema.js";
 import {
     createOrderSchema,
-    createOrderPushSubscriptionSchema,
     listOrdersSchema,
     getOrdersSummarySchema,
     getOrderDetailSchema,
@@ -150,7 +148,6 @@ router.put(
 router.get("/tenant/:slug", validateSchema(getTenantSchema), new GetTenantController().handle);
 router.get("/store/:slug/menu", validateSchema(getStoreMenuSchema), new GetStoreMenuController().handle);
 router.post("/store/:slug/orders", publicOrderRateLimiter, optionalAuthenticateCustomer, validateSchema(createOrderSchema), new CreateOrderController().handle);
-router.post("/store/:slug/orders/:orderId/push-subscription", validateSchema(createOrderPushSubscriptionSchema), new CreateOrderPushSubscriptionController().handle);
 router.get("/store/:slug/loyalty", validateSchema(getLoyaltyPointsSchema), new GetLoyaltyPointsController().handle);
 
 /* ---------------------------------------------------------------------------

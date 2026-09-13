@@ -70,18 +70,3 @@ export const updateOrderStatusSchema =
             status: orderStatus,
         })
     })
-
-export const createOrderPushSubscriptionSchema =
-    z.object({
-        params: z.object({
-            slug: z.string().min(1, { message: "A loja é obrigatória" }),
-            orderId: z.string().uuid({ message: "Pedido inválido" }),
-        }),
-        body: z.object({
-            endpoint: z.string().min(1, { message: "Endpoint é obrigatório" }),
-            keys: z.object({
-                p256dh: z.string().min(1, { message: "Chave p256dh é obrigatória" }),
-                auth: z.string().min(1, { message: "Chave auth é obrigatória" }),
-            }),
-        })
-    })
