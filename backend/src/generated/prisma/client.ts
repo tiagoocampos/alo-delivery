@@ -67,6 +67,11 @@ export type PlatformExpense = Prisma.PlatformExpenseModel
  */
 export type User = Prisma.UserModel
 /**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
  * Model Category
  * 
  */

@@ -15,3 +15,11 @@ export class TenantRequiredError extends AppError {
         Object.setPrototypeOf(this, TenantRequiredError.prototype);
     }
 }
+
+export class InvalidResetTokenError extends AppError {
+    constructor() {
+        super("Link inválido ou expirado. Solicite um novo.", 400);
+        this.name = "InvalidResetTokenError";
+        Object.setPrototypeOf(this, InvalidResetTokenError.prototype);
+    }
+}

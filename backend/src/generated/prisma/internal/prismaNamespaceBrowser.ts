@@ -56,6 +56,7 @@ export const ModelName = {
   PlatformPayment: 'PlatformPayment',
   PlatformExpense: 'PlatformExpense',
   User: 'User',
+  PasswordResetToken: 'PasswordResetToken',
   Category: 'Category',
   CategorySize: 'CategorySize',
   CategoryCrust: 'CategoryCrust',
@@ -156,6 +157,17 @@ export const UserScalarFieldEnum = {
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  token: 'token',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
 export const CategoryScalarFieldEnum = {

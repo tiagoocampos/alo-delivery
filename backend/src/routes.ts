@@ -13,6 +13,8 @@ import { authRateLimiter, publicOrderRateLimiter } from "./middlewares/RateLimit
 
 import { RegisterTenantController } from "./controllers/tenant/RegisterTenantController.js";
 import { LoginTenantController } from "./controllers/tenant/LoginTenantController.js";
+import { ForgotPasswordController } from "./controllers/auth/ForgotPasswordController.js";
+import { ResetPasswordController } from "./controllers/auth/ResetPasswordController.js";
 import { GetTenantController } from "./controllers/tenant/GetTenantController.js";
 import { GetMyTenantController } from "./controllers/tenant/GetMyTenantController.js";
 import { UpdateMyTenantController } from "./controllers/tenant/UpdateMyTenantController.js";
@@ -63,6 +65,7 @@ import { GetAdminSummaryController } from "./controllers/admin/GetAdminSummaryCo
 
 import { tenantSchema, getTenantSchema, getStoreMenuSchema, updateMyTenantSchema } from "./schemas/tenantSchema.js";
 import { loginSchema } from "./schemas/loginShema.js";
+import { forgotPasswordSchema, resetPasswordSchema } from "./schemas/authSchema.js";
 import {
     createCategorySchema,
     updateCategorySchema,
@@ -128,6 +131,8 @@ const upload = multer(uploadConfig);
  * ------------------------------------------------------------------------ */
 router.post("/register", authRateLimiter, validateSchema(tenantSchema), new RegisterTenantController().handle);
 router.post("/login", authRateLimiter, validateSchema(loginSchema), new LoginTenantController().handle);
+router.post("/auth/forgot-password", authRateLimiter, validateSchema(forgotPasswordSchema), new ForgotPasswordController().handle);
+router.post("/auth/reset-password", validateSchema(resetPasswordSchema), new ResetPasswordController().handle);
 
 /* ---------------------------------------------------------------------------
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request
