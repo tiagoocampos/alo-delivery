@@ -1,5 +1,5 @@
 import prismaClient from "../../prisma/index.js";
-import { formatMonthOnly } from "../../utils/dateRange.js";
+import { formatMonthOnly, getMonthKey, getMonthRange } from "../../utils/dateRange.js";
 
 interface GetAdminRevenueServiceProps {
     months?: number | undefined;
@@ -9,9 +9,8 @@ class GetAdminRevenueService {
     async execute({ months }: GetAdminRevenueServiceProps) {
 
         const numMonths = months ?? 12;
-        const now = new Date();
-        const rangeStart = new Date(now.getFullYear(), now.getMonth() - (numMonths - 1), 1, 0, 0, 0, 0);
-        const rangeEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+        const { start: rangeStart } = getMonthRange(numMonths - 1);
+        const { end: rangeEnd } = getMonthRange(0);
 
         const payments = await prismaClient.platformPayment.findMany({
             where: {
@@ -31,8 +30,7 @@ class GetAdminRevenueService {
 
         const result: { month: string; totalRevenue: number }[] = [];
         for (let i = 0; i < numMonths; i++) {
-            const month = new Date(rangeStart.getFullYear(), rangeStart.getMonth() + i, 1);
-            const key = formatMonthOnly(month);
+            const key = getMonthKey(numMonths - 1 - i);
             result.push({ month: key, totalRevenue: revenueByMonth.get(key) ?? 0 });
         }
 

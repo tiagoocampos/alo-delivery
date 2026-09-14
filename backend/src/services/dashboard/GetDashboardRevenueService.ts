@@ -1,5 +1,5 @@
 import prismaClient from "../../prisma/index.js";
-import { formatDateOnly } from "../../utils/dateRange.js";
+import { formatDateOnly, getDayRange, shiftDateKey } from "../../utils/dateRange.js";
 
 interface GetDashboardRevenueServiceProps {
     tenantId: string;
@@ -10,9 +10,10 @@ class GetDashboardRevenueService {
     async execute({ tenantId, days }: GetDashboardRevenueServiceProps) {
 
         const numDays = days ?? 30;
-        const today = new Date();
-        const rangeEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
-        const rangeStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (numDays - 1), 0, 0, 0, 0);
+        const todayKey = formatDateOnly(new Date());
+        const startKey = shiftDateKey(todayKey, -(numDays - 1));
+        const { end: rangeEnd } = getDayRange(todayKey);
+        const { start: rangeStart } = getDayRange(startKey);
 
         const orders = await prismaClient.order.findMany({
             where: {
@@ -37,8 +38,7 @@ class GetDashboardRevenueService {
 
         const result: { date: string; totalRevenue: number; totalOrders: number }[] = [];
         for (let i = 0; i < numDays; i++) {
-            const day = new Date(rangeStart.getFullYear(), rangeStart.getMonth(), rangeStart.getDate() + i);
-            const key = formatDateOnly(day);
+            const key = shiftDateKey(startKey, i);
             const entry = byDate.get(key) ?? { totalRevenue: 0, totalOrders: 0 };
             result.push({ date: key, totalRevenue: entry.totalRevenue, totalOrders: entry.totalOrders });
         }

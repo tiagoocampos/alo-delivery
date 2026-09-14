@@ -1,4 +1,5 @@
 import prismaClient from "../../prisma/index.js";
+import { formatDateOnly, getDayRange, shiftDateKey } from "../../utils/dateRange.js";
 
 interface GetDashboardTopProductsServiceProps {
     tenantId: string;
@@ -12,9 +13,10 @@ class GetDashboardTopProductsService {
         const numDays = days ?? 30;
         const limitCount = limit ?? 5;
 
-        const today = new Date();
-        const rangeEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
-        const rangeStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (numDays - 1), 0, 0, 0, 0);
+        const todayKey = formatDateOnly(new Date());
+        const startKey = shiftDateKey(todayKey, -(numDays - 1));
+        const { end: rangeEnd } = getDayRange(todayKey);
+        const { start: rangeStart } = getDayRange(startKey);
 
         const orders = await prismaClient.order.findMany({
             where: {
