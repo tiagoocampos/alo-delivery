@@ -1,6 +1,7 @@
 import crypto from "crypto";
+import axios from "axios";
 import prismaClient from "../../prisma/index.js";
-import transporter from "../../config/mailer.js";
+import { sendEmail } from "../../config/mailer.js";
 
 interface ForgotPasswordServiceProps {
     email: string;
@@ -40,17 +41,24 @@ class ForgotPasswordService {
         const resetLink = `${process.env.PAINEL_URL}/redefinir-senha?token=${token}`;
 
         try {
-            await transporter.sendMail({
-                from: process.env.EMAIL_FROM,
+            await sendEmail({
                 to: user.email,
                 subject: "Redefinir sua senha — Alô Delivery",
-                text: `Clique no link para redefinir sua senha: ${resetLink}\n\nSe você não pediu isso, ignore este e-mail.`
+                htmlContent: `<p>Clique no link para redefinir sua senha: <a href="${resetLink}">${resetLink}</a></p><p>Se você não pediu isso, ignore este e-mail.</p>`
             });
         } catch (error) {
             // Falha de envio nunca pode virar um 500 aqui: a resposta precisa
             // continuar genérica pro cliente, senão vira um oráculo de e-mail
             // cadastrado (sucesso quando não existe vs. erro quando existe).
-            console.error("Falha ao enviar e-mail de redefinição de senha:", error);
+            //
+            // Loga só status/corpo da resposta, nunca o erro inteiro — o
+            // AxiosError carrega a config da requisição, e com ela a
+            // BREVO_API_KEY em texto puro no header "api-key".
+            if (axios.isAxiosError(error)) {
+                console.error("Falha ao enviar e-mail de redefinição de senha:", error.response?.status, error.response?.data);
+            } else {
+                console.error("Falha ao enviar e-mail de redefinição de senha:", error);
+            }
         }
     }
 }
