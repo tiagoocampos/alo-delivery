@@ -5,6 +5,7 @@ import uploadConfig from "./config/multer.js";
 import { validateSchema } from "./middlewares/ValidateSchema.js";
 import { authenticate } from "./middlewares/Authenticate.js";
 import { requireTenant } from "./middlewares/RequireTenant.js";
+import { requireActiveSubscription } from "./middlewares/RequireActiveSubscription.js";
 import { authorize } from "./middlewares/Authorize.js";
 import { authenticateCustomer } from "./middlewares/AuthenticateCustomer.js";
 import { optionalAuthenticateCustomer } from "./middlewares/OptionalAuthenticateCustomer.js";
@@ -131,11 +132,12 @@ router.post("/login", authRateLimiter, validateSchema(loginSchema), new LoginTen
 /* ---------------------------------------------------------------------------
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request
  * ------------------------------------------------------------------------ */
-router.get("/tenant/me", authenticate, requireTenant, new GetMyTenantController().handle);
+router.get("/tenant/me", authenticate, requireTenant, requireActiveSubscription, new GetMyTenantController().handle);
 router.put(
     "/tenant/me",
     authenticate,
     requireTenant,
+    requireActiveSubscription,
     authorize("store_owner"),
     upload.fields([
         { name: "logo", maxCount: 1 },
@@ -176,36 +178,36 @@ router.patch("/store/:slug/customer/orders/:orderId/cancel", authenticateCustome
 /* ---------------------------------------------------------------------------
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request
  * ------------------------------------------------------------------------ */
-router.post("/categories", authenticate, requireTenant, authorize("store_owner"), validateSchema(createCategorySchema), new CreateCategoryController().handle);
-router.get("/categories", authenticate, requireTenant, new ListCategoriesController().handle);
-router.put("/categories/:categoryId", authenticate, requireTenant, authorize("store_owner"), validateSchema(updateCategorySchema), new UpdateCategoryController().handle);
-router.delete("/categories/:categoryId", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteCategorySchema), new DeleteCategoryController().handle);
+router.post("/categories", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(createCategorySchema), new CreateCategoryController().handle);
+router.get("/categories", authenticate, requireTenant, requireActiveSubscription, new ListCategoriesController().handle);
+router.put("/categories/:categoryId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(updateCategorySchema), new UpdateCategoryController().handle);
+router.delete("/categories/:categoryId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(deleteCategorySchema), new DeleteCategoryController().handle);
 
-router.post("/categories/:id/sizes", authenticate, requireTenant, authorize("store_owner"), validateSchema(createCategorySizeSchema), new CreateCategorySizeController().handle);
-router.put("/categories/:id/sizes/:sizeId", authenticate, requireTenant, authorize("store_owner"), validateSchema(updateCategorySizeSchema), new UpdateCategorySizeController().handle);
-router.delete("/categories/:id/sizes/:sizeId", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteCategorySizeSchema), new DeleteCategorySizeController().handle);
+router.post("/categories/:id/sizes", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(createCategorySizeSchema), new CreateCategorySizeController().handle);
+router.put("/categories/:id/sizes/:sizeId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(updateCategorySizeSchema), new UpdateCategorySizeController().handle);
+router.delete("/categories/:id/sizes/:sizeId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(deleteCategorySizeSchema), new DeleteCategorySizeController().handle);
 
-router.post("/categories/:id/crusts", authenticate, requireTenant, authorize("store_owner"), validateSchema(createCategoryCrustSchema), new CreateCategoryCrustController().handle);
-router.put("/categories/:id/crusts/:crustId", authenticate, requireTenant, authorize("store_owner"), validateSchema(updateCategoryCrustSchema), new UpdateCategoryCrustController().handle);
-router.delete("/categories/:id/crusts/:crustId", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteCategoryCrustSchema), new DeleteCategoryCrustController().handle);
+router.post("/categories/:id/crusts", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(createCategoryCrustSchema), new CreateCategoryCrustController().handle);
+router.put("/categories/:id/crusts/:crustId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(updateCategoryCrustSchema), new UpdateCategoryCrustController().handle);
+router.delete("/categories/:id/crusts/:crustId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(deleteCategoryCrustSchema), new DeleteCategoryCrustController().handle);
 
-router.post("/products", authenticate, requireTenant, authorize("store_owner"), upload.single("file"), validateSchema(createProductSchema), new CreateProductController().handle);
-router.get("/products", authenticate, requireTenant, validateSchema(listProductsSchema), new ListProductsController().handle);
-router.put("/products/:id", authenticate, requireTenant, authorize("store_owner"), upload.single("file"), validateSchema(updateProductSchema), new UpdateProductController().handle);
-router.delete("/products/:id", authenticate, requireTenant, authorize("store_owner"), validateSchema(deleteProductSchema), new DeleteProductController().handle);
-router.post("/products/:id/variants", authenticate, requireTenant, authorize("store_owner"), validateSchema(createProductVariantSchema), new CreateProductVariantController().handle);
+router.post("/products", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), upload.single("file"), validateSchema(createProductSchema), new CreateProductController().handle);
+router.get("/products", authenticate, requireTenant, requireActiveSubscription, validateSchema(listProductsSchema), new ListProductsController().handle);
+router.put("/products/:id", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), upload.single("file"), validateSchema(updateProductSchema), new UpdateProductController().handle);
+router.delete("/products/:id", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(deleteProductSchema), new DeleteProductController().handle);
+router.post("/products/:id/variants", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(createProductVariantSchema), new CreateProductVariantController().handle);
 
-router.get("/orders", authenticate, requireTenant, validateSchema(listOrdersSchema), new ListOrdersController().handle);
-router.get("/orders/summary", authenticate, requireTenant, validateSchema(getOrdersSummarySchema), new GetOrdersSummaryController().handle);
-router.get("/orders/:id", authenticate, requireTenant, validateSchema(getOrderDetailSchema), new GetOrderDetailController().handle);
-router.patch("/orders/:id/status", authenticate, requireTenant, authorize("store_owner", "store_staff"), validateSchema(updateOrderStatusSchema), new UpdateOrderStatusController().handle);
+router.get("/orders", authenticate, requireTenant, requireActiveSubscription, validateSchema(listOrdersSchema), new ListOrdersController().handle);
+router.get("/orders/summary", authenticate, requireTenant, requireActiveSubscription, validateSchema(getOrdersSummarySchema), new GetOrdersSummaryController().handle);
+router.get("/orders/:id", authenticate, requireTenant, requireActiveSubscription, validateSchema(getOrderDetailSchema), new GetOrderDetailController().handle);
+router.patch("/orders/:id/status", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(updateOrderStatusSchema), new UpdateOrderStatusController().handle);
 
 /* ---------------------------------------------------------------------------
  * Dashboard — só store_owner (visão gerencial, não operacional)
  * ------------------------------------------------------------------------ */
-router.get("/dashboard/revenue", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardRevenueSchema), new GetDashboardRevenueController().handle);
-router.get("/dashboard/summary", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardSummarySchema), new GetDashboardSummaryController().handle);
-router.get("/dashboard/top-products", authenticate, requireTenant, authorize("store_owner"), validateSchema(getDashboardTopProductsSchema), new GetDashboardTopProductsController().handle);
+router.get("/dashboard/revenue", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(getDashboardRevenueSchema), new GetDashboardRevenueController().handle);
+router.get("/dashboard/summary", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(getDashboardSummarySchema), new GetDashboardSummaryController().handle);
+router.get("/dashboard/top-products", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(getDashboardTopProductsSchema), new GetDashboardTopProductsController().handle);
 
 /* ---------------------------------------------------------------------------
  * Admin da plataforma — só platform_admin (não tem tenantId, sem requireTenant)

@@ -13,8 +13,8 @@ interface ProductCardProps {
 }
 
 const BADGE_CONFIG: Record<ProductBadge, { label: string; variant: "default" | "destructive" | "secondary" }> = {
-  mais_pedido: { label: "Mais pedido", variant: "default" },
-  promocao: { label: "Promoção", variant: "destructive" },
+  mais_pedido: { label: "Mais pedido", variant: "secondary" },
+  promocao: { label: "Promoção", variant: "default" },
   novo: { label: "Novo", variant: "secondary" },
 }
 

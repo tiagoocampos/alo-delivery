@@ -1,5 +1,4 @@
-import { TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
-import prismaClient from "../../prisma/index.js";
+import { resolveTenantOrThrow } from "./resolveTenantOrThrow.js";
 
 interface GetTenantServiceProps {
     slug: string;
@@ -8,35 +7,26 @@ interface GetTenantServiceProps {
 class GetTenantService {
     async execute({ slug }: GetTenantServiceProps) {
 
-        const tenant = await prismaClient.tenant.findUnique({
-            where: {
-                slug
-            },
-            select: {
-                id: true,
-                name: true,
-                slug: true,
-                phone: true,
-                deliveryFee: true,
-                isActive: true,
-                logoUrl: true,
-                bannerUrl: true,
-                faviconUrl: true,
-                description: true,
-                address: true,
-                instagramUrl: true,
-                minimumOrderValue: true,
-                businessHours: true,
-                createdAt: true,
-                updatedAt: true
-            }
-        });
+        const tenant = await resolveTenantOrThrow({ slug });
 
-        if (!tenant) {
-            throw new TenantNotFoundError();
-        }
-
-        return tenant;
+        return {
+            id: tenant.id,
+            name: tenant.name,
+            slug: tenant.slug,
+            phone: tenant.phone,
+            deliveryFee: tenant.deliveryFee,
+            isActive: tenant.isActive,
+            logoUrl: tenant.logoUrl,
+            bannerUrl: tenant.bannerUrl,
+            faviconUrl: tenant.faviconUrl,
+            description: tenant.description,
+            address: tenant.address,
+            instagramUrl: tenant.instagramUrl,
+            minimumOrderValue: tenant.minimumOrderValue,
+            businessHours: tenant.businessHours,
+            createdAt: tenant.createdAt,
+            updatedAt: tenant.updatedAt
+        };
     }
 }
 

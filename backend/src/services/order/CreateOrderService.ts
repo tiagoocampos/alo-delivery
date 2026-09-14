@@ -1,4 +1,5 @@
-import { TenantInactiveError, TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
+import { TenantInactiveError } from "../../errors/tenant/TenantErrors.js";
+import { resolveTenantOrThrow } from "../tenant/resolveTenantOrThrow.js";
 import {
     InvalidCategoryCrustError,
     InvalidCategorySizeError,
@@ -49,21 +50,7 @@ class CreateOrderService {
         customerAuth
     }: CreateOrderServiceProps) {
 
-        const tenant = await prismaClient.tenant.findUnique({
-            where: {
-                slug
-            },
-            select: {
-                id: true,
-                deliveryFee: true,
-                isActive: true,
-                minimumOrderValue: true
-            }
-        });
-
-        if (!tenant) {
-            throw new TenantNotFoundError();
-        }
+        const tenant = await resolveTenantOrThrow({ slug });
 
         if (!tenant.isActive) {
             throw new TenantInactiveError();

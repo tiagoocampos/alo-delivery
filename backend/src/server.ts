@@ -8,7 +8,22 @@ import { router } from "./routes.js";
 const app = express();
 app.use(helmet());
 app.use(express.json());
-app.use(cors());
+
+const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? "").split(",").map((o) => o.trim());
+
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            // "origin" vem undefined em chamadas sem navegador (ex: Postman, curl) — permita
+            // isso passar, já que não representa um navegador de terceiro tentando acessar via browser.
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Origem não permitida por CORS"));
+            }
+        },
+    })
+);
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

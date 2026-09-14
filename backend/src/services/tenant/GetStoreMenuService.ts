@@ -1,5 +1,6 @@
-import { TenantInactiveError, TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
+import { TenantInactiveError } from "../../errors/tenant/TenantErrors.js";
 import prismaClient from "../../prisma/index.js";
+import { resolveTenantOrThrow } from "./resolveTenantOrThrow.js";
 
 interface GetStoreMenuServiceProps {
     slug: string;
@@ -8,31 +9,7 @@ interface GetStoreMenuServiceProps {
 class GetStoreMenuService {
     async execute({ slug }: GetStoreMenuServiceProps) {
 
-        const tenant = await prismaClient.tenant.findUnique({
-            where: {
-                slug
-            },
-            select: {
-                id: true,
-                name: true,
-                slug: true,
-                phone: true,
-                deliveryFee: true,
-                isActive: true,
-                logoUrl: true,
-                bannerUrl: true,
-                faviconUrl: true,
-                description: true,
-                address: true,
-                instagramUrl: true,
-                minimumOrderValue: true,
-                businessHours: true
-            }
-        });
-
-        if (!tenant) {
-            throw new TenantNotFoundError();
-        }
+        const tenant = await resolveTenantOrThrow({ slug });
 
         if (!tenant.isActive) {
             throw new TenantInactiveError();
