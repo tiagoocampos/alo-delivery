@@ -50,6 +50,7 @@ export const updateMyTenantSchema =
             description: z.string().optional(),
             address: z.string().optional(),
             instagramUrl: z.string().url({ message: "URL do Instagram inválida" }).optional(),
+            pixKey: z.string().min(1, { message: "A chave Pix não pode ser vazia" }).optional(),
             minimumOrderValue: z.preprocess(
                 (value) => (typeof value === "string" ? Number(value) : value),
                 z.number().int().min(0, { message: "O pedido mínimo deve ser um inteiro não negativo em centavos" })

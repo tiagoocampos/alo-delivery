@@ -65,6 +65,7 @@ model Tenant {
   description       String?
   address           String?
   instagramUrl      String?  @map("instagram_url")
+  pixKey            String?  @map("pix_key")
   minimumOrderValue Int      @default(0) @map("minimum_order_value") // centavos
   businessHours     Json?    @map("business_hours")
   createdAt         DateTime @default(now()) @map("created_at")

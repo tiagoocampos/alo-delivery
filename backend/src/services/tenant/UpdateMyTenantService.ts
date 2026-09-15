@@ -15,6 +15,7 @@ interface UpdateMyTenantServiceProps {
     description?: string;
     address?: string;
     instagramUrl?: string;
+    pixKey?: string;
     minimumOrderValue?: number;
     businessHours?: Prisma.InputJsonValue;
     logoBuffer?: Buffer | undefined;
@@ -62,6 +63,7 @@ class UpdateMyTenantService {
         description,
         address,
         instagramUrl,
+        pixKey,
         minimumOrderValue,
         businessHours,
         logoBuffer,
@@ -117,6 +119,7 @@ class UpdateMyTenantService {
                 ...(description !== undefined && { description }),
                 ...(address !== undefined && { address }),
                 ...(instagramUrl !== undefined && { instagramUrl }),
+                ...(pixKey !== undefined && { pixKey }),
                 ...(minimumOrderValue !== undefined && { minimumOrderValue }),
                 ...(businessHours !== undefined && { businessHours }),
                 ...(logoUrl !== undefined && { logoUrl }),
@@ -136,6 +139,7 @@ class UpdateMyTenantService {
                 description: true,
                 address: true,
                 instagramUrl: true,
+                pixKey: true,
                 minimumOrderValue: true,
                 businessHours: true,
                 createdAt: true,

@@ -25,6 +25,7 @@ class GetMyTenantService {
                 description: true,
                 address: true,
                 instagramUrl: true,
+                pixKey: true,
                 minimumOrderValue: true,
                 businessHours: true,
                 createdAt: true,

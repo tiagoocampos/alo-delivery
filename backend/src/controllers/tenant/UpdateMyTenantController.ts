@@ -5,7 +5,7 @@ import { normalizePhone } from "../../utils/phone.js";
 class UpdateMyTenantController {
     async handle(req: Request, res: Response) {
         const tenantId = req.auth!.tenantId as string;
-        const { name, slug, phone, deliveryFee, isActive, description, address, instagramUrl } = req.body;
+        const { name, slug, phone, deliveryFee, isActive, description, address, instagramUrl, pixKey } = req.body;
 
         const files = req.files as { [fieldname: string]: Express.Multer.File[] } | undefined;
         const logoFile = files?.logo?.[0];
@@ -36,6 +36,7 @@ class UpdateMyTenantController {
             description,
             address,
             instagramUrl,
+            pixKey,
             minimumOrderValue,
             businessHours,
             logoBuffer: logoFile?.buffer,

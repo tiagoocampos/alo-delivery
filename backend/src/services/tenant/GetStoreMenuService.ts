@@ -83,6 +83,7 @@ class GetStoreMenuService {
                 description: tenant.description,
                 address: tenant.address,
                 instagramUrl: tenant.instagramUrl,
+                pixKey: tenant.pixKey,
                 minimumOrderValue: tenant.minimumOrderValue,
                 businessHours: tenant.businessHours
             },

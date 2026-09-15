@@ -100,6 +100,7 @@ export const TenantScalarFieldEnum = {
   description: 'description',
   address: 'address',
   instagramUrl: 'instagramUrl',
+  pixKey: 'pixKey',
   minimumOrderValue: 'minimumOrderValue',
   businessHours: 'businessHours',
   createdAt: 'createdAt',

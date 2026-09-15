@@ -29,6 +29,7 @@ async function resolveTenantOrThrow({ slug }: ResolveTenantOrThrowProps) {
             description: true,
             address: true,
             instagramUrl: true,
+            pixKey: true,
             minimumOrderValue: true,
             businessHours: true,
             createdAt: true,
