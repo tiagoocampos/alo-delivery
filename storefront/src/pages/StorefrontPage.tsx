@@ -220,6 +220,7 @@ function StorefrontContent({ slug }: { slug: string }) {
         slug={slug}
         deliveryFee={menu.tenant.deliveryFee}
         minimumOrderValue={menu.tenant.minimumOrderValue}
+        pixKey={menu.tenant.pixKey}
         onOrderCreated={setCompletedOrder}
       />
 

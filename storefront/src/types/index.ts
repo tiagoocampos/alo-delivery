@@ -57,6 +57,7 @@ export interface Tenant {
   description: string | null
   address: string | null
   instagramUrl: string | null
+  pixKey: string | null
   minimumOrderValue: number
   businessHours: BusinessHoursDay[] | null
 }

@@ -24,6 +24,7 @@ interface CartSheetProps {
   slug: string
   deliveryFee: number
   minimumOrderValue: number
+  pixKey: string | null
   onOrderCreated: (order: Order) => void
 }
 
@@ -33,6 +34,7 @@ export function CartSheet({
   slug,
   deliveryFee,
   minimumOrderValue,
+  pixKey,
   onOrderCreated,
 }: CartSheetProps) {
   const { items, subtotal, updateQuantity, removeItem, clear } = useCart()
@@ -206,6 +208,8 @@ export function CartSheet({
                 customerPhone: customer?.phone,
                 address: defaultAddressLine,
               }}
+              pixKey={pixKey}
+              totalCents={subtotal + deliveryFee}
             />
             <Button variant="ghost" onClick={() => setStep("cart")} disabled={isSubmitting}>
               Voltar para o carrinho
