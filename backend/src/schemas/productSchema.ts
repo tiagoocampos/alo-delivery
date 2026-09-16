@@ -60,3 +60,41 @@ export const createProductVariantSchema =
                 .optional(),
         })
     })
+
+export const createProductExtraSchema =
+    z.object({
+        params: z.object({
+            id: z.string().uuid({ message: "Produto inválido" }),
+        }),
+        body: z.object({
+            name: z.string().min(1, { message: "O nome do adicional é obrigatório" }),
+            price: z
+                .number()
+                .int({ message: "O preço deve ser um inteiro em centavos" })
+                .min(0, { message: "O preço deve ser um inteiro não negativo em centavos" }),
+        })
+    })
+
+export const updateProductExtraSchema =
+    z.object({
+        params: z.object({
+            id: z.string().uuid({ message: "Produto inválido" }),
+            extraId: z.string().uuid({ message: "Adicional inválido" }),
+        }),
+        body: z.object({
+            name: z.string().min(1, { message: "O nome do adicional é obrigatório" }).optional(),
+            price: z
+                .number()
+                .int({ message: "O preço deve ser um inteiro em centavos" })
+                .min(0, { message: "O preço deve ser um inteiro não negativo em centavos" })
+                .optional(),
+        })
+    })
+
+export const deleteProductExtraSchema =
+    z.object({
+        params: z.object({
+            id: z.string().uuid({ message: "Produto inválido" }),
+            extraId: z.string().uuid({ message: "Adicional inválido" }),
+        })
+    })

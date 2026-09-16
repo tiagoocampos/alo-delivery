@@ -97,6 +97,11 @@ export type Product = Prisma.ProductModel
  */
 export type ProductVariant = Prisma.ProductVariantModel
 /**
+ * Model ProductExtra
+ * 
+ */
+export type ProductExtra = Prisma.ProductExtraModel
+/**
  * Model Order
  * 
  */
@@ -116,6 +121,11 @@ export type OrderItem = Prisma.OrderItemModel
  * 
  */
 export type OrderItemFlavor = Prisma.OrderItemFlavorModel
+/**
+ * Model OrderItemExtra
+ * 
+ */
+export type OrderItemExtra = Prisma.OrderItemExtraModel
 /**
  * Model LoyaltyPoint
  * 

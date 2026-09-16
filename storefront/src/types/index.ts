@@ -4,6 +4,12 @@ export interface ProductVariant {
   priceDelta: number
 }
 
+export interface ProductExtra {
+  id: string
+  name: string
+  price: number
+}
+
 export type ProductBadge = "mais_pedido" | "promocao" | "novo"
 
 export interface Product {
@@ -14,6 +20,7 @@ export interface Product {
   basePrice: number | null
   badge: ProductBadge | null
   variants: ProductVariant[]
+  extras: ProductExtra[]
 }
 
 export interface CategorySize {
@@ -82,6 +89,8 @@ export interface CartItem {
   categoryCrustName?: string
   flavorProductIds?: string[]
   flavorProductNames?: string[]
+  extraIds?: string[]
+  extraNames?: string[]
   unitPrice: number
   quantity: number
   note?: string
@@ -92,6 +101,7 @@ export type CreateOrderItemInput =
   | {
       productId: string
       variantId?: string
+      extraIds?: string[]
       quantity: number
       note?: string
     }
@@ -117,6 +127,13 @@ export interface OrderItemFlavorResult {
   productName: string
 }
 
+export interface OrderItemExtraResult {
+  id: string
+  productExtraId: string
+  name: string
+  price: number
+}
+
 export interface OrderItemResult {
   id: string
   quantity: number
@@ -127,6 +144,7 @@ export interface OrderItemResult {
   categorySize: { id: string; name: string; category: { name: string } } | null
   categoryCrust: { id: string; name: string } | null
   flavors: OrderItemFlavorResult[]
+  extras: OrderItemExtraResult[]
 }
 
 export interface Order {

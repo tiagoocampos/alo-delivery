@@ -62,10 +62,12 @@ export const ModelName = {
   CategoryCrust: 'CategoryCrust',
   Product: 'Product',
   ProductVariant: 'ProductVariant',
+  ProductExtra: 'ProductExtra',
   Order: 'Order',
   OrderPushSubscription: 'OrderPushSubscription',
   OrderItem: 'OrderItem',
   OrderItemFlavor: 'OrderItemFlavor',
+  OrderItemExtra: 'OrderItemExtra',
   LoyaltyPoint: 'LoyaltyPoint',
   Customer: 'Customer',
   Address: 'Address'
@@ -231,6 +233,16 @@ export const ProductVariantScalarFieldEnum = {
 export type ProductVariantScalarFieldEnum = (typeof ProductVariantScalarFieldEnum)[keyof typeof ProductVariantScalarFieldEnum]
 
 
+export const ProductExtraScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  name: 'name',
+  price: 'price'
+} as const
+
+export type ProductExtraScalarFieldEnum = (typeof ProductExtraScalarFieldEnum)[keyof typeof ProductExtraScalarFieldEnum]
+
+
 export const OrderScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -287,6 +299,17 @@ export const OrderItemFlavorScalarFieldEnum = {
 } as const
 
 export type OrderItemFlavorScalarFieldEnum = (typeof OrderItemFlavorScalarFieldEnum)[keyof typeof OrderItemFlavorScalarFieldEnum]
+
+
+export const OrderItemExtraScalarFieldEnum = {
+  id: 'id',
+  orderItemId: 'orderItemId',
+  productExtraId: 'productExtraId',
+  name: 'name',
+  price: 'price'
+} as const
+
+export type OrderItemExtraScalarFieldEnum = (typeof OrderItemExtraScalarFieldEnum)[keyof typeof OrderItemExtraScalarFieldEnum]
 
 
 export const LoyaltyPointScalarFieldEnum = {

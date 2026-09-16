@@ -16,6 +16,14 @@ export class ProductVariantNotFoundError extends AppError {
     }
 }
 
+export class ProductExtraNotFoundError extends AppError {
+    constructor() {
+        super("Adicional não encontrado para este produto", 404);
+        this.name = "ProductExtraNotFoundError";
+        Object.setPrototypeOf(this, ProductExtraNotFoundError.prototype);
+    }
+}
+
 export class ProductPriceRequiredError extends AppError {
     constructor() {
         super("O preço do produto é obrigatório para categorias sem tamanho", 400);

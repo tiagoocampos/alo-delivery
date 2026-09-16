@@ -4,6 +4,7 @@ import {
     InvalidCategoryCrustError,
     InvalidCategorySizeError,
     InvalidFlavorSelectionError,
+    InvalidProductExtraError,
     OrderBelowMinimumError,
     ProductUnavailableError
 } from "../../errors/order/OrderErrors.js";
@@ -15,6 +16,7 @@ import type { PaymentMethod } from "../../generated/prisma/enums.js";
 interface NormalOrderItemInput {
     productId: string;
     variantId?: string | undefined;
+    extraIds?: string[] | undefined;
     quantity: number;
     note?: string | undefined;
 }
@@ -86,6 +88,13 @@ class CreateOrderService {
                     select: {
                         id: true,
                         priceDelta: true
+                    }
+                },
+                extras: {
+                    select: {
+                        id: true,
+                        name: true,
+                        price: true
                     }
                 }
             }
@@ -164,7 +173,19 @@ class CreateOrderService {
                     priceDelta = variant.priceDelta;
                 }
 
-                const unitPrice = product.basePrice + priceDelta;
+                const extraIds = item.extraIds ?? [];
+                const extras = extraIds.map(extraId => {
+                    const extra = product.extras.find(e => e.id === extraId);
+
+                    if (!extra) {
+                        throw new InvalidProductExtraError();
+                    }
+
+                    return { productExtraId: extra.id, name: extra.name, price: extra.price };
+                });
+                const extrasTotal = extras.reduce((sum, extra) => sum + extra.price, 0);
+
+                const unitPrice = product.basePrice + priceDelta + extrasTotal;
                 subtotal += unitPrice * item.quantity;
 
                 return {
@@ -174,7 +195,10 @@ class CreateOrderService {
                     categoryCrustId: null,
                     quantity: item.quantity,
                     unitPrice,
-                    note: item.note ?? null
+                    note: item.note ?? null,
+                    extras: {
+                        create: extras
+                    }
                 };
             }
 
@@ -305,6 +329,14 @@ class CreateOrderService {
                                 id: true,
                                 productId: true,
                                 productName: true
+                            }
+                        },
+                        extras: {
+                            select: {
+                                id: true,
+                                productExtraId: true,
+                                name: true,
+                                price: true
                             }
                         }
                     }

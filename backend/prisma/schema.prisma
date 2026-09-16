@@ -255,6 +255,7 @@ model Product {
   tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   category         Category          @relation(fields: [categoryId], references: [id])
   variants         ProductVariant[]
+  extras           ProductExtra[]
   orderItems       OrderItem[]
   orderItemFlavors OrderItemFlavor[]
 
@@ -279,6 +280,25 @@ model ProductVariant {
 
   @@index([productId])
   @@map("product_variants")
+}
+
+// =========================================================
+// PRODUCT EXTRA — adicional de produto de categoria sem tamanho (ex:
+// "Maionese +R$ 2,00", "Bacon extra +R$ 5,00"). Múltipla escolha livre,
+// cada um soma seu preço próprio ao preço do produto.
+// =========================================================
+
+model ProductExtra {
+  id        String @id @default(uuid())
+  productId String @map("product_id")
+  name      String
+  price     Int // centavos, sempre somado ao preço do produto
+
+  product    Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderItems OrderItemExtra[]
+
+  @@index([productId])
+  @@map("product_extras")
 }
 
 // =========================================================
@@ -352,6 +372,7 @@ model OrderItem {
   categorySize  CategorySize?     @relation(fields: [categorySizeId], references: [id])
   categoryCrust CategoryCrust?    @relation(fields: [categoryCrustId], references: [id])
   flavors       OrderItemFlavor[]
+  extras        OrderItemExtra[]
 
   @@index([orderId])
   @@map("order_items")
@@ -375,6 +396,27 @@ model OrderItemFlavor {
 
   @@index([orderItemId])
   @@map("order_item_flavors")
+}
+
+// =========================================================
+// ORDER ITEM EXTRA — adicional(is) escolhido(s) num item normal. name e
+// price são congelados no momento do pedido (mesmo princípio do unitPrice
+// travado em OrderItem) — diferente do sabor, o adicional tem preço próprio,
+// então também precisa travar o preço, não só o nome.
+// =========================================================
+
+model OrderItemExtra {
+  id             String @id @default(uuid())
+  orderItemId    String @map("order_item_id")
+  productExtraId String @map("product_extra_id")
+  name           String
+  price          Int
+
+  orderItem    OrderItem    @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+  productExtra ProductExtra @relation(fields: [productExtraId], references: [id])
+
+  @@index([orderItemId])
+  @@map("order_item_extras")
 }
 
 // =========================================================

@@ -77,6 +77,14 @@ class ListOrdersService {
                                 productId: true,
                                 productName: true
                             }
+                        },
+                        extras: {
+                            select: {
+                                id: true,
+                                productExtraId: true,
+                                name: true,
+                                price: true
+                            }
                         }
                     }
                 }

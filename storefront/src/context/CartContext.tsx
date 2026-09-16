@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState, type ReactNode } from "react"
+import { createContext, useCallback, useMemo, useState, type ReactNode } from "react"
 import type { CartItem } from "@/types"
 
 interface AddItemInput {
@@ -13,6 +13,8 @@ interface AddItemInput {
   categoryCrustName?: string
   flavorProductIds?: string[]
   flavorProductNames?: string[]
+  extraIds?: string[]
+  extraNames?: string[]
   unitPrice: number
   quantity: number
   note?: string
@@ -40,7 +42,9 @@ function buildKey(input: AddItemInput) {
   }
 
   const variantPart = input.variantId ? `:${input.variantId}` : ""
-  return `${input.productId}${variantPart}`
+  const extrasPart =
+    input.extraIds && input.extraIds.length > 0 ? `:e(${[...input.extraIds].sort().join(",")})` : ""
+  return `${input.productId}${variantPart}${extrasPart}`
 }
 
 export const CartContext = createContext<CartContextValue | null>(null)
@@ -48,7 +52,7 @@ export const CartContext = createContext<CartContextValue | null>(null)
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
 
-  const addItem = (input: AddItemInput) => {
+  const addItem = useCallback((input: AddItemInput) => {
     const key = buildKey(input)
 
     setItems((current) => {
@@ -64,22 +68,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       return [...current, { key, ...input }]
     })
-  }
+  }, [])
 
-  const updateQuantity = (key: string, quantity: number) => {
+  const removeItem = useCallback((key: string) => {
+    setItems((current) => current.filter((item) => item.key !== key))
+  }, [])
+
+  const updateQuantity = useCallback((key: string, quantity: number) => {
     if (quantity <= 0) {
       removeItem(key)
       return
     }
 
     setItems((current) => current.map((item) => (item.key === key ? { ...item, quantity } : item)))
-  }
+  }, [removeItem])
 
-  const removeItem = (key: string) => {
-    setItems((current) => current.filter((item) => item.key !== key))
-  }
-
-  const clear = () => setItems([])
+  const clear = useCallback(() => setItems([]), [])
 
   const { totalCount, subtotal } = useMemo(() => {
     return items.reduce(
@@ -91,15 +95,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
     )
   }, [items])
 
-  const value: CartContextValue = {
-    items,
-    totalCount,
-    subtotal,
-    addItem,
-    updateQuantity,
-    removeItem,
-    clear,
-  }
+  // Memoizado pra não recriar o objeto de contexto a cada render do provider —
+  // sem isso, todo consumidor de useCart() (produtos, header, carrinho) re-renderiza
+  // mesmo quando o carrinho em si não muda.
+  const value: CartContextValue = useMemo(
+    () => ({
+      items,
+      totalCount,
+      subtotal,
+      addItem,
+      updateQuantity,
+      removeItem,
+      clear,
+    }),
+    [items, totalCount, subtotal, addItem, updateQuantity, removeItem, clear]
+  )
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }

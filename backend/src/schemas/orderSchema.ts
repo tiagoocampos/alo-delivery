@@ -6,6 +6,7 @@ const orderStatus = z.enum(["novo", "preparo", "transporte", "entregue", "cancel
 const normalOrderItemSchema = z.object({
     productId: z.string().uuid({ message: "Produto inválido" }),
     variantId: z.string().uuid({ message: "Variação inválida" }).optional(),
+    extraIds: z.array(z.string().uuid({ message: "Adicional inválido" })).optional(),
     quantity: z.number().int().positive({ message: "A quantidade deve ser maior que zero" }),
     note: z.string().optional(),
 });

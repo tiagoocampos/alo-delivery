@@ -258,6 +258,7 @@ export type OrderItemWhereInput = {
   categorySize?: Prisma.XOR<Prisma.CategorySizeNullableScalarRelationFilter, Prisma.CategorySizeWhereInput> | null
   categoryCrust?: Prisma.XOR<Prisma.CategoryCrustNullableScalarRelationFilter, Prisma.CategoryCrustWhereInput> | null
   flavors?: Prisma.OrderItemFlavorListRelationFilter
+  extras?: Prisma.OrderItemExtraListRelationFilter
 }
 
 export type OrderItemOrderByWithRelationInput = {
@@ -276,6 +277,7 @@ export type OrderItemOrderByWithRelationInput = {
   categorySize?: Prisma.CategorySizeOrderByWithRelationInput
   categoryCrust?: Prisma.CategoryCrustOrderByWithRelationInput
   flavors?: Prisma.OrderItemFlavorOrderByRelationAggregateInput
+  extras?: Prisma.OrderItemExtraOrderByRelationAggregateInput
 }
 
 export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
@@ -297,6 +299,7 @@ export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
   categorySize?: Prisma.XOR<Prisma.CategorySizeNullableScalarRelationFilter, Prisma.CategorySizeWhereInput> | null
   categoryCrust?: Prisma.XOR<Prisma.CategoryCrustNullableScalarRelationFilter, Prisma.CategoryCrustWhereInput> | null
   flavors?: Prisma.OrderItemFlavorListRelationFilter
+  extras?: Prisma.OrderItemExtraListRelationFilter
 }, "id">
 
 export type OrderItemOrderByWithAggregationInput = {
@@ -342,6 +345,7 @@ export type OrderItemCreateInput = {
   categorySize?: Prisma.CategorySizeCreateNestedOneWithoutOrderItemsInput
   categoryCrust?: Prisma.CategoryCrustCreateNestedOneWithoutOrderItemsInput
   flavors?: Prisma.OrderItemFlavorCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUncheckedCreateInput = {
@@ -355,6 +359,7 @@ export type OrderItemUncheckedCreateInput = {
   unitPrice: number
   note?: string | null
   flavors?: Prisma.OrderItemFlavorUncheckedCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraUncheckedCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUpdateInput = {
@@ -368,6 +373,7 @@ export type OrderItemUpdateInput = {
   categorySize?: Prisma.CategorySizeUpdateOneWithoutOrderItemsNestedInput
   categoryCrust?: Prisma.CategoryCrustUpdateOneWithoutOrderItemsNestedInput
   flavors?: Prisma.OrderItemFlavorUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateInput = {
@@ -381,6 +387,7 @@ export type OrderItemUncheckedUpdateInput = {
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   flavors?: Prisma.OrderItemFlavorUncheckedUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUncheckedUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemCreateManyInput = {
@@ -699,6 +706,20 @@ export type OrderItemUpdateOneRequiredWithoutFlavorsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.OrderItemUpdateToOneWithWhereWithoutFlavorsInput, Prisma.OrderItemUpdateWithoutFlavorsInput>, Prisma.OrderItemUncheckedUpdateWithoutFlavorsInput>
 }
 
+export type OrderItemCreateNestedOneWithoutExtrasInput = {
+  create?: Prisma.XOR<Prisma.OrderItemCreateWithoutExtrasInput, Prisma.OrderItemUncheckedCreateWithoutExtrasInput>
+  connectOrCreate?: Prisma.OrderItemCreateOrConnectWithoutExtrasInput
+  connect?: Prisma.OrderItemWhereUniqueInput
+}
+
+export type OrderItemUpdateOneRequiredWithoutExtrasNestedInput = {
+  create?: Prisma.XOR<Prisma.OrderItemCreateWithoutExtrasInput, Prisma.OrderItemUncheckedCreateWithoutExtrasInput>
+  connectOrCreate?: Prisma.OrderItemCreateOrConnectWithoutExtrasInput
+  upsert?: Prisma.OrderItemUpsertWithoutExtrasInput
+  connect?: Prisma.OrderItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.OrderItemUpdateToOneWithWhereWithoutExtrasInput, Prisma.OrderItemUpdateWithoutExtrasInput>, Prisma.OrderItemUncheckedUpdateWithoutExtrasInput>
+}
+
 export type OrderItemCreateWithoutCategorySizeInput = {
   id?: string
   quantity: number
@@ -709,6 +730,7 @@ export type OrderItemCreateWithoutCategorySizeInput = {
   variant?: Prisma.ProductVariantCreateNestedOneWithoutOrderItemsInput
   categoryCrust?: Prisma.CategoryCrustCreateNestedOneWithoutOrderItemsInput
   flavors?: Prisma.OrderItemFlavorCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUncheckedCreateWithoutCategorySizeInput = {
@@ -721,6 +743,7 @@ export type OrderItemUncheckedCreateWithoutCategorySizeInput = {
   unitPrice: number
   note?: string | null
   flavors?: Prisma.OrderItemFlavorUncheckedCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraUncheckedCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemCreateOrConnectWithoutCategorySizeInput = {
@@ -774,6 +797,7 @@ export type OrderItemCreateWithoutCategoryCrustInput = {
   variant?: Prisma.ProductVariantCreateNestedOneWithoutOrderItemsInput
   categorySize?: Prisma.CategorySizeCreateNestedOneWithoutOrderItemsInput
   flavors?: Prisma.OrderItemFlavorCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUncheckedCreateWithoutCategoryCrustInput = {
@@ -786,6 +810,7 @@ export type OrderItemUncheckedCreateWithoutCategoryCrustInput = {
   unitPrice: number
   note?: string | null
   flavors?: Prisma.OrderItemFlavorUncheckedCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraUncheckedCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemCreateOrConnectWithoutCategoryCrustInput = {
@@ -824,6 +849,7 @@ export type OrderItemCreateWithoutProductInput = {
   categorySize?: Prisma.CategorySizeCreateNestedOneWithoutOrderItemsInput
   categoryCrust?: Prisma.CategoryCrustCreateNestedOneWithoutOrderItemsInput
   flavors?: Prisma.OrderItemFlavorCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUncheckedCreateWithoutProductInput = {
@@ -836,6 +862,7 @@ export type OrderItemUncheckedCreateWithoutProductInput = {
   unitPrice: number
   note?: string | null
   flavors?: Prisma.OrderItemFlavorUncheckedCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraUncheckedCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemCreateOrConnectWithoutProductInput = {
@@ -874,6 +901,7 @@ export type OrderItemCreateWithoutVariantInput = {
   categorySize?: Prisma.CategorySizeCreateNestedOneWithoutOrderItemsInput
   categoryCrust?: Prisma.CategoryCrustCreateNestedOneWithoutOrderItemsInput
   flavors?: Prisma.OrderItemFlavorCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUncheckedCreateWithoutVariantInput = {
@@ -886,6 +914,7 @@ export type OrderItemUncheckedCreateWithoutVariantInput = {
   unitPrice: number
   note?: string | null
   flavors?: Prisma.OrderItemFlavorUncheckedCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraUncheckedCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemCreateOrConnectWithoutVariantInput = {
@@ -924,6 +953,7 @@ export type OrderItemCreateWithoutOrderInput = {
   categorySize?: Prisma.CategorySizeCreateNestedOneWithoutOrderItemsInput
   categoryCrust?: Prisma.CategoryCrustCreateNestedOneWithoutOrderItemsInput
   flavors?: Prisma.OrderItemFlavorCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUncheckedCreateWithoutOrderInput = {
@@ -936,6 +966,7 @@ export type OrderItemUncheckedCreateWithoutOrderInput = {
   unitPrice: number
   note?: string | null
   flavors?: Prisma.OrderItemFlavorUncheckedCreateNestedManyWithoutOrderItemInput
+  extras?: Prisma.OrderItemExtraUncheckedCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemCreateOrConnectWithoutOrderInput = {
@@ -974,6 +1005,7 @@ export type OrderItemCreateWithoutFlavorsInput = {
   variant?: Prisma.ProductVariantCreateNestedOneWithoutOrderItemsInput
   categorySize?: Prisma.CategorySizeCreateNestedOneWithoutOrderItemsInput
   categoryCrust?: Prisma.CategoryCrustCreateNestedOneWithoutOrderItemsInput
+  extras?: Prisma.OrderItemExtraCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemUncheckedCreateWithoutFlavorsInput = {
@@ -986,6 +1018,7 @@ export type OrderItemUncheckedCreateWithoutFlavorsInput = {
   quantity: number
   unitPrice: number
   note?: string | null
+  extras?: Prisma.OrderItemExtraUncheckedCreateNestedManyWithoutOrderItemInput
 }
 
 export type OrderItemCreateOrConnectWithoutFlavorsInput = {
@@ -1014,6 +1047,7 @@ export type OrderItemUpdateWithoutFlavorsInput = {
   variant?: Prisma.ProductVariantUpdateOneWithoutOrderItemsNestedInput
   categorySize?: Prisma.CategorySizeUpdateOneWithoutOrderItemsNestedInput
   categoryCrust?: Prisma.CategoryCrustUpdateOneWithoutOrderItemsNestedInput
+  extras?: Prisma.OrderItemExtraUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutFlavorsInput = {
@@ -1026,6 +1060,75 @@ export type OrderItemUncheckedUpdateWithoutFlavorsInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  extras?: Prisma.OrderItemExtraUncheckedUpdateManyWithoutOrderItemNestedInput
+}
+
+export type OrderItemCreateWithoutExtrasInput = {
+  id?: string
+  quantity: number
+  unitPrice: number
+  note?: string | null
+  order: Prisma.OrderCreateNestedOneWithoutItemsInput
+  product?: Prisma.ProductCreateNestedOneWithoutOrderItemsInput
+  variant?: Prisma.ProductVariantCreateNestedOneWithoutOrderItemsInput
+  categorySize?: Prisma.CategorySizeCreateNestedOneWithoutOrderItemsInput
+  categoryCrust?: Prisma.CategoryCrustCreateNestedOneWithoutOrderItemsInput
+  flavors?: Prisma.OrderItemFlavorCreateNestedManyWithoutOrderItemInput
+}
+
+export type OrderItemUncheckedCreateWithoutExtrasInput = {
+  id?: string
+  orderId: string
+  productId?: string | null
+  variantId?: string | null
+  categorySizeId?: string | null
+  categoryCrustId?: string | null
+  quantity: number
+  unitPrice: number
+  note?: string | null
+  flavors?: Prisma.OrderItemFlavorUncheckedCreateNestedManyWithoutOrderItemInput
+}
+
+export type OrderItemCreateOrConnectWithoutExtrasInput = {
+  where: Prisma.OrderItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.OrderItemCreateWithoutExtrasInput, Prisma.OrderItemUncheckedCreateWithoutExtrasInput>
+}
+
+export type OrderItemUpsertWithoutExtrasInput = {
+  update: Prisma.XOR<Prisma.OrderItemUpdateWithoutExtrasInput, Prisma.OrderItemUncheckedUpdateWithoutExtrasInput>
+  create: Prisma.XOR<Prisma.OrderItemCreateWithoutExtrasInput, Prisma.OrderItemUncheckedCreateWithoutExtrasInput>
+  where?: Prisma.OrderItemWhereInput
+}
+
+export type OrderItemUpdateToOneWithWhereWithoutExtrasInput = {
+  where?: Prisma.OrderItemWhereInput
+  data: Prisma.XOR<Prisma.OrderItemUpdateWithoutExtrasInput, Prisma.OrderItemUncheckedUpdateWithoutExtrasInput>
+}
+
+export type OrderItemUpdateWithoutExtrasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
+  product?: Prisma.ProductUpdateOneWithoutOrderItemsNestedInput
+  variant?: Prisma.ProductVariantUpdateOneWithoutOrderItemsNestedInput
+  categorySize?: Prisma.CategorySizeUpdateOneWithoutOrderItemsNestedInput
+  categoryCrust?: Prisma.CategoryCrustUpdateOneWithoutOrderItemsNestedInput
+  flavors?: Prisma.OrderItemFlavorUpdateManyWithoutOrderItemNestedInput
+}
+
+export type OrderItemUncheckedUpdateWithoutExtrasInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
+  note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  flavors?: Prisma.OrderItemFlavorUncheckedUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemCreateManyCategorySizeInput = {
@@ -1049,6 +1152,7 @@ export type OrderItemUpdateWithoutCategorySizeInput = {
   variant?: Prisma.ProductVariantUpdateOneWithoutOrderItemsNestedInput
   categoryCrust?: Prisma.CategoryCrustUpdateOneWithoutOrderItemsNestedInput
   flavors?: Prisma.OrderItemFlavorUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutCategorySizeInput = {
@@ -1061,6 +1165,7 @@ export type OrderItemUncheckedUpdateWithoutCategorySizeInput = {
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   flavors?: Prisma.OrderItemFlavorUncheckedUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUncheckedUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateManyWithoutCategorySizeInput = {
@@ -1095,6 +1200,7 @@ export type OrderItemUpdateWithoutCategoryCrustInput = {
   variant?: Prisma.ProductVariantUpdateOneWithoutOrderItemsNestedInput
   categorySize?: Prisma.CategorySizeUpdateOneWithoutOrderItemsNestedInput
   flavors?: Prisma.OrderItemFlavorUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutCategoryCrustInput = {
@@ -1107,6 +1213,7 @@ export type OrderItemUncheckedUpdateWithoutCategoryCrustInput = {
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   flavors?: Prisma.OrderItemFlavorUncheckedUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUncheckedUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateManyWithoutCategoryCrustInput = {
@@ -1141,6 +1248,7 @@ export type OrderItemUpdateWithoutProductInput = {
   categorySize?: Prisma.CategorySizeUpdateOneWithoutOrderItemsNestedInput
   categoryCrust?: Prisma.CategoryCrustUpdateOneWithoutOrderItemsNestedInput
   flavors?: Prisma.OrderItemFlavorUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutProductInput = {
@@ -1153,6 +1261,7 @@ export type OrderItemUncheckedUpdateWithoutProductInput = {
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   flavors?: Prisma.OrderItemFlavorUncheckedUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUncheckedUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateManyWithoutProductInput = {
@@ -1187,6 +1296,7 @@ export type OrderItemUpdateWithoutVariantInput = {
   categorySize?: Prisma.CategorySizeUpdateOneWithoutOrderItemsNestedInput
   categoryCrust?: Prisma.CategoryCrustUpdateOneWithoutOrderItemsNestedInput
   flavors?: Prisma.OrderItemFlavorUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutVariantInput = {
@@ -1199,6 +1309,7 @@ export type OrderItemUncheckedUpdateWithoutVariantInput = {
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   flavors?: Prisma.OrderItemFlavorUncheckedUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUncheckedUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateManyWithoutVariantInput = {
@@ -1233,6 +1344,7 @@ export type OrderItemUpdateWithoutOrderInput = {
   categorySize?: Prisma.CategorySizeUpdateOneWithoutOrderItemsNestedInput
   categoryCrust?: Prisma.CategoryCrustUpdateOneWithoutOrderItemsNestedInput
   flavors?: Prisma.OrderItemFlavorUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateWithoutOrderInput = {
@@ -1245,6 +1357,7 @@ export type OrderItemUncheckedUpdateWithoutOrderInput = {
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   flavors?: Prisma.OrderItemFlavorUncheckedUpdateManyWithoutOrderItemNestedInput
+  extras?: Prisma.OrderItemExtraUncheckedUpdateManyWithoutOrderItemNestedInput
 }
 
 export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
@@ -1265,10 +1378,12 @@ export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
 
 export type OrderItemCountOutputType = {
   flavors: number
+  extras: number
 }
 
 export type OrderItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   flavors?: boolean | OrderItemCountOutputTypeCountFlavorsArgs
+  extras?: boolean | OrderItemCountOutputTypeCountExtrasArgs
 }
 
 /**
@@ -1288,6 +1403,13 @@ export type OrderItemCountOutputTypeCountFlavorsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.OrderItemFlavorWhereInput
 }
 
+/**
+ * OrderItemCountOutputType without action
+ */
+export type OrderItemCountOutputTypeCountExtrasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OrderItemExtraWhereInput
+}
+
 
 export type OrderItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1305,6 +1427,7 @@ export type OrderItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   categorySize?: boolean | Prisma.OrderItem$categorySizeArgs<ExtArgs>
   categoryCrust?: boolean | Prisma.OrderItem$categoryCrustArgs<ExtArgs>
   flavors?: boolean | Prisma.OrderItem$flavorsArgs<ExtArgs>
+  extras?: boolean | Prisma.OrderItem$extrasArgs<ExtArgs>
   _count?: boolean | Prisma.OrderItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["orderItem"]>
 
@@ -1362,6 +1485,7 @@ export type OrderItemInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   categorySize?: boolean | Prisma.OrderItem$categorySizeArgs<ExtArgs>
   categoryCrust?: boolean | Prisma.OrderItem$categoryCrustArgs<ExtArgs>
   flavors?: boolean | Prisma.OrderItem$flavorsArgs<ExtArgs>
+  extras?: boolean | Prisma.OrderItem$extrasArgs<ExtArgs>
   _count?: boolean | Prisma.OrderItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type OrderItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1388,6 +1512,7 @@ export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     categorySize: Prisma.$CategorySizePayload<ExtArgs> | null
     categoryCrust: Prisma.$CategoryCrustPayload<ExtArgs> | null
     flavors: Prisma.$OrderItemFlavorPayload<ExtArgs>[]
+    extras: Prisma.$OrderItemExtraPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1799,6 +1924,7 @@ export interface Prisma__OrderItemClient<T, Null = never, ExtArgs extends runtim
   categorySize<T extends Prisma.OrderItem$categorySizeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderItem$categorySizeArgs<ExtArgs>>): Prisma.Prisma__CategorySizeClient<runtime.Types.Result.GetResult<Prisma.$CategorySizePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   categoryCrust<T extends Prisma.OrderItem$categoryCrustArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderItem$categoryCrustArgs<ExtArgs>>): Prisma.Prisma__CategoryCrustClient<runtime.Types.Result.GetResult<Prisma.$CategoryCrustPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   flavors<T extends Prisma.OrderItem$flavorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderItem$flavorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemFlavorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  extras<T extends Prisma.OrderItem$extrasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrderItem$extrasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OrderItemExtraPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2335,6 +2461,30 @@ export type OrderItem$flavorsArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.OrderItemFlavorScalarFieldEnum | Prisma.OrderItemFlavorScalarFieldEnum[]
+}
+
+/**
+ * OrderItem.extras
+ */
+export type OrderItem$extrasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OrderItemExtra
+   */
+  select?: Prisma.OrderItemExtraSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OrderItemExtra
+   */
+  omit?: Prisma.OrderItemExtraOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OrderItemExtraInclude<ExtArgs> | null
+  where?: Prisma.OrderItemExtraWhereInput
+  orderBy?: Prisma.OrderItemExtraOrderByWithRelationInput | Prisma.OrderItemExtraOrderByWithRelationInput[]
+  cursor?: Prisma.OrderItemExtraWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OrderItemExtraScalarFieldEnum | Prisma.OrderItemExtraScalarFieldEnum[]
 }
 
 /**

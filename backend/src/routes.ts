@@ -26,6 +26,9 @@ import { ListProductsController } from "./controllers/product/ListProductsContro
 import { UpdateProductController } from "./controllers/product/UpdateProductController.js";
 import { DeleteProductController } from "./controllers/product/DeleteProductController.js";
 import { CreateProductVariantController } from "./controllers/product/CreateProductVariantController.js";
+import { CreateProductExtraController } from "./controllers/product/CreateProductExtraController.js";
+import { UpdateProductExtraController } from "./controllers/product/UpdateProductExtraController.js";
+import { DeleteProductExtraController } from "./controllers/product/DeleteProductExtraController.js";
 import { CreateCategorySizeController } from "./controllers/category/CreateCategorySizeController.js";
 import { UpdateCategorySizeController } from "./controllers/category/UpdateCategorySizeController.js";
 import { DeleteCategorySizeController } from "./controllers/category/DeleteCategorySizeController.js";
@@ -82,7 +85,10 @@ import {
     listProductsSchema,
     updateProductSchema,
     deleteProductSchema,
-    createProductVariantSchema
+    createProductVariantSchema,
+    createProductExtraSchema,
+    updateProductExtraSchema,
+    deleteProductExtraSchema
 } from "./schemas/productSchema.js";
 import {
     createOrderSchema,
@@ -201,6 +207,9 @@ router.get("/products", authenticate, requireTenant, requireActiveSubscription, 
 router.put("/products/:id", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), upload.single("file"), validateSchema(updateProductSchema), new UpdateProductController().handle);
 router.delete("/products/:id", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(deleteProductSchema), new DeleteProductController().handle);
 router.post("/products/:id/variants", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(createProductVariantSchema), new CreateProductVariantController().handle);
+router.post("/products/:id/extras", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(createProductExtraSchema), new CreateProductExtraController().handle);
+router.put("/products/:id/extras/:extraId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(updateProductExtraSchema), new UpdateProductExtraController().handle);
+router.delete("/products/:id/extras/:extraId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(deleteProductExtraSchema), new DeleteProductExtraController().handle);
 
 router.get("/orders", authenticate, requireTenant, requireActiveSubscription, validateSchema(listOrdersSchema), new ListOrdersController().handle);
 router.get("/orders/summary", authenticate, requireTenant, requireActiveSubscription, validateSchema(getOrdersSummarySchema), new GetOrdersSummaryController().handle);

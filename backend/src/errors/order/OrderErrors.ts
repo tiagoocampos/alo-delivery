@@ -44,6 +44,14 @@ export class InvalidCategoryCrustError extends AppError {
     }
 }
 
+export class InvalidProductExtraError extends AppError {
+    constructor() {
+        super("Adicional inválido para este produto", 400);
+        this.name = "InvalidProductExtraError";
+        Object.setPrototypeOf(this, InvalidProductExtraError.prototype);
+    }
+}
+
 export class InvalidCategorySizeError extends AppError {
     constructor() {
         super("Tamanho inválido para este pedido", 400);

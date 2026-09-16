@@ -77,6 +77,7 @@ export function CartSheet({
             : {
                 productId: item.productId!,
                 variantId: item.variantId,
+                extraIds: item.extraIds,
                 quantity: item.quantity,
                 note: item.note,
               }
@@ -118,6 +119,9 @@ export function CartSheet({
                       </span>
                       {item.variantName && (
                         <span className="text-xs text-muted-foreground">{item.variantName}</span>
+                      )}
+                      {item.extraNames && item.extraNames.length > 0 && (
+                        <span className="text-xs text-muted-foreground">{item.extraNames.join(", ")}</span>
                       )}
                       {item.flavorProductNames && item.flavorProductNames.length > 0 && (
                         <span className="text-xs text-muted-foreground">{item.flavorProductNames.join(", ")}</span>

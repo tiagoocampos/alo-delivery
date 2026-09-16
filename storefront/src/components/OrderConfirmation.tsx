@@ -49,6 +49,9 @@ export function OrderConfirmation({ order, slug, onNewOrder }: OrderConfirmation
               <span>
                 {item.quantity}x {formatOrderItemTitle(item)}
                 {item.variant && <span className="text-muted-foreground"> · {item.variant.name}</span>}
+                {item.extras.length > 0 && (
+                  <span className="text-muted-foreground"> · {item.extras.map((e) => e.name).join(", ")}</span>
+                )}
                 {item.flavors.length > 0 && (
                   <span className="text-muted-foreground"> · {item.flavors.map((f) => f.productName).join(", ")}</span>
                 )}

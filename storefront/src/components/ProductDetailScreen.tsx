@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ArrowLeft, Minus, Plus } from "lucide-react"
+import { ArrowLeft, Check, Minus, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
@@ -51,12 +51,21 @@ interface ProductDetailBodyProps {
 function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDetailBodyProps) {
   const { addItem } = useCart()
   const [variantId, setVariantId] = useState<string | undefined>(product.variants[0]?.id)
+  const [extraIds, setExtraIds] = useState<string[]>([])
   const [quantity, setQuantity] = useState(1)
   const [note, setNote] = useState("")
 
   const selectedVariant = product.variants.find((variant) => variant.id === variantId)
-  const unitPrice = (product.basePrice ?? 0) + (selectedVariant?.priceDelta ?? 0)
+  const selectedExtras = product.extras.filter((extra) => extraIds.includes(extra.id))
+  const extrasTotal = selectedExtras.reduce((sum, extra) => sum + extra.price, 0)
+  const unitPrice = (product.basePrice ?? 0) + (selectedVariant?.priceDelta ?? 0) + extrasTotal
   const total = unitPrice * quantity
+
+  const toggleExtra = (extraId: string) => {
+    setExtraIds((current) =>
+      current.includes(extraId) ? current.filter((id) => id !== extraId) : [...current, extraId]
+    )
+  }
 
   const handleAdd = () => {
     addItem({
@@ -65,6 +74,8 @@ function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDe
       categoryName,
       variantId: selectedVariant?.id,
       variantName: selectedVariant?.name,
+      extraIds: selectedExtras.length > 0 ? selectedExtras.map((extra) => extra.id) : undefined,
+      extraNames: selectedExtras.length > 0 ? selectedExtras.map((extra) => extra.name) : undefined,
       unitPrice,
       quantity,
       note: note.trim() || undefined,
@@ -117,6 +128,43 @@ function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDe
                       {formatCents(variant.priceDelta)}
                     </span>
                   )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {product.extras.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <Label>Adicionais</Label>
+            <div className="flex flex-col gap-2">
+              {product.extras.map((extra) => (
+                <button
+                  key={extra.id}
+                  type="button"
+                  onClick={() => toggleExtra(extra.id)}
+                  className={cn(
+                    "flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors",
+                    extraIds.includes(extra.id)
+                      ? "border-primary bg-accent text-accent-foreground"
+                      : "border-border text-foreground"
+                  )}
+                >
+                  <span className="flex items-center gap-2">
+                    <span
+                      aria-hidden
+                      className={cn(
+                        "flex size-4 items-center justify-center rounded border",
+                        extraIds.includes(extra.id)
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border"
+                      )}
+                    >
+                      {extraIds.includes(extra.id) && <Check className="size-3" strokeWidth={3} />}
+                    </span>
+                    {extra.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground">+{formatCents(extra.price)}</span>
                 </button>
               ))}
             </div>

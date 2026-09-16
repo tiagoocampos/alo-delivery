@@ -102,6 +102,7 @@ export function OrdersSheet({ open, onOpenChange, slug }: OrdersSheetProps) {
                       <span key={item.id} className="text-xs text-muted-foreground">
                         {item.quantity}x {formatOrderItemTitle(item)}
                         {item.variant && ` · ${item.variant.name}`}
+                        {item.extras.length > 0 && ` · ${item.extras.map((e) => e.name).join(", ")}`}
                         {item.flavors.length > 0 && ` · ${item.flavors.map((f) => f.productName).join(", ")}`}
                         {item.categoryCrust && ` · Borda: ${item.categoryCrust.name}`}
                       </span>

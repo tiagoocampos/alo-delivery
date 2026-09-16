@@ -43,6 +43,13 @@ class ListProductsService {
                         name: true,
                         priceDelta: true
                     }
+                },
+                extras: {
+                    select: {
+                        id: true,
+                        name: true,
+                        price: true
+                    }
                 }
             }
         });
