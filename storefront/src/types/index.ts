@@ -67,6 +67,7 @@ export interface Tenant {
   pixKey: string | null
   minimumOrderValue: number
   businessHours: BusinessHoursDay[] | null
+  effectivePlan: "completo" | "basico"
 }
 
 export interface StoreMenu {

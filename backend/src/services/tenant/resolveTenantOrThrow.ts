@@ -1,5 +1,6 @@
 import { TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
 import { SubscriptionCanceledError } from "../../errors/subscription/SubscriptionErrors.js";
+import { getEffectivePlan } from "../../utils/subscriptionPlan.js";
 import prismaClient from "../../prisma/index.js";
 
 interface ResolveTenantOrThrowProps {
@@ -36,7 +37,9 @@ async function resolveTenantOrThrow({ slug }: ResolveTenantOrThrowProps) {
             updatedAt: true,
             subscription: {
                 select: {
-                    status: true
+                    status: true,
+                    monthlyPrice: true,
+                    startedAt: true
                 }
             }
         }
@@ -50,7 +53,12 @@ async function resolveTenantOrThrow({ slug }: ResolveTenantOrThrowProps) {
         throw new SubscriptionCanceledError();
     }
 
-    return tenant;
+    const { subscription, ...rest } = tenant;
+
+    return {
+        ...rest,
+        effectivePlan: getEffectivePlan(subscription)
+    };
 }
 
 export { resolveTenantOrThrow };

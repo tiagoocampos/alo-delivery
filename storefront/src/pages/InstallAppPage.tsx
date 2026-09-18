@@ -92,6 +92,17 @@ export function InstallAppPage() {
     )
   }
 
+  if (tenant.effectivePlan === "basico") {
+    return (
+      <div className="flex min-h-svh flex-col items-center justify-center gap-4 p-6 text-center">
+        <p className="text-sm text-muted-foreground">Instalação de app não disponível no momento.</p>
+        <Button size="lg" onClick={() => navigate(`/${slug}`)}>
+          Ir para o cardápio
+        </Button>
+      </div>
+    )
+  }
+
   const handleInstall = async () => {
     setInstalling(true)
     await promptInstall()

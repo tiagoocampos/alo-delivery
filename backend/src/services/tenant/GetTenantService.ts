@@ -25,7 +25,8 @@ class GetTenantService {
             minimumOrderValue: tenant.minimumOrderValue,
             businessHours: tenant.businessHours,
             createdAt: tenant.createdAt,
-            updatedAt: tenant.updatedAt
+            updatedAt: tenant.updatedAt,
+            effectivePlan: tenant.effectivePlan
         };
     }
 }

@@ -9,6 +9,10 @@ interface RegisterTenantInput {
     password: string;
 }
 
+// Preço cheio do plano completo, em centavos — usado tanto pra criar a
+// Subscription do tenant novo quanto, se aplicável, pra referência futura.
+const FULL_PLAN_MONTHLY_PRICE = 4990;
+
 // O slug é a chave pública da loja (/store/:slug/menu), então precisa sair
 // sem acento, sem espaço e sem caractere especial.
 function slugify(value: string) {
@@ -49,6 +53,19 @@ class RegisterTenantService {
                     name: storeName,
                     slug,
                 },
+            });
+
+            // Sem essa Subscription, getEffectivePlan trata o tenant como sem
+            // assinatura cadastrada e nunca conta o trial — ele ficaria "completo"
+            // pra sempre.
+            await tx.subscription.create({
+                data: {
+                    tenantId: tenant.id,
+                    planName: "Completo",
+                    monthlyPrice: FULL_PLAN_MONTHLY_PRICE,
+                    status: "trial",
+                    startedAt: new Date()
+                }
             });
 
             const user = await tx.user.create({

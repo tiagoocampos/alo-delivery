@@ -15,10 +15,11 @@ const PAYMENT_LABELS: Record<Order["paymentMethod"], string> = {
 interface OrderConfirmationProps {
   order: Order
   slug: string
+  effectivePlan: "completo" | "basico"
   onNewOrder: () => void
 }
 
-export function OrderConfirmation({ order, slug, onNewOrder }: OrderConfirmationProps) {
+export function OrderConfirmation({ order, slug, effectivePlan, onNewOrder }: OrderConfirmationProps) {
   const [pushState, setPushState] = useState<"idle" | "loading" | "subscribed">("idle")
 
   async function handleSubscribe() {
@@ -89,7 +90,7 @@ export function OrderConfirmation({ order, slug, onNewOrder }: OrderConfirmation
         </div>
       </div>
 
-      {isPushSupported() && (
+      {isPushSupported() && effectivePlan !== "basico" && (
         <Button
           onClick={handleSubscribe}
           disabled={pushState !== "idle"}

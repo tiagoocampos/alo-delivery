@@ -92,7 +92,8 @@ class GetStoreMenuService {
                 instagramUrl: tenant.instagramUrl,
                 pixKey: tenant.pixKey,
                 minimumOrderValue: tenant.minimumOrderValue,
-                businessHours: tenant.businessHours
+                businessHours: tenant.businessHours,
+                effectivePlan: tenant.effectivePlan
             },
             categories
         };

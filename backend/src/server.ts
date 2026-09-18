@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/ErrorHandler.js";
 import { router } from "./routes.js";
 
 const app = express();
+app.set("trust proxy", 1); // atrás do proxy do Railway — sem isso, o rate limiting derruba o backend
 app.use(helmet());
 app.use(express.json());
 

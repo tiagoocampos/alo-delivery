@@ -84,7 +84,7 @@ export function NavMenuSheet({
             Cardápio
           </button>
 
-          {canInstall && (
+          {canInstall && tenant.effectivePlan !== "basico" && (
             <button type="button" onClick={promptInstall} className={itemClass}>
               <Download className="size-4.5" strokeWidth={1.75} />
               Instalar app

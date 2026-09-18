@@ -1,4 +1,5 @@
 import { TenantNotFoundError } from "../../errors/tenant/TenantErrors.js";
+import { getEffectivePlan } from "../../utils/subscriptionPlan.js";
 import prismaClient from "../../prisma/index.js";
 
 interface GetMyTenantServiceProps {
@@ -29,7 +30,14 @@ class GetMyTenantService {
                 minimumOrderValue: true,
                 businessHours: true,
                 createdAt: true,
-                updatedAt: true
+                updatedAt: true,
+                subscription: {
+                    select: {
+                        status: true,
+                        monthlyPrice: true,
+                        startedAt: true
+                    }
+                }
             }
         });
 
@@ -37,7 +45,12 @@ class GetMyTenantService {
             throw new TenantNotFoundError();
         }
 
-        return tenant;
+        const { subscription, ...rest } = tenant;
+
+        return {
+            ...rest,
+            effectivePlan: getEffectivePlan(subscription)
+        };
     }
 }
 

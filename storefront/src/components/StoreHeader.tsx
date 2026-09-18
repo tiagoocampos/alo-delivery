@@ -13,8 +13,14 @@ interface StoreHeaderProps {
   onOpenCart: () => void
 }
 
+const ALO_DELIVERY_LANDING_URL = import.meta.env.VITE_ALO_DELIVERY_LANDING_URL
+
 export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: StoreHeaderProps) {
-  const hasBanner = Boolean(tenant.bannerUrl)
+  const isBasico = tenant.effectivePlan === "basico"
+  // Plano básico não usa a marca do lojista: ignora logo/banner salvos e
+  // mostra a marca do próprio Alô Delivery, mesmo que o tenant tenha valores
+  // cadastrados de quando estava no plano completo.
+  const hasBanner = !isBasico && Boolean(tenant.bannerUrl)
 
   const iconBar = (
     <div
@@ -39,12 +45,23 @@ export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: Store
       </Button>
 
       <div className="flex min-w-0 items-center gap-2">
-        {tenant.logoUrl && (
-          <img
-            src={tenant.logoUrl}
-            alt=""
-            className="size-7 shrink-0 rounded-full object-cover"
-          />
+        {isBasico ? (
+          <a
+            href={ALO_DELIVERY_LANDING_URL}
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Conheça o Alô Delivery"
+          >
+            <img src="/favicon.svg" alt="" className="size-7 shrink-0 rounded-full object-cover" />
+          </a>
+        ) : (
+          tenant.logoUrl && (
+            <img
+              src={tenant.logoUrl}
+              alt=""
+              className="size-7 shrink-0 rounded-full object-cover"
+            />
+          )
         )}
         <span className="truncate font-heading text-sm font-semibold uppercase tracking-wide">{tenant.name}</span>
       </div>
