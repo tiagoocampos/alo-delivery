@@ -2,6 +2,7 @@ import { Award, Download, ListOrdered, LogIn, Phone, ShoppingCart, User, Utensil
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import { StoreBrandLogo } from "@/components/StoreBrandLogo"
+import { AloDeliveryBrandBadge } from "@/components/AloDeliveryBrandBadge"
 import { getInitials } from "@/lib/text"
 import { getStoreBranding } from "@/lib/storeBranding"
 import { useCustomerAuth } from "@/hooks/useCustomerAuth"
@@ -81,6 +82,12 @@ export function NavMenuSheet({
           </div>
         ) : (
           titleRow
+        )}
+
+        {isBasico && (
+          <div className="px-4 pt-3">
+            <AloDeliveryBrandBadge size="lg" />
+          </div>
         )}
 
         <nav className="flex flex-1 flex-col py-1">
@@ -163,9 +170,9 @@ export function NavMenuSheet({
           )}
         </nav>
 
-        <div className="border-t border-brand-foreground/10 px-4 py-2.5 text-center text-[11px] text-brand-foreground/50">
-          Alô Delivery
-        </div>
+        {!isBasico && (
+          <AloDeliveryBrandBadge size="sm" className="border-t border-brand-foreground/10 px-4 py-2.5" />
+        )}
       </SheetContent>
     </Sheet>
   )

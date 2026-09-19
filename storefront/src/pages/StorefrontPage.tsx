@@ -66,13 +66,23 @@ function StorefrontContent({ slug }: { slug: string }) {
   }, [slug])
 
   useEffect(() => {
-    if (!menu?.tenant.faviconUrl) return
+    if (!menu?.tenant) return
 
     const link = document.querySelector<HTMLLinkElement>("link[rel='icon']")
-    if (link) {
+    if (!link) return
+
+    // Plano básico ignora o favicon da loja, igual já fazemos com logo/banner
+    // — usa o favicon do próprio Alô Delivery mesmo que o tenant tenha um
+    // configurado.
+    if (menu.tenant.effectivePlan === "basico") {
+      link.href = "/brand/favicon-256x256.png"
+      return
+    }
+
+    if (menu.tenant.faviconUrl) {
       link.href = menu.tenant.faviconUrl
     }
-  }, [menu?.tenant.faviconUrl])
+  }, [menu?.tenant])
 
   useEffect(() => {
     if (!menu?.tenant.name) return

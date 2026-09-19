@@ -43,7 +43,7 @@ export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: Store
 
       <div className="flex min-w-0 items-center gap-2">
         {isBasico ? (
-          <StoreBrandLogo className="size-7 shrink-0 rounded-full object-cover" />
+          <StoreBrandLogo className="size-9 shrink-0 rounded-full object-cover" />
         ) : (
           logoUrl && <img src={logoUrl} alt="" className="size-7 shrink-0 rounded-full object-cover" />
         )}
