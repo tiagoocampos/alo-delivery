@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { formatCents } from "@/lib/money"
-import { getOrderStatusLabel } from "@/lib/orderStatus"
+import { getVisibleOrderStatusLabel } from "@/lib/orderStatus"
 import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
 import { cancelCustomerOrder } from "@/services/customer"
 import type { CustomerOrder } from "@/types"
@@ -23,10 +23,11 @@ const CANCELED_BY_LABELS: Record<string, string> = {
 interface OrderDetailViewProps {
   order: CustomerOrder
   slug: string
+  effectivePlan: "completo" | "basico"
   onOrderUpdated: (order: CustomerOrder) => void
 }
 
-export function OrderDetailView({ order, slug, onOrderUpdated }: OrderDetailViewProps) {
+export function OrderDetailView({ order, slug, effectivePlan, onOrderUpdated }: OrderDetailViewProps) {
   const [showCancelForm, setShowCancelForm] = useState(false)
   const [reason, setReason] = useState("")
   const [isCanceling, setIsCanceling] = useState(false)
@@ -61,9 +62,13 @@ export function OrderDetailView({ order, slug, onOrderUpdated }: OrderDetailView
           })}
         </span>
         <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">
-          {getOrderStatusLabel(order.status)}
+          {getVisibleOrderStatusLabel(order.status, effectivePlan)}
         </span>
       </div>
+
+      {effectivePlan === "basico" && order.status !== "cancelado" && (
+        <p className="text-xs text-muted-foreground">Seu pedido foi recebido pela loja.</p>
+      )}
 
       <Separator />
 

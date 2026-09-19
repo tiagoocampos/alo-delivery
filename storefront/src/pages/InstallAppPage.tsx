@@ -4,6 +4,7 @@ import { Download, Share } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { getInitials } from "@/lib/text"
+import { getStoreBranding } from "@/lib/storeBranding"
 import { applyTenantManifest } from "@/lib/pwaManifest"
 import { useInstallPrompt } from "@/hooks/useInstallPrompt"
 import { getTenant } from "@/services/storefront"
@@ -110,10 +111,14 @@ export function InstallAppPage() {
     navigate(`/${slug}`)
   }
 
+  // Essa tela já retorna antes de chegar aqui quando o plano é básico (acima),
+  // mas usamos o mesmo helper por consistência com StoreHeader/NavMenuSheet.
+  const { logoUrl } = getStoreBranding(tenant)
+
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 text-center">
-      {tenant.logoUrl ? (
-        <img src={tenant.logoUrl} alt="" className="size-24 rounded-2xl object-cover shadow-md" />
+      {logoUrl ? (
+        <img src={logoUrl} alt="" className="size-24 rounded-2xl object-cover shadow-md" />
       ) : (
         <span className="flex size-24 items-center justify-center rounded-2xl bg-primary text-2xl font-bold text-primary-foreground">
           {getInitials(tenant.name)}

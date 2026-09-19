@@ -1,3 +1,4 @@
+import { getStoreBranding } from "@/lib/storeBranding"
 import type { Tenant } from "@/types"
 
 const GENERIC_ICONS = [
@@ -19,7 +20,11 @@ function imageLoads(src: string): Promise<boolean> {
 }
 
 export async function applyTenantManifest(tenant: Tenant, slug: string): Promise<() => void> {
-  const logoWorks = tenant.logoUrl ? await imageLoads(tenant.logoUrl) : false
+  // Plano básico não usa a logo do lojista em lugar nenhum, nem no manifest —
+  // sem essa checagem, o menu "Instalar app" nativo do navegador (fora do
+  // nosso botão, ex: menu de 3 pontos do Chrome) ainda ofereceria a marca real.
+  const { logoUrl } = getStoreBranding(tenant)
+  const logoWorks = logoUrl ? await imageLoads(logoUrl) : false
 
   const manifest = {
     name: tenant.name,
@@ -30,8 +35,8 @@ export async function applyTenantManifest(tenant: Tenant, slug: string): Promise
     theme_color: "#0066FF",
     icons: logoWorks
       ? [
-          { src: tenant.logoUrl!, sizes: "192x192", type: "image/png" },
-          { src: tenant.logoUrl!, sizes: "512x512", type: "image/png" },
+          { src: logoUrl!, sizes: "192x192", type: "image/png" },
+          { src: logoUrl!, sizes: "512x512", type: "image/png" },
         ]
       : GENERIC_ICONS,
   }

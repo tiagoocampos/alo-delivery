@@ -243,7 +243,12 @@ function StorefrontContent({ slug }: { slug: string }) {
 
       <LoyaltySheet open={loyaltyOpen} onOpenChange={setLoyaltyOpen} slug={slug} />
       <AccountSheet open={accountOpen} onOpenChange={setAccountOpen} slug={slug} />
-      <OrdersSheet open={ordersOpen} onOpenChange={setOrdersOpen} slug={slug} />
+      <OrdersSheet
+        open={ordersOpen}
+        onOpenChange={setOrdersOpen}
+        slug={slug}
+        effectivePlan={menu.tenant.effectivePlan}
+      />
     </div>
   )
 }

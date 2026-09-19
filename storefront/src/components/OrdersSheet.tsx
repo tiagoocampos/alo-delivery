@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { OrderDetailView } from "@/components/OrderDetailView"
 import { formatCents } from "@/lib/money"
-import { getOrderStatusLabel } from "@/lib/orderStatus"
+import { getVisibleOrderStatusLabel } from "@/lib/orderStatus"
 import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
 import { listCustomerOrders } from "@/services/customer"
 import type { CustomerOrder } from "@/types"
@@ -15,9 +15,10 @@ interface OrdersSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   slug: string
+  effectivePlan: "completo" | "basico"
 }
 
-export function OrdersSheet({ open, onOpenChange, slug }: OrdersSheetProps) {
+export function OrdersSheet({ open, onOpenChange, slug, effectivePlan }: OrdersSheetProps) {
   const [orders, setOrders] = useState<CustomerOrder[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(null)
@@ -49,6 +50,7 @@ export function OrdersSheet({ open, onOpenChange, slug }: OrdersSheetProps) {
             <OrderDetailView
               order={selectedOrder}
               slug={slug}
+              effectivePlan={effectivePlan}
               onOrderUpdated={(updated) => {
                 setOrders((current) => current.map((o) => (o.id === updated.id ? updated : o)))
                 setSelectedOrder(updated)
@@ -91,7 +93,7 @@ export function OrdersSheet({ open, onOpenChange, slug }: OrdersSheetProps) {
                       })}
                     </span>
                     <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">
-                      {getOrderStatusLabel(order.status)}
+                      {getVisibleOrderStatusLabel(order.status, effectivePlan)}
                     </span>
                   </div>
 

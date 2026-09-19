@@ -1,7 +1,9 @@
 import { Award, Download, ListOrdered, LogIn, Phone, ShoppingCart, User, UtensilsCrossed } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
+import { StoreBrandLogo } from "@/components/StoreBrandLogo"
 import { getInitials } from "@/lib/text"
+import { getStoreBranding } from "@/lib/storeBranding"
 import { useCustomerAuth } from "@/hooks/useCustomerAuth"
 import { useInstallPrompt } from "@/hooks/useInstallPrompt"
 import type { Tenant } from "@/types"
@@ -28,14 +30,17 @@ export function NavMenuSheet({
   const { isAuthenticated } = useCustomerAuth()
   const { canInstall, promptInstall } = useInstallPrompt()
   const close = () => onOpenChange(false)
-  const hasBanner = Boolean(tenant.bannerUrl)
+  const { isBasico, logoUrl, bannerUrl } = getStoreBranding(tenant)
+  const hasBanner = Boolean(bannerUrl)
 
   const itemClass =
     "flex items-center gap-3 px-4 py-2.5 text-sm text-brand-foreground/90 transition-colors hover:bg-brand-foreground/10"
 
-  const avatar = tenant.logoUrl ? (
+  const avatar = isBasico ? (
+    <StoreBrandLogo className="size-8 shrink-0 rounded-full object-cover ring-2 ring-white/30" />
+  ) : logoUrl ? (
     <img
-      src={tenant.logoUrl}
+      src={logoUrl}
       alt=""
       className="size-8 shrink-0 rounded-full object-cover ring-2 ring-white/30"
     />
@@ -71,7 +76,7 @@ export function NavMenuSheet({
       >
         {hasBanner ? (
           <div className="relative w-full border-b border-brand-foreground/10">
-            <img src={tenant.bannerUrl!} alt="" className="h-28 w-full object-cover" />
+            <img src={bannerUrl!} alt="" className="h-28 w-full object-cover" />
             <div className="absolute inset-x-0 top-0 bg-linear-to-b from-black/60 to-transparent">{titleRow}</div>
           </div>
         ) : (
@@ -84,7 +89,7 @@ export function NavMenuSheet({
             Cardápio
           </button>
 
-          {canInstall && tenant.effectivePlan !== "basico" && (
+          {canInstall && !isBasico && (
             <button type="button" onClick={promptInstall} className={itemClass}>
               <Download className="size-4.5" strokeWidth={1.75} />
               Instalar app

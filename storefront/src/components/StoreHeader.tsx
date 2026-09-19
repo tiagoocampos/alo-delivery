@@ -2,8 +2,10 @@ import { Menu, ShoppingCart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/ThemeToggle"
+import { StoreBrandLogo } from "@/components/StoreBrandLogo"
 import { formatCents } from "@/lib/money"
 import { getStoreOpenStatus } from "@/lib/storeHours"
+import { getStoreBranding } from "@/lib/storeBranding"
 import type { Tenant } from "@/types"
 
 interface StoreHeaderProps {
@@ -13,14 +15,9 @@ interface StoreHeaderProps {
   onOpenCart: () => void
 }
 
-const ALO_DELIVERY_LANDING_URL = import.meta.env.VITE_ALO_DELIVERY_LANDING_URL
-
 export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: StoreHeaderProps) {
-  const isBasico = tenant.effectivePlan === "basico"
-  // Plano básico não usa a marca do lojista: ignora logo/banner salvos e
-  // mostra a marca do próprio Alô Delivery, mesmo que o tenant tenha valores
-  // cadastrados de quando estava no plano completo.
-  const hasBanner = !isBasico && Boolean(tenant.bannerUrl)
+  const { isBasico, logoUrl, bannerUrl } = getStoreBranding(tenant)
+  const hasBanner = Boolean(bannerUrl)
 
   const iconBar = (
     <div
@@ -46,22 +43,9 @@ export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: Store
 
       <div className="flex min-w-0 items-center gap-2">
         {isBasico ? (
-          <a
-            href={ALO_DELIVERY_LANDING_URL}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Conheça o Alô Delivery"
-          >
-            <img src="/favicon.svg" alt="" className="size-7 shrink-0 rounded-full object-cover" />
-          </a>
+          <StoreBrandLogo className="size-7 shrink-0 rounded-full object-cover" />
         ) : (
-          tenant.logoUrl && (
-            <img
-              src={tenant.logoUrl}
-              alt=""
-              className="size-7 shrink-0 rounded-full object-cover"
-            />
-          )
+          logoUrl && <img src={logoUrl} alt="" className="size-7 shrink-0 rounded-full object-cover" />
         )}
         <span className="truncate font-heading text-sm font-semibold uppercase tracking-wide">{tenant.name}</span>
       </div>
@@ -123,7 +107,7 @@ export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: Store
       <header>
         <div className="relative w-full">
           <img
-            src={tenant.bannerUrl!}
+            src={bannerUrl!}
             alt=""
             className="h-48 w-full object-cover sm:h-56"
           />
