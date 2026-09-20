@@ -25,6 +25,13 @@ export const getStoreMenuSchema =
         })
     })
 
+export const searchStoresSchema =
+    z.object({
+        query: z.object({
+            q: z.string().max(100, { message: "Busca muito longa" }).optional(),
+        })
+    })
+
 const businessHoursDaySchema = z.object({
     dayOfWeek: z.number().int().min(0).max(6),
     isClosed: z.boolean(),

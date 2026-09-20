@@ -9,7 +9,7 @@ import { requireActiveSubscription } from "./middlewares/RequireActiveSubscripti
 import { authorize } from "./middlewares/Authorize.js";
 import { authenticateCustomer } from "./middlewares/AuthenticateCustomer.js";
 import { optionalAuthenticateCustomer } from "./middlewares/OptionalAuthenticateCustomer.js";
-import { authRateLimiter, publicOrderRateLimiter } from "./middlewares/RateLimit.js";
+import { authRateLimiter, publicOrderRateLimiter, storeSearchRateLimiter } from "./middlewares/RateLimit.js";
 
 import { RegisterTenantController } from "./controllers/tenant/RegisterTenantController.js";
 import { LoginTenantController } from "./controllers/tenant/LoginTenantController.js";
@@ -19,6 +19,7 @@ import { GetTenantController } from "./controllers/tenant/GetTenantController.js
 import { GetMyTenantController } from "./controllers/tenant/GetMyTenantController.js";
 import { UpdateMyTenantController } from "./controllers/tenant/UpdateMyTenantController.js";
 import { GetStoreMenuController } from "./controllers/tenant/GetStoreMenuController.js";
+import { SearchStoresController } from "./controllers/tenant/SearchStoresController.js";
 import { CreateCategoryController } from "./controllers/category/CreateCategoryController.js";
 import { ListCategoriesController } from "./controllers/category/ListCategoriesController.js";
 import { CreateProductController } from "./controllers/product/CreateProductController.js";
@@ -66,7 +67,7 @@ import { DeletePlatformExpenseController } from "./controllers/admin/DeletePlatf
 import { GetAdminRevenueController } from "./controllers/admin/GetAdminRevenueController.js";
 import { GetAdminSummaryController } from "./controllers/admin/GetAdminSummaryController.js";
 
-import { tenantSchema, getTenantSchema, getStoreMenuSchema, updateMyTenantSchema } from "./schemas/tenantSchema.js";
+import { tenantSchema, getTenantSchema, getStoreMenuSchema, updateMyTenantSchema, searchStoresSchema } from "./schemas/tenantSchema.js";
 import { loginSchema } from "./schemas/loginShema.js";
 import { forgotPasswordSchema, resetPasswordSchema } from "./schemas/authSchema.js";
 import {
@@ -163,6 +164,7 @@ router.put(
  * Rotas públicas da loja (cliente final, sem login) — identificadas pelo slug
  * ------------------------------------------------------------------------ */
 router.get("/tenant/:slug", validateSchema(getTenantSchema), new GetTenantController().handle);
+router.get("/stores/search", storeSearchRateLimiter, validateSchema(searchStoresSchema), new SearchStoresController().handle);
 router.get("/store/:slug/menu", validateSchema(getStoreMenuSchema), new GetStoreMenuController().handle);
 router.post("/store/:slug/orders", publicOrderRateLimiter, optionalAuthenticateCustomer, validateSchema(createOrderSchema), new CreateOrderController().handle);
 router.post("/store/:slug/orders/:orderId/push-subscription", validateSchema(createOrderPushSubscriptionSchema), new CreateOrderPushSubscriptionController().handle);

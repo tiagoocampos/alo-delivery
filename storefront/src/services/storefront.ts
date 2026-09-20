@@ -1,9 +1,14 @@
 import { api } from "@/services/api"
 import { getCustomerSession } from "@/lib/customerSession"
-import type { CreateOrderPayload, LoyaltyInfo, Order, StoreMenu, Tenant } from "@/types"
+import type { CreateOrderPayload, LoyaltyInfo, Order, StoreMenu, StoreSearchResult, Tenant } from "@/types"
 
 export async function getTenant(slug: string): Promise<Tenant> {
   const { data } = await api.get<Tenant>(`/tenant/${slug}`)
+  return data
+}
+
+export async function searchStores(q: string): Promise<StoreSearchResult[]> {
+  const { data } = await api.get<StoreSearchResult[]>("/stores/search", { params: { q } })
   return data
 }
 

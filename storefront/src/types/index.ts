@@ -4,6 +4,11 @@ export interface ProductVariant {
   priceDelta: number
 }
 
+export interface StoreSearchResult {
+  name: string
+  slug: string
+}
+
 export interface ProductExtra {
   id: string
   name: string

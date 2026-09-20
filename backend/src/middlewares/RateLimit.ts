@@ -15,3 +15,11 @@ export const publicOrderRateLimiter = rateLimit({
     legacyHeaders: false,
     message: { error: "Muitos pedidos enviados. Aguarde alguns minutos." }
 });
+
+export const storeSearchRateLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 30,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Muitas buscas em pouco tempo. Aguarde um instante." }
+});

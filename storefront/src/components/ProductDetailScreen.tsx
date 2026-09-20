@@ -95,7 +95,9 @@ function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDe
       </div>
 
       {product.imageUrl && (
-        <img src={product.imageUrl} alt="" className="aspect-square w-full object-cover" />
+        <div className="relative flex h-50 w-full items-center justify-center">
+          <img src={product.imageUrl} alt="" className="aspect-square w-50 object-cover" /></div>
+        
       )}
 
       <div className="flex flex-1 flex-col gap-5 p-4 pb-28">
