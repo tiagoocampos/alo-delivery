@@ -79,7 +79,10 @@ class CreateOrderService {
             where: {
                 id: { in: normalProductIds },
                 tenantId: tenant.id,
-                isActive: true
+                isActive: true,
+                // Produto só de balcão não pode ser pedido online (regra no backend,
+                // esconder no storefront não basta).
+                availability: { in: ["ambos", "delivery"] }
             },
             select: {
                 id: true,
@@ -121,7 +124,8 @@ class CreateOrderService {
         const flavorProducts = await prismaClient.product.findMany({
             where: {
                 id: { in: flavorProductIds },
-                isActive: true
+                isActive: true,
+                availability: { in: ["ambos", "delivery"] }
             },
             select: {
                 id: true,

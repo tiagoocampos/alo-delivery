@@ -6,6 +6,10 @@ const centsAsString = z
     .string()
     .regex(/^\d+$/, { message: "O preço deve ser um número inteiro em centavos" });
 
+const productAvailability = z.enum(["ambos", "delivery", "balcao"], {
+    message: "Disponibilidade inválida"
+});
+
 export const createProductSchema =
     z.object({
         body: z.object({
@@ -14,6 +18,7 @@ export const createProductSchema =
             basePrice: centsAsString.optional(),
             categoryId: z.string().uuid({ message: "Categoria inválida" }),
             badge: z.enum(["mais_pedido", "promocao", "novo"]).nullable().optional(),
+            availability: productAvailability.optional(),
         })
     })
 
@@ -22,6 +27,7 @@ export const listProductsSchema =
         query: z.object({
             categoryId: z.string().uuid({ message: "Categoria inválida" }).optional(),
             isActive: z.enum(["true", "false"]).optional(),
+            availability: productAvailability.optional(),
         })
     })
 
@@ -37,6 +43,7 @@ export const updateProductSchema =
             categoryId: z.string().uuid({ message: "Categoria inválida" }).optional(),
             isActive: z.enum(["true", "false"]).optional(),
             badge: z.enum(["mais_pedido", "promocao", "novo"]).nullable().optional(),
+            availability: productAvailability.optional(),
         })
     })
 

@@ -37,6 +37,13 @@ class GetStoreMenuService {
                         maxFlavors: true
                     }
                 },
+                // Usado só pra esconder categoria que ficou vazia por causa do
+                // filtro de disponibilidade (não vai pra resposta).
+                _count: {
+                    select: {
+                        products: { where: { isActive: true, availability: "balcao" } }
+                    }
+                },
                 crusts: {
                     select: {
                         id: true,
@@ -46,7 +53,9 @@ class GetStoreMenuService {
                 },
                 products: {
                     where: {
-                        isActive: true
+                        isActive: true,
+                        // Produto só de balcão nunca aparece no storefront.
+                        availability: { in: ["ambos", "delivery"] }
                     },
                     orderBy: {
                         name: "asc"
@@ -77,6 +86,12 @@ class GetStoreMenuService {
             }
         });
 
+        // Categoria que só tem itens de balcão não aparece vazia no storefront.
+        // Categoria que já era vazia antes continua aparecendo, como sempre.
+        const visibleCategories = categories
+            .filter(category => category.products.length > 0 || category._count.products === 0)
+            .map(({ _count, ...category }) => category);
+
         return {
             tenant: {
                 id: tenant.id,
@@ -95,7 +110,7 @@ class GetStoreMenuService {
                 businessHours: tenant.businessHours,
                 effectivePlan: tenant.effectivePlan
             },
-            categories
+            categories: visibleCategories
         };
     }
 }

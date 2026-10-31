@@ -20,6 +20,7 @@ class GetOrderDetailService {
                 customerName: true,
                 customerPhone: true,
                 address: true,
+                origin: true,
                 status: true,
                 subtotal: true,
                 deliveryFee: true,
@@ -32,6 +33,7 @@ class GetOrderDetailService {
                 items: {
                     select: {
                         id: true,
+                        name: true,
                         quantity: true,
                         unitPrice: true,
                         note: true,

@@ -6,16 +6,19 @@ interface ListOrdersServiceProps {
     tenantId: string;
     status?: OrderStatus | undefined;
     date?: string | undefined;
+    origin?: "online" | "balcao" | "all" | undefined;
 }
 
 class ListOrdersService {
-    async execute({ tenantId, status, date }: ListOrdersServiceProps) {
+    async execute({ tenantId, status, date, origin = "online" }: ListOrdersServiceProps) {
 
         const dateRange = date ? getDayRange(date) : undefined;
 
         const orders = await prismaClient.order.findMany({
             where: {
                 tenantId,
+                // Padrão "online": a tela de Pedidos (delivery) não recebe venda de balcão.
+                ...(origin === "all" ? {} : { origin }),
                 ...(status ? { status } : {}),
                 ...(dateRange ? { createdAt: { gte: dateRange.start, lte: dateRange.end } } : {})
             },
@@ -27,6 +30,7 @@ class ListOrdersService {
                 customerName: true,
                 customerPhone: true,
                 address: true,
+                origin: true,
                 status: true,
                 subtotal: true,
                 deliveryFee: true,
@@ -39,6 +43,7 @@ class ListOrdersService {
                 items: {
                     select: {
                         id: true,
+                        name: true,
                         quantity: true,
                         unitPrice: true,
                         note: true,

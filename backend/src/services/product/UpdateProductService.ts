@@ -1,9 +1,9 @@
 import { Readable } from "stream";
 import { CategoryNotFoundError } from "../../errors/category/CategoryErrors.js";
-import { ImageUploadError, ProductNotFoundError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
+import { ImageUploadError, ProductImageRequiredError, ProductNotFoundError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 import cloudinary from "../../config/cloudinary.js";
-import type { ProductBadge } from "../../generated/prisma/enums.js";
+import type { ProductAvailability, ProductBadge } from "../../generated/prisma/enums.js";
 
 interface UpdateProductServiceProps {
     tenantId: string;
@@ -14,6 +14,7 @@ interface UpdateProductServiceProps {
     categoryId?: string | undefined;
     isActive?: boolean | undefined;
     badge?: ProductBadge | null | undefined;
+    availability?: ProductAvailability | undefined;
     imageBuffer?: Buffer | undefined;
     imageName?: string | undefined;
 }
@@ -28,6 +29,7 @@ class UpdateProductService {
         categoryId,
         isActive,
         badge,
+        availability,
         imageBuffer,
         imageName
     }: UpdateProductServiceProps) {
@@ -72,6 +74,14 @@ class UpdateProductService {
             throw new ProductPriceRequiredError();
         }
 
+        // Saindo de "balcao" (ou já fora dele) o produto aparece no storefront,
+        // que exige imagem — ou já existe uma, ou vem uma nova neste update.
+        const effectiveAvailability = availability ?? product.availability;
+        const hasNewImage = Boolean(imageBuffer && imageName);
+        if (effectiveAvailability !== "balcao" && !product.imageUrl && !hasNewImage) {
+            throw new ProductImageRequiredError();
+        }
+
         let imageUrl: string | undefined;
         if (imageBuffer && imageName) {
             try {
@@ -112,6 +122,7 @@ class UpdateProductService {
                 ...(categoryId === undefined ? {} : { categoryId }),
                 ...(isActive === undefined ? {} : { isActive }),
                 ...(badge === undefined ? {} : { badge }),
+                ...(availability === undefined ? {} : { availability }),
                 ...(imageUrl === undefined ? {} : { imageUrl }),
             },
             select: {
@@ -124,6 +135,7 @@ class UpdateProductService {
                 basePrice: true,
                 isActive: true,
                 badge: true,
+                availability: true,
                 createdAt: true,
                 updatedAt: true
             }

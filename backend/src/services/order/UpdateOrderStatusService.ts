@@ -30,7 +30,10 @@ class UpdateOrderStatusService {
         const order = await prismaClient.order.findFirst({
             where: {
                 id: orderId,
-                tenantId
+                tenantId,
+                // Venda de balcão nasce "entregue" e não passa pela máquina de
+                // estados (nem fidelidade/push) — cancela via /pos/sales/:id/cancel.
+                origin: "online"
             },
             select: {
                 id: true,
@@ -40,9 +43,11 @@ class UpdateOrderStatusService {
             }
         });
 
-        if (!order) {
+        // Pedido online sempre tem telefone; o null só existe em venda de balcão.
+        if (!order || order.customerPhone === null) {
             throw new OrderNotFoundError();
         }
+        const customerPhone = order.customerPhone;
 
         if (!ALLOWED_TRANSITIONS[order.status].includes(status)) {
             throw new InvalidOrderStatusTransitionError(order.status, status);
@@ -85,7 +90,7 @@ class UpdateOrderStatusService {
                         where: {
                             tenantId_customerPhone: {
                                 tenantId,
-                                customerPhone: order.customerPhone
+                                customerPhone
                             }
                         },
                         select: {
@@ -97,12 +102,12 @@ class UpdateOrderStatusService {
                         where: {
                             tenantId_customerPhone: {
                                 tenantId,
-                                customerPhone: order.customerPhone
+                                customerPhone
                             }
                         },
                         create: {
                             tenantId,
-                            customerPhone: order.customerPhone,
+                            customerPhone,
                             points
                         },
                         update: {

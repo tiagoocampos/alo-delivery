@@ -45,6 +45,8 @@ export type OrderMinAggregateOutputType = {
   customerName: string | null
   customerPhone: string | null
   address: string | null
+  origin: $Enums.OrderOrigin | null
+  clientId: string | null
   status: $Enums.OrderStatus | null
   subtotal: number | null
   deliveryFee: number | null
@@ -63,6 +65,8 @@ export type OrderMaxAggregateOutputType = {
   customerName: string | null
   customerPhone: string | null
   address: string | null
+  origin: $Enums.OrderOrigin | null
+  clientId: string | null
   status: $Enums.OrderStatus | null
   subtotal: number | null
   deliveryFee: number | null
@@ -81,6 +85,8 @@ export type OrderCountAggregateOutputType = {
   customerName: number
   customerPhone: number
   address: number
+  origin: number
+  clientId: number
   status: number
   subtotal: number
   deliveryFee: number
@@ -113,6 +119,8 @@ export type OrderMinAggregateInputType = {
   customerName?: true
   customerPhone?: true
   address?: true
+  origin?: true
+  clientId?: true
   status?: true
   subtotal?: true
   deliveryFee?: true
@@ -131,6 +139,8 @@ export type OrderMaxAggregateInputType = {
   customerName?: true
   customerPhone?: true
   address?: true
+  origin?: true
+  clientId?: true
   status?: true
   subtotal?: true
   deliveryFee?: true
@@ -149,6 +159,8 @@ export type OrderCountAggregateInputType = {
   customerName?: true
   customerPhone?: true
   address?: true
+  origin?: true
+  clientId?: true
   status?: true
   subtotal?: true
   deliveryFee?: true
@@ -252,8 +264,10 @@ export type OrderGroupByOutputType = {
   tenantId: string
   customerId: string | null
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone: string | null
+  address: string | null
+  origin: $Enums.OrderOrigin
+  clientId: string | null
   status: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -293,8 +307,10 @@ export type OrderWhereInput = {
   tenantId?: Prisma.StringFilter<"Order"> | string
   customerId?: Prisma.StringNullableFilter<"Order"> | string | null
   customerName?: Prisma.StringFilter<"Order"> | string
-  customerPhone?: Prisma.StringFilter<"Order"> | string
-  address?: Prisma.StringFilter<"Order"> | string
+  customerPhone?: Prisma.StringNullableFilter<"Order"> | string | null
+  address?: Prisma.StringNullableFilter<"Order"> | string | null
+  origin?: Prisma.EnumOrderOriginFilter<"Order"> | $Enums.OrderOrigin
+  clientId?: Prisma.StringNullableFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   subtotal?: Prisma.IntFilter<"Order"> | number
   deliveryFee?: Prisma.IntFilter<"Order"> | number
@@ -315,8 +331,10 @@ export type OrderOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   customerId?: Prisma.SortOrderInput | Prisma.SortOrder
   customerName?: Prisma.SortOrder
-  customerPhone?: Prisma.SortOrder
-  address?: Prisma.SortOrder
+  customerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  clientId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
@@ -334,14 +352,17 @@ export type OrderOrderByWithRelationInput = {
 
 export type OrderWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  tenantId_clientId?: Prisma.OrderTenantIdClientIdCompoundUniqueInput
   AND?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   OR?: Prisma.OrderWhereInput[]
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   tenantId?: Prisma.StringFilter<"Order"> | string
   customerId?: Prisma.StringNullableFilter<"Order"> | string | null
   customerName?: Prisma.StringFilter<"Order"> | string
-  customerPhone?: Prisma.StringFilter<"Order"> | string
-  address?: Prisma.StringFilter<"Order"> | string
+  customerPhone?: Prisma.StringNullableFilter<"Order"> | string | null
+  address?: Prisma.StringNullableFilter<"Order"> | string | null
+  origin?: Prisma.EnumOrderOriginFilter<"Order"> | $Enums.OrderOrigin
+  clientId?: Prisma.StringNullableFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   subtotal?: Prisma.IntFilter<"Order"> | number
   deliveryFee?: Prisma.IntFilter<"Order"> | number
@@ -355,15 +376,17 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
   items?: Prisma.OrderItemListRelationFilter
   pushSubscriptions?: Prisma.OrderPushSubscriptionListRelationFilter
-}, "id">
+}, "id" | "tenantId_clientId">
 
 export type OrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   customerId?: Prisma.SortOrderInput | Prisma.SortOrder
   customerName?: Prisma.SortOrder
-  customerPhone?: Prisma.SortOrder
-  address?: Prisma.SortOrder
+  customerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  clientId?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
@@ -388,8 +411,10 @@ export type OrderScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.StringWithAggregatesFilter<"Order"> | string
   customerId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   customerName?: Prisma.StringWithAggregatesFilter<"Order"> | string
-  customerPhone?: Prisma.StringWithAggregatesFilter<"Order"> | string
-  address?: Prisma.StringWithAggregatesFilter<"Order"> | string
+  customerPhone?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  address?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
+  origin?: Prisma.EnumOrderOriginWithAggregatesFilter<"Order"> | $Enums.OrderOrigin
+  clientId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
   subtotal?: Prisma.IntWithAggregatesFilter<"Order"> | number
   deliveryFee?: Prisma.IntWithAggregatesFilter<"Order"> | number
@@ -404,8 +429,10 @@ export type OrderScalarWhereWithAggregatesInput = {
 export type OrderCreateInput = {
   id?: string
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -426,8 +453,10 @@ export type OrderUncheckedCreateInput = {
   tenantId: string
   customerId?: string | null
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -444,8 +473,10 @@ export type OrderUncheckedCreateInput = {
 export type OrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -466,8 +497,10 @@ export type OrderUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -486,8 +519,10 @@ export type OrderCreateManyInput = {
   tenantId: string
   customerId?: string | null
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -502,8 +537,10 @@ export type OrderCreateManyInput = {
 export type OrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -520,8 +557,10 @@ export type OrderUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -543,6 +582,11 @@ export type OrderOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type OrderTenantIdClientIdCompoundUniqueInput = {
+  tenantId: string
+  clientId: string
+}
+
 export type OrderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
@@ -550,6 +594,8 @@ export type OrderCountOrderByAggregateInput = {
   customerName?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
@@ -574,6 +620,8 @@ export type OrderMaxOrderByAggregateInput = {
   customerName?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
@@ -592,6 +640,8 @@ export type OrderMinOrderByAggregateInput = {
   customerName?: Prisma.SortOrder
   customerPhone?: Prisma.SortOrder
   address?: Prisma.SortOrder
+  origin?: Prisma.SortOrder
+  clientId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   subtotal?: Prisma.SortOrder
   deliveryFee?: Prisma.SortOrder
@@ -654,6 +704,10 @@ export type OrderUncheckedUpdateManyWithoutTenantNestedInput = {
   update?: Prisma.OrderUpdateWithWhereUniqueWithoutTenantInput | Prisma.OrderUpdateWithWhereUniqueWithoutTenantInput[]
   updateMany?: Prisma.OrderUpdateManyWithWhereWithoutTenantInput | Prisma.OrderUpdateManyWithWhereWithoutTenantInput[]
   deleteMany?: Prisma.OrderScalarWhereInput | Prisma.OrderScalarWhereInput[]
+}
+
+export type EnumOrderOriginFieldUpdateOperationsInput = {
+  set?: $Enums.OrderOrigin
 }
 
 export type EnumOrderStatusFieldUpdateOperationsInput = {
@@ -741,8 +795,10 @@ export type OrderUncheckedUpdateManyWithoutCustomerNestedInput = {
 export type OrderCreateWithoutTenantInput = {
   id?: string
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -761,8 +817,10 @@ export type OrderUncheckedCreateWithoutTenantInput = {
   id?: string
   customerId?: string | null
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -810,8 +868,10 @@ export type OrderScalarWhereInput = {
   tenantId?: Prisma.StringFilter<"Order"> | string
   customerId?: Prisma.StringNullableFilter<"Order"> | string | null
   customerName?: Prisma.StringFilter<"Order"> | string
-  customerPhone?: Prisma.StringFilter<"Order"> | string
-  address?: Prisma.StringFilter<"Order"> | string
+  customerPhone?: Prisma.StringNullableFilter<"Order"> | string | null
+  address?: Prisma.StringNullableFilter<"Order"> | string | null
+  origin?: Prisma.EnumOrderOriginFilter<"Order"> | $Enums.OrderOrigin
+  clientId?: Prisma.StringNullableFilter<"Order"> | string | null
   status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   subtotal?: Prisma.IntFilter<"Order"> | number
   deliveryFee?: Prisma.IntFilter<"Order"> | number
@@ -826,8 +886,10 @@ export type OrderScalarWhereInput = {
 export type OrderCreateWithoutPushSubscriptionsInput = {
   id?: string
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -847,8 +909,10 @@ export type OrderUncheckedCreateWithoutPushSubscriptionsInput = {
   tenantId: string
   customerId?: string | null
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -880,8 +944,10 @@ export type OrderUpdateToOneWithWhereWithoutPushSubscriptionsInput = {
 export type OrderUpdateWithoutPushSubscriptionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -901,8 +967,10 @@ export type OrderUncheckedUpdateWithoutPushSubscriptionsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -918,8 +986,10 @@ export type OrderUncheckedUpdateWithoutPushSubscriptionsInput = {
 export type OrderCreateWithoutItemsInput = {
   id?: string
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -939,8 +1009,10 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   tenantId: string
   customerId?: string | null
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -972,8 +1044,10 @@ export type OrderUpdateToOneWithWhereWithoutItemsInput = {
 export type OrderUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -993,8 +1067,10 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1010,8 +1086,10 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
 export type OrderCreateWithoutCustomerInput = {
   id?: string
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -1030,8 +1108,10 @@ export type OrderUncheckedCreateWithoutCustomerInput = {
   id?: string
   tenantId: string
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -1075,8 +1155,10 @@ export type OrderCreateManyTenantInput = {
   id?: string
   customerId?: string | null
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -1091,8 +1173,10 @@ export type OrderCreateManyTenantInput = {
 export type OrderUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1111,8 +1195,10 @@ export type OrderUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1130,8 +1216,10 @@ export type OrderUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1147,8 +1235,10 @@ export type OrderCreateManyCustomerInput = {
   id?: string
   tenantId: string
   customerName: string
-  customerPhone: string
-  address: string
+  customerPhone?: string | null
+  address?: string | null
+  origin?: $Enums.OrderOrigin
+  clientId?: string | null
   status?: $Enums.OrderStatus
   subtotal: number
   deliveryFee: number
@@ -1163,8 +1253,10 @@ export type OrderCreateManyCustomerInput = {
 export type OrderUpdateWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1183,8 +1275,10 @@ export type OrderUncheckedUpdateWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1202,8 +1296,10 @@ export type OrderUncheckedUpdateManyWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerName?: Prisma.StringFieldUpdateOperationsInput | string
-  customerPhone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.StringFieldUpdateOperationsInput | string
+  customerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  origin?: Prisma.EnumOrderOriginFieldUpdateOperationsInput | $Enums.OrderOrigin
+  clientId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   subtotal?: Prisma.IntFieldUpdateOperationsInput | number
   deliveryFee?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1262,6 +1358,8 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   customerName?: boolean
   customerPhone?: boolean
   address?: boolean
+  origin?: boolean
+  clientId?: boolean
   status?: boolean
   subtotal?: boolean
   deliveryFee?: boolean
@@ -1285,6 +1383,8 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   customerName?: boolean
   customerPhone?: boolean
   address?: boolean
+  origin?: boolean
+  clientId?: boolean
   status?: boolean
   subtotal?: boolean
   deliveryFee?: boolean
@@ -1305,6 +1405,8 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   customerName?: boolean
   customerPhone?: boolean
   address?: boolean
+  origin?: boolean
+  clientId?: boolean
   status?: boolean
   subtotal?: boolean
   deliveryFee?: boolean
@@ -1325,6 +1427,8 @@ export type OrderSelectScalar = {
   customerName?: boolean
   customerPhone?: boolean
   address?: boolean
+  origin?: boolean
+  clientId?: boolean
   status?: boolean
   subtotal?: boolean
   deliveryFee?: boolean
@@ -1336,7 +1440,7 @@ export type OrderSelectScalar = {
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "customerName" | "customerPhone" | "address" | "status" | "subtotal" | "deliveryFee" | "total" | "paymentMethod" | "cancelReason" | "canceledBy" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "customerName" | "customerPhone" | "address" | "origin" | "clientId" | "status" | "subtotal" | "deliveryFee" | "total" | "paymentMethod" | "cancelReason" | "canceledBy" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.Order$customerArgs<ExtArgs>
@@ -1366,8 +1470,10 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     tenantId: string
     customerId: string | null
     customerName: string
-    customerPhone: string
-    address: string
+    customerPhone: string | null
+    address: string | null
+    origin: $Enums.OrderOrigin
+    clientId: string | null
     status: $Enums.OrderStatus
     subtotal: number
     deliveryFee: number
@@ -1810,6 +1916,8 @@ export interface OrderFieldRefs {
   readonly customerName: Prisma.FieldRef<"Order", 'String'>
   readonly customerPhone: Prisma.FieldRef<"Order", 'String'>
   readonly address: Prisma.FieldRef<"Order", 'String'>
+  readonly origin: Prisma.FieldRef<"Order", 'OrderOrigin'>
+  readonly clientId: Prisma.FieldRef<"Order", 'String'>
   readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
   readonly subtotal: Prisma.FieldRef<"Order", 'Int'>
   readonly deliveryFee: Prisma.FieldRef<"Order", 'Int'>

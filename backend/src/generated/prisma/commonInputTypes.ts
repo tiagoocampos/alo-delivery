@@ -278,6 +278,13 @@ export type EnumProductBadgeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel> | $Enums.ProductBadge | null
 }
 
+export type EnumProductAvailabilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductAvailability | Prisma.EnumProductAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductAvailabilityFilter<$PrismaModel> | $Enums.ProductAvailability
+}
+
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -304,6 +311,23 @@ export type EnumProductBadgeNullableWithAggregatesFilter<$PrismaModel = never> =
   _max?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
 }
 
+export type EnumProductAvailabilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductAvailability | Prisma.EnumProductAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductAvailabilityWithAggregatesFilter<$PrismaModel> | $Enums.ProductAvailability
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductAvailabilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductAvailabilityFilter<$PrismaModel>
+}
+
+export type EnumOrderOriginFilter<$PrismaModel = never> = {
+  equals?: $Enums.OrderOrigin | Prisma.EnumOrderOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOrderOriginFilter<$PrismaModel> | $Enums.OrderOrigin
+}
+
 export type EnumOrderStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.OrderStatus | Prisma.EnumOrderStatusFieldRefInput<$PrismaModel>
   in?: $Enums.OrderStatus[] | Prisma.ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -323,6 +347,16 @@ export type EnumCanceledByNullableFilter<$PrismaModel = never> = {
   in?: $Enums.CanceledBy[] | Prisma.ListEnumCanceledByFieldRefInput<$PrismaModel> | null
   notIn?: $Enums.CanceledBy[] | Prisma.ListEnumCanceledByFieldRefInput<$PrismaModel> | null
   not?: Prisma.NestedEnumCanceledByNullableFilter<$PrismaModel> | $Enums.CanceledBy | null
+}
+
+export type EnumOrderOriginWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OrderOrigin | Prisma.EnumOrderOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOrderOriginWithAggregatesFilter<$PrismaModel> | $Enums.OrderOrigin
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOrderOriginFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOrderOriginFilter<$PrismaModel>
 }
 
 export type EnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -594,6 +628,13 @@ export type NestedEnumProductBadgeNullableFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel> | $Enums.ProductBadge | null
 }
 
+export type NestedEnumProductAvailabilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductAvailability | Prisma.EnumProductAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductAvailabilityFilter<$PrismaModel> | $Enums.ProductAvailability
+}
+
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -631,6 +672,23 @@ export type NestedEnumProductBadgeNullableWithAggregatesFilter<$PrismaModel = ne
   _max?: Prisma.NestedEnumProductBadgeNullableFilter<$PrismaModel>
 }
 
+export type NestedEnumProductAvailabilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.ProductAvailability | Prisma.EnumProductAvailabilityFieldRefInput<$PrismaModel>
+  in?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.ProductAvailability[] | Prisma.ListEnumProductAvailabilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumProductAvailabilityWithAggregatesFilter<$PrismaModel> | $Enums.ProductAvailability
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumProductAvailabilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumProductAvailabilityFilter<$PrismaModel>
+}
+
+export type NestedEnumOrderOriginFilter<$PrismaModel = never> = {
+  equals?: $Enums.OrderOrigin | Prisma.EnumOrderOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOrderOriginFilter<$PrismaModel> | $Enums.OrderOrigin
+}
+
 export type NestedEnumOrderStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.OrderStatus | Prisma.EnumOrderStatusFieldRefInput<$PrismaModel>
   in?: $Enums.OrderStatus[] | Prisma.ListEnumOrderStatusFieldRefInput<$PrismaModel>
@@ -650,6 +708,16 @@ export type NestedEnumCanceledByNullableFilter<$PrismaModel = never> = {
   in?: $Enums.CanceledBy[] | Prisma.ListEnumCanceledByFieldRefInput<$PrismaModel> | null
   notIn?: $Enums.CanceledBy[] | Prisma.ListEnumCanceledByFieldRefInput<$PrismaModel> | null
   not?: Prisma.NestedEnumCanceledByNullableFilter<$PrismaModel> | $Enums.CanceledBy | null
+}
+
+export type NestedEnumOrderOriginWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.OrderOrigin | Prisma.EnumOrderOriginFieldRefInput<$PrismaModel>
+  in?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  notIn?: $Enums.OrderOrigin[] | Prisma.ListEnumOrderOriginFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumOrderOriginWithAggregatesFilter<$PrismaModel> | $Enums.OrderOrigin
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOrderOriginFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOrderOriginFilter<$PrismaModel>
 }
 
 export type NestedEnumOrderStatusWithAggregatesFilter<$PrismaModel = never> = {

@@ -21,8 +21,8 @@ export class OrderNotFoundError extends AppError {
 }
 
 export class ProductUnavailableError extends AppError {
-    constructor(productId: string) {
-        super(`O produto ${productId} não está disponível nesta loja`, 400);
+    constructor(productId: string, detail?: string) {
+        super(detail ?? `O produto ${productId} não está disponível nesta loja`, 400);
         this.name = "ProductUnavailableError";
         Object.setPrototypeOf(this, ProductUnavailableError.prototype);
     }

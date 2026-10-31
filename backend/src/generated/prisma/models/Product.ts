@@ -44,6 +44,7 @@ export type ProductMinAggregateOutputType = {
   basePrice: number | null
   isActive: boolean | null
   badge: $Enums.ProductBadge | null
+  availability: $Enums.ProductAvailability | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -58,6 +59,7 @@ export type ProductMaxAggregateOutputType = {
   basePrice: number | null
   isActive: boolean | null
   badge: $Enums.ProductBadge | null
+  availability: $Enums.ProductAvailability | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -72,6 +74,7 @@ export type ProductCountAggregateOutputType = {
   basePrice: number
   isActive: number
   badge: number
+  availability: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -96,6 +99,7 @@ export type ProductMinAggregateInputType = {
   basePrice?: true
   isActive?: true
   badge?: true
+  availability?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -110,6 +114,7 @@ export type ProductMaxAggregateInputType = {
   basePrice?: true
   isActive?: true
   badge?: true
+  availability?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -124,6 +129,7 @@ export type ProductCountAggregateInputType = {
   basePrice?: true
   isActive?: true
   badge?: true
+  availability?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -225,6 +231,7 @@ export type ProductGroupByOutputType = {
   basePrice: number | null
   isActive: boolean
   badge: $Enums.ProductBadge | null
+  availability: $Enums.ProductAvailability
   createdAt: Date
   updatedAt: Date
   _count: ProductCountAggregateOutputType | null
@@ -262,6 +269,7 @@ export type ProductWhereInput = {
   basePrice?: Prisma.IntNullableFilter<"Product"> | number | null
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   badge?: Prisma.EnumProductBadgeNullableFilter<"Product"> | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFilter<"Product"> | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -282,6 +290,7 @@ export type ProductOrderByWithRelationInput = {
   basePrice?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   badge?: Prisma.SortOrderInput | Prisma.SortOrder
+  availability?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -305,6 +314,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<{
   basePrice?: Prisma.IntNullableFilter<"Product"> | number | null
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   badge?: Prisma.EnumProductBadgeNullableFilter<"Product"> | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFilter<"Product"> | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -325,6 +335,7 @@ export type ProductOrderByWithAggregationInput = {
   basePrice?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   badge?: Prisma.SortOrderInput | Prisma.SortOrder
+  availability?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ProductCountOrderByAggregateInput
@@ -347,6 +358,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   basePrice?: Prisma.IntNullableWithAggregatesFilter<"Product"> | number | null
   isActive?: Prisma.BoolWithAggregatesFilter<"Product"> | boolean
   badge?: Prisma.EnumProductBadgeNullableWithAggregatesFilter<"Product"> | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityWithAggregatesFilter<"Product"> | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Product"> | Date | string
 }
@@ -359,6 +371,7 @@ export type ProductCreateInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutProductsInput
@@ -379,6 +392,7 @@ export type ProductUncheckedCreateInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -395,6 +409,7 @@ export type ProductUpdateInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductsNestedInput
@@ -415,6 +430,7 @@ export type ProductUncheckedUpdateInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -433,6 +449,7 @@ export type ProductCreateManyInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -445,6 +462,7 @@ export type ProductUpdateManyMutationInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -459,6 +477,7 @@ export type ProductUncheckedUpdateManyInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -483,6 +502,7 @@ export type ProductCountOrderByAggregateInput = {
   basePrice?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   badge?: Prisma.SortOrder
+  availability?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -501,6 +521,7 @@ export type ProductMaxOrderByAggregateInput = {
   basePrice?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   badge?: Prisma.SortOrder
+  availability?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -515,6 +536,7 @@ export type ProductMinOrderByAggregateInput = {
   basePrice?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   badge?: Prisma.SortOrder
+  availability?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -629,6 +651,10 @@ export type NullableEnumProductBadgeFieldUpdateOperationsInput = {
   set?: $Enums.ProductBadge | null
 }
 
+export type EnumProductAvailabilityFieldUpdateOperationsInput = {
+  set?: $Enums.ProductAvailability
+}
+
 export type ProductCreateNestedOneWithoutVariantsInput = {
   create?: Prisma.XOR<Prisma.ProductCreateWithoutVariantsInput, Prisma.ProductUncheckedCreateWithoutVariantsInput>
   connectOrCreate?: Prisma.ProductCreateOrConnectWithoutVariantsInput
@@ -695,6 +721,7 @@ export type ProductCreateWithoutTenantInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   category: Prisma.CategoryCreateNestedOneWithoutProductsInput
@@ -713,6 +740,7 @@ export type ProductUncheckedCreateWithoutTenantInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -760,6 +788,7 @@ export type ProductScalarWhereInput = {
   basePrice?: Prisma.IntNullableFilter<"Product"> | number | null
   isActive?: Prisma.BoolFilter<"Product"> | boolean
   badge?: Prisma.EnumProductBadgeNullableFilter<"Product"> | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFilter<"Product"> | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFilter<"Product"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Product"> | Date | string
 }
@@ -772,6 +801,7 @@ export type ProductCreateWithoutCategoryInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutProductsInput
@@ -790,6 +820,7 @@ export type ProductUncheckedCreateWithoutCategoryInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -832,6 +863,7 @@ export type ProductCreateWithoutVariantsInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutProductsInput
@@ -851,6 +883,7 @@ export type ProductUncheckedCreateWithoutVariantsInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   extras?: Prisma.ProductExtraUncheckedCreateNestedManyWithoutProductInput
@@ -882,6 +915,7 @@ export type ProductUpdateWithoutVariantsInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductsNestedInput
@@ -901,6 +935,7 @@ export type ProductUncheckedUpdateWithoutVariantsInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   extras?: Prisma.ProductExtraUncheckedUpdateManyWithoutProductNestedInput
@@ -916,6 +951,7 @@ export type ProductCreateWithoutExtrasInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutProductsInput
@@ -935,6 +971,7 @@ export type ProductUncheckedCreateWithoutExtrasInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -966,6 +1003,7 @@ export type ProductUpdateWithoutExtrasInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductsNestedInput
@@ -985,6 +1023,7 @@ export type ProductUncheckedUpdateWithoutExtrasInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -1000,6 +1039,7 @@ export type ProductCreateWithoutOrderItemsInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutProductsInput
@@ -1019,6 +1059,7 @@ export type ProductUncheckedCreateWithoutOrderItemsInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -1050,6 +1091,7 @@ export type ProductUpdateWithoutOrderItemsInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductsNestedInput
@@ -1069,6 +1111,7 @@ export type ProductUncheckedUpdateWithoutOrderItemsInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -1084,6 +1127,7 @@ export type ProductCreateWithoutOrderItemFlavorsInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutProductsInput
@@ -1103,6 +1147,7 @@ export type ProductUncheckedCreateWithoutOrderItemFlavorsInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
   variants?: Prisma.ProductVariantUncheckedCreateNestedManyWithoutProductInput
@@ -1134,6 +1179,7 @@ export type ProductUpdateWithoutOrderItemFlavorsInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductsNestedInput
@@ -1153,6 +1199,7 @@ export type ProductUncheckedUpdateWithoutOrderItemFlavorsInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -1169,6 +1216,7 @@ export type ProductCreateManyTenantInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1181,6 +1229,7 @@ export type ProductUpdateWithoutTenantInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   category?: Prisma.CategoryUpdateOneRequiredWithoutProductsNestedInput
@@ -1199,6 +1248,7 @@ export type ProductUncheckedUpdateWithoutTenantInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -1216,6 +1266,7 @@ export type ProductUncheckedUpdateManyWithoutTenantInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1229,6 +1280,7 @@ export type ProductCreateManyCategoryInput = {
   basePrice?: number | null
   isActive?: boolean
   badge?: $Enums.ProductBadge | null
+  availability?: $Enums.ProductAvailability
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1241,6 +1293,7 @@ export type ProductUpdateWithoutCategoryInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutProductsNestedInput
@@ -1259,6 +1312,7 @@ export type ProductUncheckedUpdateWithoutCategoryInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   variants?: Prisma.ProductVariantUncheckedUpdateManyWithoutProductNestedInput
@@ -1276,6 +1330,7 @@ export type ProductUncheckedUpdateManyWithoutCategoryInput = {
   basePrice?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   badge?: Prisma.NullableEnumProductBadgeFieldUpdateOperationsInput | $Enums.ProductBadge | null
+  availability?: Prisma.EnumProductAvailabilityFieldUpdateOperationsInput | $Enums.ProductAvailability
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1348,6 +1403,7 @@ export type ProductSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   basePrice?: boolean
   isActive?: boolean
   badge?: boolean
+  availability?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1369,6 +1425,7 @@ export type ProductSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   basePrice?: boolean
   isActive?: boolean
   badge?: boolean
+  availability?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1385,6 +1442,7 @@ export type ProductSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   basePrice?: boolean
   isActive?: boolean
   badge?: boolean
+  availability?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1401,11 +1459,12 @@ export type ProductSelectScalar = {
   basePrice?: boolean
   isActive?: boolean
   badge?: boolean
+  availability?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "categoryId" | "name" | "description" | "imageUrl" | "basePrice" | "isActive" | "badge" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
+export type ProductOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "categoryId" | "name" | "description" | "imageUrl" | "basePrice" | "isActive" | "badge" | "availability" | "createdAt" | "updatedAt", ExtArgs["result"]["product"]>
 export type ProductInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1444,6 +1503,7 @@ export type $ProductPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     basePrice: number | null
     isActive: boolean
     badge: $Enums.ProductBadge | null
+    availability: $Enums.ProductAvailability
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["product"]>
@@ -1884,6 +1944,7 @@ export interface ProductFieldRefs {
   readonly basePrice: Prisma.FieldRef<"Product", 'Int'>
   readonly isActive: Prisma.FieldRef<"Product", 'Boolean'>
   readonly badge: Prisma.FieldRef<"Product", 'ProductBadge'>
+  readonly availability: Prisma.FieldRef<"Product", 'ProductAvailability'>
   readonly createdAt: Prisma.FieldRef<"Product", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Product", 'DateTime'>
 }

@@ -46,6 +46,7 @@ export const listOrdersSchema =
         query: z.object({
             status: orderStatus.optional(),
             date: dateOnly.optional(),
+            origin: z.enum(["online", "balcao", "all"]).optional(),
         })
     })
 

@@ -4,9 +4,10 @@ import { ProductImageRequiredError } from '../../errors/product/ProductErrors.js
 
 class CreateProductController {
     async handle(req: Request, res: Response) {
-        const { name, description, basePrice, categoryId, badge } = req.body;
+        const { name, description, basePrice, categoryId, badge, availability } = req.body;
 
-        if (!req.file) {
+        // Produto só de balcão não aparece no storefront, então não precisa de imagem.
+        if (!req.file && availability !== "balcao") {
             throw new ProductImageRequiredError();
         }
 
@@ -18,8 +19,9 @@ class CreateProductController {
             basePrice: basePrice === undefined || basePrice === "" ? undefined : parseInt(basePrice),
             categoryId,
             badge,
-            imageBuffer: req.file.buffer,
-            imageName: req.file.originalname
+            availability,
+            imageBuffer: req.file?.buffer,
+            imageName: req.file?.originalname
         });
 
         return res.status(201).json(product);

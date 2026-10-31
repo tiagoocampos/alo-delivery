@@ -24,10 +24,15 @@ async function normalizeTenants() {
 }
 
 async function normalizeOrders() {
-    const orders = await prismaClient.order.findMany({ select: { id: true, customerPhone: true } });
+    // Venda de balcão não tem telefone (customerPhone null).
+    const orders = await prismaClient.order.findMany({
+        where: { customerPhone: { not: null } },
+        select: { id: true, customerPhone: true }
+    });
 
     let updated = 0;
     for (const order of orders) {
+        if (order.customerPhone === null) continue;
         const normalized = normalizePhone(order.customerPhone);
         if (normalized !== order.customerPhone) {
             await prismaClient.order.update({ where: { id: order.id }, data: { customerPhone: normalized } });

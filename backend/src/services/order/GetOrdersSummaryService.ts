@@ -18,7 +18,8 @@ class GetOrdersSummaryService {
             },
             select: {
                 status: true,
-                total: true
+                total: true,
+                origin: true
             }
         });
 
@@ -26,13 +27,19 @@ class GetOrdersSummaryService {
         const validOrders = orders.filter(order => order.status !== "cancelado");
         const totalOrders = validOrders.length;
         const totalRevenue = validOrders.reduce((sum, order) => sum + order.total, 0);
+        const onlineRevenue = validOrders
+            .filter(order => order.origin === "online")
+            .reduce((sum, order) => sum + order.total, 0);
+        const balcaoRevenue = totalRevenue - onlineRevenue;
         const averageTicket = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
 
         return {
             totalOrders,
             totalRevenue,
             averageTicket,
-            totalOrdersIncludingCancelled
+            totalOrdersIncludingCancelled,
+            onlineRevenue,
+            balcaoRevenue
         };
     }
 }

@@ -42,6 +42,9 @@ import { GetOrdersSummaryController } from "./controllers/order/GetOrdersSummary
 import { GetOrderDetailController } from "./controllers/order/GetOrderDetailController.js";
 import { UpdateOrderStatusController } from "./controllers/order/UpdateOrderStatusController.js";
 import { CreateOrderPushSubscriptionController } from "./controllers/order/CreateOrderPushSubscriptionController.js";
+import { CreatePosSaleController } from "./controllers/pos/CreatePosSaleController.js";
+import { ListPosSalesController } from "./controllers/pos/ListPosSalesController.js";
+import { CancelPosSaleController } from "./controllers/pos/CancelPosSaleController.js";
 import { GetDashboardRevenueController } from "./controllers/dashboard/GetDashboardRevenueController.js";
 import { GetDashboardSummaryController } from "./controllers/dashboard/GetDashboardSummaryController.js";
 import { GetDashboardTopProductsController } from "./controllers/dashboard/GetDashboardTopProductsController.js";
@@ -99,6 +102,7 @@ import {
     updateOrderStatusSchema,
     createOrderPushSubscriptionSchema
 } from "./schemas/orderSchema.js";
+import { createPosSaleSchema, listPosSalesSchema, cancelPosSaleSchema } from "./schemas/posSchema.js";
 import {
     getDashboardRevenueSchema,
     getDashboardSummarySchema,
@@ -217,6 +221,14 @@ router.get("/orders", authenticate, requireTenant, requireActiveSubscription, va
 router.get("/orders/summary", authenticate, requireTenant, requireActiveSubscription, validateSchema(getOrdersSummarySchema), new GetOrdersSummaryController().handle);
 router.get("/orders/:id", authenticate, requireTenant, requireActiveSubscription, validateSchema(getOrderDetailSchema), new GetOrderDetailController().handle);
 router.patch("/orders/:id/status", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(updateOrderStatusSchema), new UpdateOrderStatusController().handle);
+
+/* ---------------------------------------------------------------------------
+ * PDV de balcão — venda da loja física. Registrar/listar: dono e atendente
+ * (registrar só no plano completo); cancelar: só o dono.
+ * ------------------------------------------------------------------------ */
+router.post("/pos/sales", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(createPosSaleSchema), new CreatePosSaleController().handle);
+router.get("/pos/sales", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(listPosSalesSchema), new ListPosSalesController().handle);
+router.patch("/pos/sales/:id/cancel", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(cancelPosSaleSchema), new CancelPosSaleController().handle);
 
 /* ---------------------------------------------------------------------------
  * Dashboard — só store_owner (visão gerencial, não operacional)

@@ -40,6 +40,7 @@ export type OrderItemMinAggregateOutputType = {
   id: string | null
   orderId: string | null
   productId: string | null
+  name: string | null
   variantId: string | null
   categorySizeId: string | null
   categoryCrustId: string | null
@@ -52,6 +53,7 @@ export type OrderItemMaxAggregateOutputType = {
   id: string | null
   orderId: string | null
   productId: string | null
+  name: string | null
   variantId: string | null
   categorySizeId: string | null
   categoryCrustId: string | null
@@ -64,6 +66,7 @@ export type OrderItemCountAggregateOutputType = {
   id: number
   orderId: number
   productId: number
+  name: number
   variantId: number
   categorySizeId: number
   categoryCrustId: number
@@ -88,6 +91,7 @@ export type OrderItemMinAggregateInputType = {
   id?: true
   orderId?: true
   productId?: true
+  name?: true
   variantId?: true
   categorySizeId?: true
   categoryCrustId?: true
@@ -100,6 +104,7 @@ export type OrderItemMaxAggregateInputType = {
   id?: true
   orderId?: true
   productId?: true
+  name?: true
   variantId?: true
   categorySizeId?: true
   categoryCrustId?: true
@@ -112,6 +117,7 @@ export type OrderItemCountAggregateInputType = {
   id?: true
   orderId?: true
   productId?: true
+  name?: true
   variantId?: true
   categorySizeId?: true
   categoryCrustId?: true
@@ -211,6 +217,7 @@ export type OrderItemGroupByOutputType = {
   id: string
   orderId: string
   productId: string | null
+  name: string | null
   variantId: string | null
   categorySizeId: string | null
   categoryCrustId: string | null
@@ -246,6 +253,7 @@ export type OrderItemWhereInput = {
   id?: Prisma.StringFilter<"OrderItem"> | string
   orderId?: Prisma.StringFilter<"OrderItem"> | string
   productId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  name?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   variantId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   categorySizeId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   categoryCrustId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
@@ -265,6 +273,7 @@ export type OrderItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   productId?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   variantId?: Prisma.SortOrderInput | Prisma.SortOrder
   categorySizeId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryCrustId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -287,6 +296,7 @@ export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OrderItemWhereInput | Prisma.OrderItemWhereInput[]
   orderId?: Prisma.StringFilter<"OrderItem"> | string
   productId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  name?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   variantId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   categorySizeId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   categoryCrustId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
@@ -306,6 +316,7 @@ export type OrderItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   productId?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   variantId?: Prisma.SortOrderInput | Prisma.SortOrder
   categorySizeId?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryCrustId?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -326,6 +337,7 @@ export type OrderItemScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   orderId?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   productId?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
+  name?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   variantId?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   categorySizeId?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
   categoryCrustId?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
@@ -336,6 +348,7 @@ export type OrderItemScalarWhereWithAggregatesInput = {
 
 export type OrderItemCreateInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -352,6 +365,7 @@ export type OrderItemUncheckedCreateInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -364,6 +378,7 @@ export type OrderItemUncheckedCreateInput = {
 
 export type OrderItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -380,6 +395,7 @@ export type OrderItemUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -394,6 +410,7 @@ export type OrderItemCreateManyInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -404,6 +421,7 @@ export type OrderItemCreateManyInput = {
 
 export type OrderItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -413,6 +431,7 @@ export type OrderItemUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -435,6 +454,7 @@ export type OrderItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   variantId?: Prisma.SortOrder
   categorySizeId?: Prisma.SortOrder
   categoryCrustId?: Prisma.SortOrder
@@ -452,6 +472,7 @@ export type OrderItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   variantId?: Prisma.SortOrder
   categorySizeId?: Prisma.SortOrder
   categoryCrustId?: Prisma.SortOrder
@@ -464,6 +485,7 @@ export type OrderItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   orderId?: Prisma.SortOrder
   productId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   variantId?: Prisma.SortOrder
   categorySizeId?: Prisma.SortOrder
   categoryCrustId?: Prisma.SortOrder
@@ -722,6 +744,7 @@ export type OrderItemUpdateOneRequiredWithoutExtrasNestedInput = {
 
 export type OrderItemCreateWithoutCategorySizeInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -737,6 +760,7 @@ export type OrderItemUncheckedCreateWithoutCategorySizeInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categoryCrustId?: string | null
   quantity: number
@@ -779,6 +803,7 @@ export type OrderItemScalarWhereInput = {
   id?: Prisma.StringFilter<"OrderItem"> | string
   orderId?: Prisma.StringFilter<"OrderItem"> | string
   productId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
+  name?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   variantId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   categorySizeId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   categoryCrustId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
@@ -789,6 +814,7 @@ export type OrderItemScalarWhereInput = {
 
 export type OrderItemCreateWithoutCategoryCrustInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -804,6 +830,7 @@ export type OrderItemUncheckedCreateWithoutCategoryCrustInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   quantity: number
@@ -841,6 +868,7 @@ export type OrderItemUpdateManyWithWhereWithoutCategoryCrustInput = {
 
 export type OrderItemCreateWithoutProductInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -855,6 +883,7 @@ export type OrderItemCreateWithoutProductInput = {
 export type OrderItemUncheckedCreateWithoutProductInput = {
   id?: string
   orderId: string
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -893,6 +922,7 @@ export type OrderItemUpdateManyWithWhereWithoutProductInput = {
 
 export type OrderItemCreateWithoutVariantInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -908,6 +938,7 @@ export type OrderItemUncheckedCreateWithoutVariantInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
   quantity: number
@@ -945,6 +976,7 @@ export type OrderItemUpdateManyWithWhereWithoutVariantInput = {
 
 export type OrderItemCreateWithoutOrderInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -959,6 +991,7 @@ export type OrderItemCreateWithoutOrderInput = {
 export type OrderItemUncheckedCreateWithoutOrderInput = {
   id?: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -997,6 +1030,7 @@ export type OrderItemUpdateManyWithWhereWithoutOrderInput = {
 
 export type OrderItemCreateWithoutFlavorsInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -1012,6 +1046,7 @@ export type OrderItemUncheckedCreateWithoutFlavorsInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -1039,6 +1074,7 @@ export type OrderItemUpdateToOneWithWhereWithoutFlavorsInput = {
 
 export type OrderItemUpdateWithoutFlavorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1054,6 +1090,7 @@ export type OrderItemUncheckedUpdateWithoutFlavorsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1065,6 +1102,7 @@ export type OrderItemUncheckedUpdateWithoutFlavorsInput = {
 
 export type OrderItemCreateWithoutExtrasInput = {
   id?: string
+  name?: string | null
   quantity: number
   unitPrice: number
   note?: string | null
@@ -1080,6 +1118,7 @@ export type OrderItemUncheckedCreateWithoutExtrasInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -1107,6 +1146,7 @@ export type OrderItemUpdateToOneWithWhereWithoutExtrasInput = {
 
 export type OrderItemUpdateWithoutExtrasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1122,6 +1162,7 @@ export type OrderItemUncheckedUpdateWithoutExtrasInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1135,6 +1176,7 @@ export type OrderItemCreateManyCategorySizeInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categoryCrustId?: string | null
   quantity: number
@@ -1144,6 +1186,7 @@ export type OrderItemCreateManyCategorySizeInput = {
 
 export type OrderItemUpdateWithoutCategorySizeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1159,6 +1202,7 @@ export type OrderItemUncheckedUpdateWithoutCategorySizeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1172,6 +1216,7 @@ export type OrderItemUncheckedUpdateManyWithoutCategorySizeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1183,6 +1228,7 @@ export type OrderItemCreateManyCategoryCrustInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   quantity: number
@@ -1192,6 +1238,7 @@ export type OrderItemCreateManyCategoryCrustInput = {
 
 export type OrderItemUpdateWithoutCategoryCrustInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1207,6 +1254,7 @@ export type OrderItemUncheckedUpdateWithoutCategoryCrustInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1220,6 +1268,7 @@ export type OrderItemUncheckedUpdateManyWithoutCategoryCrustInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1230,6 +1279,7 @@ export type OrderItemUncheckedUpdateManyWithoutCategoryCrustInput = {
 export type OrderItemCreateManyProductInput = {
   id?: string
   orderId: string
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -1240,6 +1290,7 @@ export type OrderItemCreateManyProductInput = {
 
 export type OrderItemUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1254,6 +1305,7 @@ export type OrderItemUpdateWithoutProductInput = {
 export type OrderItemUncheckedUpdateWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1267,6 +1319,7 @@ export type OrderItemUncheckedUpdateWithoutProductInput = {
 export type OrderItemUncheckedUpdateManyWithoutProductInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1279,6 +1332,7 @@ export type OrderItemCreateManyVariantInput = {
   id?: string
   orderId: string
   productId?: string | null
+  name?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
   quantity: number
@@ -1288,6 +1342,7 @@ export type OrderItemCreateManyVariantInput = {
 
 export type OrderItemUpdateWithoutVariantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1303,6 +1358,7 @@ export type OrderItemUncheckedUpdateWithoutVariantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1316,6 +1372,7 @@ export type OrderItemUncheckedUpdateManyWithoutVariantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1326,6 +1383,7 @@ export type OrderItemUncheckedUpdateManyWithoutVariantInput = {
 export type OrderItemCreateManyOrderInput = {
   id?: string
   productId?: string | null
+  name?: string | null
   variantId?: string | null
   categorySizeId?: string | null
   categoryCrustId?: string | null
@@ -1336,6 +1394,7 @@ export type OrderItemCreateManyOrderInput = {
 
 export type OrderItemUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitPrice?: Prisma.IntFieldUpdateOperationsInput | number
   note?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1350,6 +1409,7 @@ export type OrderItemUpdateWithoutOrderInput = {
 export type OrderItemUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1363,6 +1423,7 @@ export type OrderItemUncheckedUpdateWithoutOrderInput = {
 export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   productId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   variantId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorySizeId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryCrustId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1415,6 +1476,7 @@ export type OrderItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   id?: boolean
   orderId?: boolean
   productId?: boolean
+  name?: boolean
   variantId?: boolean
   categorySizeId?: boolean
   categoryCrustId?: boolean
@@ -1435,6 +1497,7 @@ export type OrderItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   id?: boolean
   orderId?: boolean
   productId?: boolean
+  name?: boolean
   variantId?: boolean
   categorySizeId?: boolean
   categoryCrustId?: boolean
@@ -1452,6 +1515,7 @@ export type OrderItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   id?: boolean
   orderId?: boolean
   productId?: boolean
+  name?: boolean
   variantId?: boolean
   categorySizeId?: boolean
   categoryCrustId?: boolean
@@ -1469,6 +1533,7 @@ export type OrderItemSelectScalar = {
   id?: boolean
   orderId?: boolean
   productId?: boolean
+  name?: boolean
   variantId?: boolean
   categorySizeId?: boolean
   categoryCrustId?: boolean
@@ -1477,7 +1542,7 @@ export type OrderItemSelectScalar = {
   note?: boolean
 }
 
-export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "productId" | "variantId" | "categorySizeId" | "categoryCrustId" | "quantity" | "unitPrice" | "note", ExtArgs["result"]["orderItem"]>
+export type OrderItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "productId" | "name" | "variantId" | "categorySizeId" | "categoryCrustId" | "quantity" | "unitPrice" | "note", ExtArgs["result"]["orderItem"]>
 export type OrderItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   order?: boolean | Prisma.OrderDefaultArgs<ExtArgs>
   product?: boolean | Prisma.OrderItem$productArgs<ExtArgs>
@@ -1518,6 +1583,7 @@ export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     id: string
     orderId: string
     productId: string | null
+    name: string | null
     variantId: string | null
     categorySizeId: string | null
     categoryCrustId: string | null
@@ -1957,6 +2023,7 @@ export interface OrderItemFieldRefs {
   readonly id: Prisma.FieldRef<"OrderItem", 'String'>
   readonly orderId: Prisma.FieldRef<"OrderItem", 'String'>
   readonly productId: Prisma.FieldRef<"OrderItem", 'String'>
+  readonly name: Prisma.FieldRef<"OrderItem", 'String'>
   readonly variantId: Prisma.FieldRef<"OrderItem", 'String'>
   readonly categorySizeId: Prisma.FieldRef<"OrderItem", 'String'>
   readonly categoryCrustId: Prisma.FieldRef<"OrderItem", 'String'>

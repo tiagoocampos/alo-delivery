@@ -216,6 +216,7 @@ export const ProductScalarFieldEnum = {
   basePrice: 'basePrice',
   isActive: 'isActive',
   badge: 'badge',
+  availability: 'availability',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -250,6 +251,8 @@ export const OrderScalarFieldEnum = {
   customerName: 'customerName',
   customerPhone: 'customerPhone',
   address: 'address',
+  origin: 'origin',
+  clientId: 'clientId',
   status: 'status',
   subtotal: 'subtotal',
   deliveryFee: 'deliveryFee',
@@ -280,6 +283,7 @@ export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   productId: 'productId',
+  name: 'name',
   variantId: 'variantId',
   categorySizeId: 'categorySizeId',
   categoryCrustId: 'categoryCrustId',

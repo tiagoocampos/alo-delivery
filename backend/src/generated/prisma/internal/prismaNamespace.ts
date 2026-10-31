@@ -2082,6 +2082,7 @@ export const ProductScalarFieldEnum = {
   basePrice: 'basePrice',
   isActive: 'isActive',
   badge: 'badge',
+  availability: 'availability',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -2116,6 +2117,8 @@ export const OrderScalarFieldEnum = {
   customerName: 'customerName',
   customerPhone: 'customerPhone',
   address: 'address',
+  origin: 'origin',
+  clientId: 'clientId',
   status: 'status',
   subtotal: 'subtotal',
   deliveryFee: 'deliveryFee',
@@ -2146,6 +2149,7 @@ export const OrderItemScalarFieldEnum = {
   id: 'id',
   orderId: 'orderId',
   productId: 'productId',
+  name: 'name',
   variantId: 'variantId',
   categorySizeId: 'categorySizeId',
   categoryCrustId: 'categoryCrustId',
@@ -2366,6 +2370,34 @@ export type EnumProductBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
  * Reference to a field of type 'ProductBadge[]'
  */
 export type ListEnumProductBadgeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductBadge[]'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductAvailability'
+ */
+export type EnumProductAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductAvailability'>
+    
+
+
+/**
+ * Reference to a field of type 'ProductAvailability[]'
+ */
+export type ListEnumProductAvailabilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProductAvailability[]'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderOrigin'
+ */
+export type EnumOrderOriginFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderOrigin'>
+    
+
+
+/**
+ * Reference to a field of type 'OrderOrigin[]'
+ */
+export type ListEnumOrderOriginFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderOrigin[]'>
     
 
 

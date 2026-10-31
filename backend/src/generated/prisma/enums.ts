@@ -31,10 +31,31 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 export const PaymentMethod = {
   pix_manual: 'pix_manual',
-  na_entrega: 'na_entrega'
+  na_entrega: 'na_entrega',
+  dinheiro: 'dinheiro',
+  pix: 'pix',
+  cartao_debito: 'cartao_debito',
+  cartao_credito: 'cartao_credito'
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
+
+
+export const OrderOrigin = {
+  online: 'online',
+  balcao: 'balcao'
+} as const
+
+export type OrderOrigin = (typeof OrderOrigin)[keyof typeof OrderOrigin]
+
+
+export const ProductAvailability = {
+  ambos: 'ambos',
+  delivery: 'delivery',
+  balcao: 'balcao'
+} as const
+
+export type ProductAvailability = (typeof ProductAvailability)[keyof typeof ProductAvailability]
 
 
 export const CanceledBy = {

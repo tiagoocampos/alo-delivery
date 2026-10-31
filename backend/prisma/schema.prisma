@@ -28,6 +28,21 @@ enum OrderStatus {
 enum PaymentMethod {
   pix_manual
   na_entrega
+  dinheiro
+  pix
+  cartao_debito
+  cartao_credito
+}
+
+enum OrderOrigin {
+  online
+  balcao
+}
+
+enum ProductAvailability {
+  ambos
+  delivery
+  balcao
 }
 
 enum CanceledBy {
@@ -240,17 +255,18 @@ model CategoryCrust {
 // =========================================================
 
 model Product {
-  id          String        @id @default(uuid())
-  tenantId    String        @map("tenant_id")
-  categoryId  String        @map("category_id")
-  name        String
-  description String?
-  imageUrl    String?       @map("image_url")
-  basePrice   Int?          @map("base_price") // centavos — opcional: null quando o produto é um "sabor" de uma categoria com tamanho
-  isActive    Boolean       @default(true) @map("is_active")
-  badge       ProductBadge?
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
+  id           String              @id @default(uuid())
+  tenantId     String              @map("tenant_id")
+  categoryId   String              @map("category_id")
+  name         String
+  description  String?
+  imageUrl     String?             @map("image_url")
+  basePrice    Int?                @map("base_price") // centavos — opcional: null quando o produto é um "sabor" de uma categoria com tamanho
+  isActive     Boolean             @default(true) @map("is_active")
+  badge        ProductBadge?
+  availability ProductAvailability @default(ambos)
+  createdAt    DateTime            @default(now()) @map("created_at")
+  updatedAt    DateTime            @updatedAt @map("updated_at")
 
   tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   category         Category          @relation(fields: [categoryId], references: [id])
@@ -310,8 +326,10 @@ model Order {
   tenantId      String        @map("tenant_id")
   customerId    String?       @map("customer_id")
   customerName  String        @map("customer_name")
-  customerPhone String        @map("customer_phone")
-  address       String
+  customerPhone String?       @map("customer_phone") // null em venda de balcão
+  address       String? // null em venda de balcão
+  origin        OrderOrigin   @default(online)
+  clientId      String?       @map("client_id") // idempotência da venda de balcão (uuid gerado no frontend)
   status        OrderStatus   @default(novo)
   subtotal      Int // centavos
   deliveryFee   Int           @map("delivery_fee") // centavos
@@ -327,8 +345,10 @@ model Order {
   items             OrderItem[]
   pushSubscriptions OrderPushSubscription[]
 
+  @@unique([tenantId, clientId])
   @@index([tenantId])
   @@index([tenantId, status])
+  @@index([tenantId, origin, createdAt])
   @@map("orders")
 }
 
@@ -358,7 +378,8 @@ model OrderPushSubscription {
 model OrderItem {
   id              String  @id @default(uuid())
   orderId         String  @map("order_id")
-  productId       String? @map("product_id") // opcional — null quando o item é do tipo "tamanho+sabores"
+  productId       String? @map("product_id") // opcional — null quando o item é do tipo "tamanho+sabores" ou item avulso de balcão
+  name            String? // nome congelado do item (sempre gravado em venda de balcão)
   variantId       String? @map("variant_id") // continua igual, para produtos de categoria sem tamanho
   categorySizeId  String? @map("category_size_id") // preenchido só quando o item usa tamanho de categoria
   categoryCrustId String? @map("category_crust_id")

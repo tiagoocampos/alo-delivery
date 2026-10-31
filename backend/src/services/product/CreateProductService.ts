@@ -1,9 +1,9 @@
 import { Readable } from "stream";
 import { CategoryNotFoundError } from "../../errors/category/CategoryErrors.js";
-import { ImageUploadError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
+import { ImageUploadError, ProductImageRequiredError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 import cloudinary from "../../config/cloudinary.js";
-import type { ProductBadge } from "../../generated/prisma/enums.js";
+import type { ProductAvailability, ProductBadge } from "../../generated/prisma/enums.js";
 
 interface CreateProductServiceProps {
     tenantId: string;
@@ -12,8 +12,9 @@ interface CreateProductServiceProps {
     basePrice?: number | undefined;
     categoryId: string;
     badge?: ProductBadge | null | undefined;
-    imageBuffer: Buffer;
-    imageName: string;
+    availability?: ProductAvailability | undefined;
+    imageBuffer?: Buffer | undefined;
+    imageName?: string | undefined;
 }
 
 class CreateProductService {
@@ -24,6 +25,7 @@ class CreateProductService {
         basePrice,
         categoryId,
         badge,
+        availability,
         imageBuffer,
         imageName
     }: CreateProductServiceProps) {
@@ -54,31 +56,38 @@ class CreateProductService {
             throw new ProductPriceRequiredError();
         }
 
-        let imageUrl = "";
-        try {
+        // Produto só de balcão pode ficar sem imagem (nunca vai pro storefront).
+        if ((!imageBuffer || !imageName) && availability !== "balcao") {
+            throw new ProductImageRequiredError();
+        }
 
-            const result = await new Promise<any>((resolve, reject) => {
-                const uploadStream = cloudinary.uploader.upload_stream({
-                    folder: `products/${tenantId}`,
-                    resource_type: "image",
-                    public_id: `${Date.now()}-${imageName.split(".")[0]}`
-                }, (error, result) => {
-                    if (error) {
-                        reject(error);
-                    } else {
-                        resolve(result)
-                    }
+        let imageUrl: string | null = null;
+        if (imageBuffer && imageName) {
+            try {
+
+                const result = await new Promise<any>((resolve, reject) => {
+                    const uploadStream = cloudinary.uploader.upload_stream({
+                        folder: `products/${tenantId}`,
+                        resource_type: "image",
+                        public_id: `${Date.now()}-${imageName.split(".")[0]}`
+                    }, (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result)
+                        }
+                    })
+
+                    const bufferStream = Readable.from(imageBuffer);
+                    bufferStream.pipe(uploadStream);
                 })
 
-                const bufferStream = Readable.from(imageBuffer);
-                bufferStream.pipe(uploadStream);
-            })
+                imageUrl = result.secure_url
 
-            imageUrl = result.secure_url
-
-        } catch (error) {
-            console.error(error);
-            throw new ImageUploadError();
+            } catch (error) {
+                console.error(error);
+                throw new ImageUploadError();
+            }
         }
 
         const product = await prismaClient.product.create({
@@ -89,7 +98,8 @@ class CreateProductService {
                 description: description ?? null,
                 imageUrl,
                 basePrice: basePrice ?? null,
-                badge: badge ?? null
+                badge: badge ?? null,
+                availability: availability ?? "ambos"
             },
             select: {
                 id: true,
@@ -101,6 +111,7 @@ class CreateProductService {
                 basePrice: true,
                 isActive: true,
                 badge: true,
+                availability: true,
                 createdAt: true
             }
         });

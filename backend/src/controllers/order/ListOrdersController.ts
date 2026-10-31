@@ -6,12 +6,14 @@ class ListOrdersController {
     async handle(req: Request, res: Response) {
         const status = req.query.status as OrderStatus | undefined;
         const date = req.query.date as string | undefined;
+        const origin = req.query.origin as "online" | "balcao" | "all" | undefined;
 
         const listOrdersService = new ListOrdersService();
         const orders = await listOrdersService.execute({
             tenantId: req.auth.tenantId!,
             status,
-            date
+            date,
+            origin
         });
 
         return res.json(orders);
