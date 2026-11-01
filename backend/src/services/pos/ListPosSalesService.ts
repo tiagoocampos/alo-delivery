@@ -14,14 +14,17 @@ class ListPosSalesService {
 
         const { start, end } = getDayRange(date);
 
+        // Só contas já encerradas (fechadas ou canceladas); mesa "aberta" não
+        // entra. O dia é o do fechamento (closedAt), não o da abertura.
         const sales = await prismaClient.order.findMany({
             where: {
                 tenantId,
                 origin: "balcao",
-                createdAt: { gte: start, lte: end }
+                status: { in: ["entregue", "cancelado"] },
+                closedAt: { gte: start, lte: end }
             },
             orderBy: {
-                createdAt: "desc"
+                closedAt: "desc"
             },
             select: posSaleSelect
         });

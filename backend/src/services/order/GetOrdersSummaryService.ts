@@ -12,9 +12,18 @@ class GetOrdersSummaryService {
         const { start, end } = getDayRange(date);
 
         const orders = await prismaClient.order.findMany({
+            // Online: dia pelo createdAt. Balcão: dia pelo closedAt, e só contas já
+            // fechadas ou canceladas (mesa "aberta" não é faturamento nem pedido).
             where: {
                 tenantId,
-                createdAt: { gte: start, lte: end }
+                OR: [
+                    { origin: "online", createdAt: { gte: start, lte: end } },
+                    {
+                        origin: "balcao",
+                        status: { in: ["entregue", "cancelado"] },
+                        closedAt: { gte: start, lte: end }
+                    }
+                ]
             },
             select: {
                 status: true,

@@ -9,8 +9,9 @@ interface CancelPosSaleServiceProps {
     reason: string;
 }
 
-// Cancelamento próprio da venda de balcão — não passa pelo
-// UpdateOrderStatusService (sem máquina de estados, fidelidade ou push).
+// Cancela venda fechada ("entregue") ou mesa aberta com itens ("aberta").
+// Cancelamento próprio do balcão — não passa pelo UpdateOrderStatusService
+// (sem máquina de estados, fidelidade ou push).
 class CancelPosSaleService {
     async execute({ tenantId, saleId, reason }: CancelPosSaleServiceProps) {
 
@@ -30,21 +31,24 @@ class CancelPosSaleService {
             throw new OrderNotFoundError();
         }
 
-        if (sale.status !== "entregue") {
+        if (sale.status !== "entregue" && sale.status !== "aberta") {
             throw new PosSaleAlreadyCanceledError();
         }
 
-        // updateMany com o status no where: dois cancelamentos simultâneos
-        // não sobrescrevem o motivo um do outro.
+        // updateMany com o status lido no where: dois cancelamentos simultâneos
+        // (ou cancelar enquanto fecham a conta) não se atropelam. Mesa aberta
+        // ganha closedAt agora; venda fechada mantém o closedAt original, que
+        // define o dia dela nos relatórios.
         const { count } = await prismaClient.order.updateMany({
             where: {
                 id: sale.id,
-                status: "entregue"
+                status: sale.status
             },
             data: {
                 status: "cancelado",
                 canceledBy: "store",
-                cancelReason: reason
+                cancelReason: reason.trim(),
+                ...(sale.status === "aberta" ? { closedAt: new Date() } : {})
             }
         });
 

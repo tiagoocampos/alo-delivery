@@ -23,7 +23,8 @@ export const OrderStatus = {
   preparo: 'preparo',
   transporte: 'transporte',
   entregue: 'entregue',
-  cancelado: 'cancelado'
+  cancelado: 'cancelado',
+  aberta: 'aberta'
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]

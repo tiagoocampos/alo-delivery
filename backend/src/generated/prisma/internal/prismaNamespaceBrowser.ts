@@ -258,6 +258,8 @@ export const OrderScalarFieldEnum = {
   deliveryFee: 'deliveryFee',
   total: 'total',
   paymentMethod: 'paymentMethod',
+  tableLabel: 'tableLabel',
+  closedAt: 'closedAt',
   cancelReason: 'cancelReason',
   canceledBy: 'canceledBy',
   createdAt: 'createdAt',

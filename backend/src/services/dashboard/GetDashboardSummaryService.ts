@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma/index.js";
 import { getMonthRange } from "../../utils/dateRange.js";
+import { revenueOrdersWhere } from "../../utils/orderRevenue.js";
 
 interface GetDashboardSummaryServiceProps {
     tenantId: string;
@@ -19,11 +20,7 @@ class GetDashboardSummaryService {
 
         const summarizeMonth = async (start: Date, end: Date): Promise<MonthSummary> => {
             const orders = await prismaClient.order.findMany({
-                where: {
-                    tenantId,
-                    status: { not: "cancelado" },
-                    createdAt: { gte: start, lte: end }
-                },
+                where: revenueOrdersWhere(tenantId, start, end),
                 select: {
                     total: true
                 }

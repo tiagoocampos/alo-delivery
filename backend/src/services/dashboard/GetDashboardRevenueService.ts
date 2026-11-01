@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma/index.js";
 import { formatDateOnly, getDayRange, shiftDateKey } from "../../utils/dateRange.js";
+import { revenueDate, revenueOrdersWhere } from "../../utils/orderRevenue.js";
 
 interface GetDashboardRevenueServiceProps {
     tenantId: string;
@@ -16,20 +17,18 @@ class GetDashboardRevenueService {
         const { start: rangeStart } = getDayRange(startKey);
 
         const orders = await prismaClient.order.findMany({
-            where: {
-                tenantId,
-                status: { not: "cancelado" },
-                createdAt: { gte: rangeStart, lte: rangeEnd }
-            },
+            where: revenueOrdersWhere(tenantId, rangeStart, rangeEnd),
             select: {
+                origin: true,
                 createdAt: true,
+                closedAt: true,
                 total: true
             }
         });
 
         const byDate = new Map<string, { totalRevenue: number; totalOrders: number }>();
         for (const order of orders) {
-            const key = formatDateOnly(order.createdAt);
+            const key = formatDateOnly(revenueDate(order));
             const entry = byDate.get(key) ?? { totalRevenue: 0, totalOrders: 0 };
             entry.totalRevenue += order.total;
             entry.totalOrders += 1;

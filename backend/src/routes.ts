@@ -45,6 +45,15 @@ import { CreateOrderPushSubscriptionController } from "./controllers/order/Creat
 import { CreatePosSaleController } from "./controllers/pos/CreatePosSaleController.js";
 import { ListPosSalesController } from "./controllers/pos/ListPosSalesController.js";
 import { CancelPosSaleController } from "./controllers/pos/CancelPosSaleController.js";
+import { OpenPosTableController } from "./controllers/pos/OpenPosTableController.js";
+import { ListPosTablesController } from "./controllers/pos/ListPosTablesController.js";
+import { GetPosTableController } from "./controllers/pos/GetPosTableController.js";
+import { AddPosTableItemController } from "./controllers/pos/AddPosTableItemController.js";
+import { UpdatePosTableItemController } from "./controllers/pos/UpdatePosTableItemController.js";
+import { RemovePosTableItemController } from "./controllers/pos/RemovePosTableItemController.js";
+import { ClosePosTableController } from "./controllers/pos/ClosePosTableController.js";
+import { DiscardPosTableController } from "./controllers/pos/DiscardPosTableController.js";
+import { CancelPosTableController } from "./controllers/pos/CancelPosTableController.js";
 import { GetDashboardRevenueController } from "./controllers/dashboard/GetDashboardRevenueController.js";
 import { GetDashboardSummaryController } from "./controllers/dashboard/GetDashboardSummaryController.js";
 import { GetDashboardTopProductsController } from "./controllers/dashboard/GetDashboardTopProductsController.js";
@@ -102,7 +111,19 @@ import {
     updateOrderStatusSchema,
     createOrderPushSubscriptionSchema
 } from "./schemas/orderSchema.js";
-import { createPosSaleSchema, listPosSalesSchema, cancelPosSaleSchema } from "./schemas/posSchema.js";
+import {
+    createPosSaleSchema,
+    listPosSalesSchema,
+    cancelPosSaleSchema,
+    openPosTableSchema,
+    getPosTableSchema,
+    addPosTableItemSchema,
+    updatePosTableItemSchema,
+    removePosTableItemSchema,
+    closePosTableSchema,
+    discardPosTableSchema,
+    cancelPosTableSchema
+} from "./schemas/posSchema.js";
 import {
     getDashboardRevenueSchema,
     getDashboardSummarySchema,
@@ -223,9 +244,19 @@ router.get("/orders/:id", authenticate, requireTenant, requireActiveSubscription
 router.patch("/orders/:id/status", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(updateOrderStatusSchema), new UpdateOrderStatusController().handle);
 
 /* ---------------------------------------------------------------------------
- * PDV de balcão — venda da loja física. Registrar/listar: dono e atendente
- * (registrar só no plano completo); cancelar: só o dono.
+ * PDV de balcão — venda da loja física. Mesas e venda rápida: dono e atendente
+ * (plano completo); cancelar: só o dono.
  * ------------------------------------------------------------------------ */
+router.post("/pos/tables", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(openPosTableSchema), new OpenPosTableController().handle);
+router.get("/pos/tables", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), new ListPosTablesController().handle);
+router.get("/pos/tables/:id", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(getPosTableSchema), new GetPosTableController().handle);
+router.post("/pos/tables/:id/items", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(addPosTableItemSchema), new AddPosTableItemController().handle);
+router.patch("/pos/tables/:id/items/:itemId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(updatePosTableItemSchema), new UpdatePosTableItemController().handle);
+router.delete("/pos/tables/:id/items/:itemId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(removePosTableItemSchema), new RemovePosTableItemController().handle);
+router.post("/pos/tables/:id/close", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(closePosTableSchema), new ClosePosTableController().handle);
+router.delete("/pos/tables/:id", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(discardPosTableSchema), new DiscardPosTableController().handle);
+router.patch("/pos/tables/:id/cancel", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(cancelPosTableSchema), new CancelPosTableController().handle);
+
 router.post("/pos/sales", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(createPosSaleSchema), new CreatePosSaleController().handle);
 router.get("/pos/sales", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner", "store_staff"), validateSchema(listPosSalesSchema), new ListPosSalesController().handle);
 router.patch("/pos/sales/:id/cancel", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(cancelPosSaleSchema), new CancelPosSaleController().handle);

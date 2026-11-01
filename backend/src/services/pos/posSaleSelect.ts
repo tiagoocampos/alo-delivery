@@ -3,6 +3,8 @@
 export const posSaleSelect = {
     id: true,
     createdAt: true,
+    closedAt: true,
+    tableLabel: true,
     status: true,
     paymentMethod: true,
     total: true,

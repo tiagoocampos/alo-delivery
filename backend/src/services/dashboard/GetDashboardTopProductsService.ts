@@ -1,5 +1,6 @@
 import prismaClient from "../../prisma/index.js";
 import { formatDateOnly, getDayRange, shiftDateKey } from "../../utils/dateRange.js";
+import { revenueOrdersWhere } from "../../utils/orderRevenue.js";
 
 interface GetDashboardTopProductsServiceProps {
     tenantId: string;
@@ -19,11 +20,7 @@ class GetDashboardTopProductsService {
         const { start: rangeStart } = getDayRange(startKey);
 
         const orders = await prismaClient.order.findMany({
-            where: {
-                tenantId,
-                status: { not: "cancelado" },
-                createdAt: { gte: rangeStart, lte: rangeEnd }
-            },
+            where: revenueOrdersWhere(tenantId, rangeStart, rangeEnd),
             select: {
                 items: {
                     select: {

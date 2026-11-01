@@ -23,6 +23,7 @@ enum OrderStatus {
   transporte
   entregue
   cancelado
+  aberta // mesa de balcão aberta, ainda não paga
 }
 
 enum PaymentMethod {
@@ -322,23 +323,25 @@ model ProductExtra {
 // =========================================================
 
 model Order {
-  id            String        @id @default(uuid())
-  tenantId      String        @map("tenant_id")
-  customerId    String?       @map("customer_id")
-  customerName  String        @map("customer_name")
-  customerPhone String?       @map("customer_phone") // null em venda de balcão
+  id            String         @id @default(uuid())
+  tenantId      String         @map("tenant_id")
+  customerId    String?        @map("customer_id")
+  customerName  String         @map("customer_name")
+  customerPhone String?        @map("customer_phone") // null em venda de balcão
   address       String? // null em venda de balcão
-  origin        OrderOrigin   @default(online)
-  clientId      String?       @map("client_id") // idempotência da venda de balcão (uuid gerado no frontend)
-  status        OrderStatus   @default(novo)
+  origin        OrderOrigin    @default(online)
+  clientId      String?        @map("client_id") // idempotência da venda de balcão (uuid gerado no frontend)
+  status        OrderStatus    @default(novo)
   subtotal      Int // centavos
-  deliveryFee   Int           @map("delivery_fee") // centavos
+  deliveryFee   Int            @map("delivery_fee") // centavos
   total         Int // centavos
-  paymentMethod PaymentMethod @map("payment_method")
-  cancelReason  String?       @map("cancel_reason")
-  canceledBy    CanceledBy?   @map("canceled_by")
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
+  paymentMethod PaymentMethod? @map("payment_method") // null só em mesa de balcão ainda aberta
+  tableLabel    String?        @map("table_label") // "Mesa 2" — só em venda de mesa
+  closedAt      DateTime?      @map("closed_at") // fechamento da conta; define o dia da venda de balcão
+  cancelReason  String?        @map("cancel_reason")
+  canceledBy    CanceledBy?    @map("canceled_by")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
 
   tenant            Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   customer          Customer?               @relation(fields: [customerId], references: [id])
@@ -349,6 +352,9 @@ model Order {
   @@index([tenantId])
   @@index([tenantId, status])
   @@index([tenantId, origin, createdAt])
+  @@index([tenantId, origin, closedAt])
+  // Existe também (só no SQL da migration, o Prisma não modela índice parcial):
+  // orders_open_table_label_key — única mesa aberta por nome, case-insensitive.
   @@map("orders")
 }
 

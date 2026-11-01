@@ -6,8 +6,10 @@ import type { OrderStatus } from "../../generated/prisma/enums.js";
 
 // Máquina de estados do pedido: só avança um passo por vez.
 // Cancelar é permitido enquanto o pedido não chegou ao cliente.
-// "entregue" e "cancelado" são estados finais.
+// "entregue" e "cancelado" são estados finais. "aberta" (mesa de balcão) não
+// participa da máquina: nenhum estado leva a ela e ela não leva a nenhum.
 const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
+    aberta: [],
     novo: ["preparo", "cancelado"],
     preparo: ["transporte", "cancelado"],
     transporte: ["entregue", "cancelado"],
