@@ -1,6 +1,9 @@
 import { getStoreBranding } from "@/lib/storeBranding"
 import type { Tenant } from "@/types"
 
+// brand-dark do tema padrão do Alô (páginas que não calculam o tema da loja).
+const DEFAULT_THEME_COLOR = "#0c1422"
+
 const GENERIC_ICONS = [
   { src: "/icon-192.png", sizes: "192x192", type: "image/png" },
   { src: "/icon-512.png", sizes: "512x512", type: "image/png" },
@@ -19,7 +22,11 @@ function imageLoads(src: string): Promise<boolean> {
   })
 }
 
-export async function applyTenantManifest(tenant: Tenant, slug: string): Promise<() => void> {
+export async function applyTenantManifest(
+  tenant: Tenant,
+  slug: string,
+  themeColor: string = DEFAULT_THEME_COLOR
+): Promise<() => void> {
   // Plano básico não usa a logo do lojista em lugar nenhum, nem no manifest —
   // sem essa checagem, o menu "Instalar app" nativo do navegador (fora do
   // nosso botão, ex: menu de 3 pontos do Chrome) ainda ofereceria a marca real.
@@ -32,7 +39,7 @@ export async function applyTenantManifest(tenant: Tenant, slug: string): Promise
     start_url: `/${slug}`,
     display: "standalone",
     background_color: "#ffffff",
-    theme_color: "#0066FF",
+    theme_color: themeColor,
     icons: logoWorks
       ? [
           { src: logoUrl!, sizes: "192x192", type: "image/png" },

@@ -19,6 +19,7 @@ import { MenuSkeleton } from "@/components/MenuSkeleton"
 import { CartProvider } from "@/context/CartContext"
 import { CustomerAuthProvider } from "@/context/CustomerAuthContext"
 import { useCart } from "@/hooks/useCart"
+import { useStoreTheme } from "@/hooks/useStoreTheme"
 import { getStoreMenu } from "@/services/storefront"
 import { applyTenantManifest } from "@/lib/pwaManifest"
 import type { Category, Order, Product, StoreMenu } from "@/types"
@@ -43,6 +44,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null)
 
   const { totalCount, subtotal } = useCart()
+  const { ready: themeReady, themeColor } = useStoreTheme(menu?.tenant ?? null)
 
   useEffect(() => {
     let active = true
@@ -95,7 +97,7 @@ function StorefrontContent({ slug }: { slug: string }) {
     let cleanup: (() => void) | undefined
     let cancelled = false
 
-    applyTenantManifest(menu.tenant, slug).then((revoke) => {
+    applyTenantManifest(menu.tenant, slug, themeColor).then((revoke) => {
       if (cancelled) {
         revoke()
       } else {
@@ -107,7 +109,7 @@ function StorefrontContent({ slug }: { slug: string }) {
       cancelled = true
       cleanup?.()
     }
-  }, [menu?.tenant, slug])
+  }, [menu?.tenant, slug, themeColor])
 
   const activeCategoryName = useMemo(
     () => menu?.categories.find((category) => category.id === activeCategoryId)?.name ?? null,
@@ -152,7 +154,9 @@ function StorefrontContent({ slug }: { slug: string }) {
       )
   }, [menu, activeCategoryId, search])
 
-  if (loading) {
+  // Enquanto o tema da loja (derivado da logo) não está pronto, segue o
+  // skeleton — assim a cor certa já aparece na primeira pintura, sem piscar.
+  if (loading || (menu && !themeReady)) {
     return <MenuSkeleton />
   }
 

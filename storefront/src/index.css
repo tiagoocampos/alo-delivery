@@ -1,14 +1,26 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/inter";
 @import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource/bebas-neue/latin-400.css";
+@import "@fontsource-variable/caveat";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: 'Plus Jakarta Sans Variable', var(--font-sans);
-    --font-sans: 'Inter Variable', sans-serif;
+    --font-heading: 'Bebas Neue', 'Plus Jakarta Sans Variable', sans-serif;
+    --font-sans: 'Plus Jakarta Sans Variable', sans-serif;
+    --font-script: 'Caveat Variable', cursive;
+    --color-brand-dark: var(--brand-dark);
+    --color-surface: var(--surface);
+    --color-paper: var(--paper);
+    --color-on-dark: var(--on-dark);
+    --color-on-dark-muted: var(--on-dark-muted);
+    --color-accent-title: var(--accent-title);
+    --color-accent-heading: var(--accent-heading);
+    --color-whatsapp: var(--whatsapp);
+    --color-status-open: var(--status-open);
+    --color-status-closed: var(--status-closed);
     --color-brand: var(--brand);
     --color-brand-foreground: var(--brand-foreground);
     --color-sidebar-ring: var(--sidebar-ring);
@@ -52,32 +64,42 @@
 }
 
 :root {
-    --background: #ffffff;
-    --foreground: #151922;
-    --card: #ffffff;
-    --card-foreground: #151922;
-    --popover: #ffffff;
-    --popover-foreground: #151922;
-    --primary: #1769e0;
+    --brand: #0c1422;
+    --brand-foreground: #ffffff;
+    --brand-dark: #0c1422;
+    --surface: #121a2c;
+    --paper: #f3f6fc;
+    --on-dark: #f0f2f5;
+    --on-dark-muted: #afb6c0;
+    --accent-title: #8ab8ff;
+    --primary: #1768de;
     --primary-foreground: #ffffff;
-    --secondary: #f7f9fc;
-    --secondary-foreground: #151922;
-    --muted: #f2f5f9;
-    --muted-foreground: #687080;
-    --accent: #edf5ff;
-    --accent-foreground: #0b47a5;
+    --ring: rgba(23, 104, 222, 0.5);
+    --whatsapp: #157a3c;
+    --status-open: #34d399;
+    --status-closed: #fbbf24;
+    --background: #f3f6fc;
+    --foreground: #131820;
+    --card: #fdfefe;
+    --card-foreground: #131820;
+    --popover: #fdfefe;
+    --popover-foreground: #131820;
+    --secondary: #ebeff4;
+    --secondary-foreground: #131820;
+    --muted: #e8ecf3;
+    --muted-foreground: #5a6472;
+    --accent: #dfe9f6;
+    --accent-foreground: #0e418b;
+    --accent-heading: #0b5dda;
+    --border: #d7dde4;
+    --input: #d7dde4;
     --destructive: oklch(0.577 0.245 27.325);
-    --border: #e7eaf0;
-    --input: #e7eaf0;
-    --ring: rgba(23, 105, 224, 0.5);
     --chart-1: #1769e0;
     --chart-2: #4f94ff;
     --chart-3: #0b47a5;
     --chart-4: #8ab8ff;
     --chart-5: #65a3ff;
-    --radius: 0.55rem;
-    --brand: #0c1422;
-    --brand-foreground: #ffffff;
+    --radius: 0.75rem;
     --sidebar: #ffffff;
     --sidebar-foreground: #151922;
     --sidebar-primary: #1769e0;
@@ -89,24 +111,36 @@
 }
 
 .dark {
+    --brand: #0c1422;
+    --brand-foreground: #ffffff;
+    --brand-dark: #0c1422;
+    --surface: #121a2c;
+    --paper: #0c1422;
+    --on-dark: #f0f2f5;
+    --on-dark-muted: #afb6c0;
+    --accent-title: #8ab8ff;
+    --primary: #1768de;
+    --primary-foreground: #ffffff;
+    --ring: rgba(23, 104, 222, 0.5);
+    --whatsapp: #157a3c;
+    --status-open: #34d399;
+    --status-closed: #fbbf24;
     --background: #0c1422;
-    --foreground: #eef2f8;
+    --foreground: #f0f2f5;
     --card: #121a2c;
-    --card-foreground: #eef2f8;
+    --card-foreground: #f0f2f5;
     --popover: #121a2c;
-    --popover-foreground: #eef2f8;
-    --primary: #4f94ff;
-    --primary-foreground: #0c1422;
-    --secondary: #182238;
-    --secondary-foreground: #eef2f8;
-    --muted: #182238;
-    --muted-foreground: #90a0b7;
-    --accent: #16233c;
-    --accent-foreground: #9fc5ff;
-    --destructive: oklch(0.704 0.191 22.216);
+    --popover-foreground: #f0f2f5;
+    --secondary: #1b2a41;
+    --secondary-foreground: #f0f2f5;
+    --muted: #1a283d;
+    --muted-foreground: #a9b1bc;
+    --accent: #1e2b3e;
+    --accent-foreground: #8ab8ff;
+    --accent-heading: #8ab8ff;
     --border: rgba(255, 255, 255, 0.1);
     --input: rgba(255, 255, 255, 0.15);
-    --ring: rgba(79, 148, 255, 0.5);
+    --destructive: oklch(0.704 0.191 22.216);
     --chart-1: #4f94ff;
     --chart-2: #1769e0;
     --chart-3: #9fc5ff;
@@ -125,11 +159,64 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
   body {
     @apply bg-background text-foreground;
-    }
+  }
   html {
     @apply font-sans;
-    }
+    scroll-padding-top: 9rem; /* cabeçalho + faixa de categorias fixos */
+  }
+}
+
+/* Bebas Neue só existe no peso 400: sem negrito sintético, sempre maiúsculo. */
+.font-heading {
+  font-weight: 400;
+  font-synthesis: none;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.font-script {
+  font-synthesis: none;
+}
+
+/* Fundo claro com pontinhos sutis (seções de papel). */
+.bg-dots {
+  background-color: var(--background);
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--foreground) 12%, transparent) 1px,
+    transparent 1.2px
+  );
+  background-size: 18px 18px;
+}
+
+/* Área segura do iPhone para barras fixas na base. */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Faixas rolláveis sem barra de rolagem visível. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
