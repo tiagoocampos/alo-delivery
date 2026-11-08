@@ -23,7 +23,7 @@ export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: Store
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-brand-dark text-on-dark">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-1.5 px-2">
-        <Button variant="ghost" size="icon" onClick={onOpenMenu} aria-label="Abrir menu" className={ICON_BUTTON}>
+        <Button variant="ghost" size="icon" onClick={onOpenMenu} aria-label="Abrir menu" data-tour="menu-button" className={ICON_BUTTON}>
           <Menu />
         </Button>
 

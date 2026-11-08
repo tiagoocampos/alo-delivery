@@ -55,3 +55,15 @@ export function isInstallPromptDismissed(slug: string): boolean {
 export function dismissInstallPrompt(slug: string) {
   write(installDismissedKey(slug), String(Date.now()))
 }
+
+// Algum pedido já foi feito neste aparelho, em qualquer loja? (cliente recorrente)
+export function hasOrderedAnywhere(): boolean {
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      if (localStorage.key(i)?.startsWith("pediu:")) return true
+    }
+  } catch {
+    // sem armazenamento: assume que não.
+  }
+  return false
+}

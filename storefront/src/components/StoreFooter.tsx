@@ -1,4 +1,5 @@
-import { AtSign, Clock, MapPin, Phone } from "lucide-react"
+import { AtSign, CircleHelp, Clock, MapPin, Phone } from "lucide-react"
+import { useCustomerTour } from "@/tour/useCustomerTour"
 import { AloDeliveryBrandBadge } from "@/components/AloDeliveryBrandBadge"
 import { mapsUrl, telUrl } from "@/lib/contact"
 import { formatBusinessHoursList } from "@/lib/storeHours"
@@ -14,6 +15,7 @@ export function StoreFooter({ tenant }: StoreFooterProps) {
   const hours = formatBusinessHoursList(tenant.businessHours)
   const maps = mapsUrl(tenant.address)
   const tel = telUrl(tenant.phone)
+  const { startTour } = useCustomerTour()
 
   return (
     <footer className="mt-12 bg-brand-dark text-on-dark">
@@ -64,6 +66,17 @@ export function StoreFooter({ tenant }: StoreFooterProps) {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="mx-auto max-w-6xl px-4 pb-4">
+        <button
+          type="button"
+          onClick={startTour}
+          className="inline-flex min-h-11 items-center gap-2 text-sm text-on-dark-muted underline-offset-4 transition-colors hover:text-accent-title hover:underline"
+        >
+          <CircleHelp className="size-4" aria-hidden />
+          Como pedir?
+        </button>
       </div>
 
       <AloDeliveryBrandBadge size="sm" className="border-t border-white/10 px-4 py-3" />

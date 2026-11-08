@@ -12,6 +12,9 @@ import { ProductList } from "@/components/ProductList"
 import { BottomBar } from "@/components/BottomBar"
 import { StoreFooter } from "@/components/StoreFooter"
 import { MenuSkeleton } from "@/components/MenuSkeleton"
+import { CustomerTourProvider } from "@/tour/CustomerTourProvider"
+import { CustomerTourInvite } from "@/tour/CustomerTourInvite"
+import { CustomerTourOverlay } from "@/tour/CustomerTourOverlay"
 import { CartProvider } from "@/context/CartContext"
 import { CustomerAuthProvider } from "@/context/CustomerAuthContext"
 import { FavoritesProvider } from "@/context/FavoritesContext"
@@ -65,6 +68,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   const [accountOpen, setAccountOpen] = useState(false)
   const [ordersOpen, setOrdersOpen] = useState(false)
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null)
+  const [installCardVisible, setInstallCardVisible] = useState(false)
 
   const { totalCount, subtotal } = useCart()
   const { favoriteIds, isFavorite } = useFavorites()
@@ -242,6 +246,12 @@ function StorefrontContent({ slug }: { slug: string }) {
   const filtering = search.trim() !== "" || activeCategoryId !== null || activeQuickFilter !== "todos"
 
   return (
+    <CustomerTourProvider
+      menu={menu}
+      panelOpen={navOpen || cartOpen || loyaltyOpen || accountOpen || ordersOpen}
+      productOpen={selectedProduct !== null || selectedCategory !== null}
+      installCardVisible={installCardVisible}
+    >
     <div className="flex min-h-svh flex-col">
       <StoreHeader
         tenant={menu.tenant}
@@ -252,14 +262,14 @@ function StorefrontContent({ slug }: { slug: string }) {
 
       <StoreHero tenant={menu.tenant} collapsed={returning} onViewMenu={() => scrollToId("cardapio")} />
 
-      <InstallAppCard tenant={menu.tenant} slug={slug} />
+      <InstallAppCard tenant={menu.tenant} slug={slug} onVisibleChange={setInstallCardVisible} />
 
       <main className="bg-dots flex flex-1 flex-col pb-4">
         {!returning && <StoreInfoCards tenant={menu.tenant} />}
 
         <MenuTitle />
 
-        <div className="mx-auto w-full max-w-6xl px-4 pb-3">
+        <div className="mx-auto w-full max-w-6xl px-4 pb-3" data-tour="busca">
           <SearchBar value={search} onChange={setSearch} placeholder={searchPlaceholder} />
         </div>
 
@@ -337,7 +347,11 @@ function StorefrontContent({ slug }: { slug: string }) {
           />
         )}
       </Suspense>
+
+      <CustomerTourInvite />
+      <CustomerTourOverlay />
     </div>
+    </CustomerTourProvider>
   )
 }
 

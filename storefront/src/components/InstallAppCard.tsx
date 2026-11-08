@@ -10,6 +10,7 @@ import type { Tenant } from "@/types"
 interface InstallAppCardProps {
   tenant: Tenant
   slug: string
+  onVisibleChange?: (visible: boolean) => void
 }
 
 const ENTER_DELAY_MS = 600
@@ -26,7 +27,7 @@ type Phase = "idle" | "in" | "out"
 // Convite para instalar o app da loja (PWA), logo abaixo da abertura. Entra
 // deslizando pela lateral e, ao tocar em "Agora não", sai deslizando de volta.
 // Quem dispensa só volta a ver depois de alguns dias.
-export function InstallAppCard({ tenant, slug }: InstallAppCardProps) {
+export function InstallAppCard({ tenant, slug, onVisibleChange }: InstallAppCardProps) {
   const { canInstall, promptInstall } = useInstallPrompt()
   const navigate = useNavigate()
   const { isBasico, logoUrl } = getStoreBranding(tenant)
@@ -72,8 +73,15 @@ export function InstallAppCard({ tenant, slug }: InstallAppCardProps) {
     navigate(`/${slug}/instalar`)
   }
 
-  if (isBasico || installed || dismissed) return null
-  if (!eligible && phase !== "out") return null
+  const rendered = !isBasico && !installed && !dismissed && (eligible || phase === "out")
+
+  // Avisa a página enquanto o card ocupa a tela (o convite do tutorial espera).
+  useEffect(() => {
+    onVisibleChange?.(rendered)
+    return () => onVisibleChange?.(false)
+  }, [rendered, onVisibleChange])
+
+  if (!rendered) return null
 
   const visible = phase === "in"
 

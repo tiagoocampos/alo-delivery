@@ -1,4 +1,5 @@
-import { Award, Download, ListOrdered, LogIn, Phone, ShoppingCart, User, UtensilsCrossed } from "lucide-react"
+import { useCustomerTour } from "@/tour/useCustomerTour"
+import { Award, CircleHelp, Download, ListOrdered, LogIn, Phone, ShoppingCart, User, UtensilsCrossed } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { Separator } from "@/components/ui/separator"
 import { StoreBrandLogo } from "@/components/StoreBrandLogo"
@@ -30,6 +31,7 @@ export function NavMenuSheet({
 }: NavMenuSheetProps) {
   const { isAuthenticated } = useCustomerAuth()
   const { canInstall, promptInstall } = useInstallPrompt()
+  const { startTour } = useCustomerTour()
   const close = () => onOpenChange(false)
   const { isBasico, logoUrl, bannerUrl } = getStoreBranding(tenant)
   const hasBanner = Boolean(bannerUrl)
@@ -125,6 +127,19 @@ export function NavMenuSheet({
           >
             <Award className="size-4.5" strokeWidth={1.75} />
             Programa de fidelidade
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              close()
+              // Espera o menu terminar de fechar antes de abrir o tour.
+              window.setTimeout(startTour, 350)
+            }}
+            className={itemClass}
+          >
+            <CircleHelp className="size-4.5" strokeWidth={1.75} />
+            Como pedir?
           </button>
 
           <Separator className="my-1 bg-brand-foreground/10" />

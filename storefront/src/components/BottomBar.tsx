@@ -48,6 +48,7 @@ export function BottomBar({ phone, count, subtotal, onOpenCart }: BottomBarProps
         <button
           type="button"
           onClick={onOpenCart}
+          data-tour="barra-pedido"
           aria-label={`Abrir pedido, ${count} ${count === 1 ? "item" : "itens"}, ${formatCents(subtotal)}`}
           className="flex min-h-12 min-w-0 flex-1 items-center justify-between gap-3 rounded-2xl bg-primary px-4 text-primary-foreground transition-transform active:scale-[0.98]"
         >

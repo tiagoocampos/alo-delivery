@@ -70,6 +70,8 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
     <div
       role="button"
       tabIndex={0}
+      data-product-card=""
+      data-customizable={customizable}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
       className={cn(

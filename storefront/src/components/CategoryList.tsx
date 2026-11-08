@@ -31,7 +31,7 @@ export function CategoryList({ categories, activeCategoryId, onSelect }: Categor
   }, [activeCategoryId])
 
   return (
-    <nav aria-label="Categorias" className="sticky top-14 z-30 border-b border-border bg-background/95 backdrop-blur">
+    <nav aria-label="Categorias" data-tour="categorias" className="sticky top-14 z-30 border-b border-border bg-background/95 backdrop-blur">
       <div ref={containerRef} className="no-scrollbar mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-2">
         <button
           type="button"
