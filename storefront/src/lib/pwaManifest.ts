@@ -9,6 +9,23 @@ const GENERIC_ICONS = [
   { src: "/icon-512.png", sizes: "512x512", type: "image/png" },
 ]
 
+// Até 12 caracteres sem cortar palavra no meio ("Casa Verde Alimentos" -> "Casa Verde").
+// Se a primeira palavra já passa de 12, corta nela mesma.
+function shortAppName(name: string): string {
+  const trimmed = name.trim()
+  if (trimmed.length <= 12) return trimmed
+
+  const words = trimmed.split(/\s+/)
+  let result = ""
+  for (const word of words) {
+    const next = result ? `${result} ${word}` : word
+    if (next.length > 12) break
+    result = next
+  }
+
+  return result || trimmed.slice(0, 12)
+}
+
 // Ícone de manifest não precisa de CORS pra ser exibido (carrega como <img>,
 // não como fetch), mas ainda assim testamos se a URL da logo carrega de fato —
 // se a logo estiver quebrada/indisponível, cai no ícone genérico em vez de
@@ -35,7 +52,7 @@ export async function applyTenantManifest(
 
   const manifest = {
     name: tenant.name,
-    short_name: tenant.name.slice(0, 12), // nomes de app ficam melhor curtos
+    short_name: shortAppName(tenant.name), // nomes de app ficam melhor curtos
     start_url: `/${slug}`,
     display: "standalone",
     background_color: "#ffffff",

@@ -71,7 +71,6 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
       tabIndex={0}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
-      aria-label={product.name}
       className={cn(
         "group flex cursor-pointer overflow-hidden rounded-3xl bg-surface text-on-dark shadow-md shadow-black/10 outline-none transition-shadow hover:shadow-lg focus-visible:ring-3 focus-visible:ring-ring",
         showImage ? "flex-col sm:flex-row" : "flex-col"

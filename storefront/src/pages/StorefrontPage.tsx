@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 import { useParams } from "react-router-dom"
 import { StoreHeader } from "@/components/StoreHeader"
 import { StoreHero } from "@/components/StoreHero"
@@ -8,16 +8,8 @@ import { SearchBar } from "@/components/SearchBar"
 import { CategoryList } from "@/components/CategoryList"
 import { QuickFilters } from "@/components/QuickFilters"
 import { ProductList } from "@/components/ProductList"
-import { ProductDetailScreen } from "@/components/ProductDetailScreen"
-import { CategoryOrderScreen } from "@/components/CategoryOrderScreen"
 import { BottomBar } from "@/components/BottomBar"
-import { CartSheet } from "@/components/CartSheet"
 import { StoreFooter } from "@/components/StoreFooter"
-import { NavMenuSheet } from "@/components/NavMenuSheet"
-import { LoyaltySheet } from "@/components/LoyaltySheet"
-import { AccountSheet } from "@/components/AccountSheet"
-import { OrdersSheet } from "@/components/OrdersSheet"
-import { OrderConfirmation } from "@/components/OrderConfirmation"
 import { MenuSkeleton } from "@/components/MenuSkeleton"
 import { CartProvider } from "@/context/CartContext"
 import { CustomerAuthProvider } from "@/context/CustomerAuthContext"
@@ -25,6 +17,8 @@ import { FavoritesProvider } from "@/context/FavoritesContext"
 import { useCart } from "@/hooks/useCart"
 import { useFavorites } from "@/hooks/useFavorites"
 import { useStoreTheme } from "@/hooks/useStoreTheme"
+import { useFontsReady } from "@/hooks/useFontsReady"
+import { useMountOnFirstOpen } from "@/hooks/useMountOnFirstOpen"
 import { getStoreMenu } from "@/services/storefront"
 import { applyTenantManifest } from "@/lib/pwaManifest"
 import { formatCents } from "@/lib/money"
@@ -38,6 +32,16 @@ import {
   type QuickFilter,
 } from "@/lib/menuFilters"
 import type { Category, Order, Product, StoreMenu } from "@/types"
+
+// Telas que só aparecem ao toque saem do JS inicial.
+const ProductDetailScreen = lazy(() => import("@/components/ProductDetailScreen").then((m) => ({ default: m.ProductDetailScreen })))
+const CategoryOrderScreen = lazy(() => import("@/components/CategoryOrderScreen").then((m) => ({ default: m.CategoryOrderScreen })))
+const CartSheet = lazy(() => import("@/components/CartSheet").then((m) => ({ default: m.CartSheet })))
+const NavMenuSheet = lazy(() => import("@/components/NavMenuSheet").then((m) => ({ default: m.NavMenuSheet })))
+const LoyaltySheet = lazy(() => import("@/components/LoyaltySheet").then((m) => ({ default: m.LoyaltySheet })))
+const AccountSheet = lazy(() => import("@/components/AccountSheet").then((m) => ({ default: m.AccountSheet })))
+const OrdersSheet = lazy(() => import("@/components/OrdersSheet").then((m) => ({ default: m.OrdersSheet })))
+const OrderConfirmation = lazy(() => import("@/components/OrderConfirmation").then((m) => ({ default: m.OrderConfirmation })))
 
 function StorefrontContent({ slug }: { slug: string }) {
   const [menu, setMenu] = useState<StoreMenu | null>(null)
@@ -64,6 +68,15 @@ function StorefrontContent({ slug }: { slug: string }) {
   const { totalCount, subtotal } = useCart()
   const { favoriteIds, isFavorite } = useFavorites()
   const { ready: themeReady, themeColor } = useStoreTheme(menu?.tenant ?? null)
+  const fontsReady = useFontsReady()
+
+  const mountProduct = useMountOnFirstOpen(selectedProduct !== null)
+  const mountCategory = useMountOnFirstOpen(selectedCategory !== null)
+  const mountCart = useMountOnFirstOpen(cartOpen)
+  const mountNav = useMountOnFirstOpen(navOpen)
+  const mountLoyalty = useMountOnFirstOpen(loyaltyOpen)
+  const mountAccount = useMountOnFirstOpen(accountOpen)
+  const mountOrders = useMountOnFirstOpen(ordersOpen)
 
   useEffect(() => {
     let active = true
@@ -189,9 +202,10 @@ function StorefrontContent({ slug }: { slug: string }) {
       )
   }, [menu, activeCategoryId, search, activeQuickFilter])
 
-  // Enquanto o tema da loja (derivado da logo) não está pronto, segue o
-  // skeleton — assim a cor certa já aparece na primeira pintura, sem piscar.
-  if (loading || (menu && !themeReady)) {
+  // Enquanto o tema da loja (derivado da logo) e as fontes não estão prontos,
+  // segue o skeleton — assim a cor e a fonte certas já aparecem na primeira
+  // pintura, sem piscar nem "pular".
+  if (loading || !fontsReady || (menu && !themeReady)) {
     return <MenuSkeleton />
   }
 
@@ -208,12 +222,14 @@ function StorefrontContent({ slug }: { slug: string }) {
 
   if (completedOrder) {
     return (
-      <OrderConfirmation
-        order={completedOrder}
-        slug={slug}
-        effectivePlan={menu.tenant.effectivePlan}
-        onNewOrder={() => setCompletedOrder(null)}
-      />
+      <Suspense fallback={<MenuSkeleton />}>
+        <OrderConfirmation
+          order={completedOrder}
+          slug={slug}
+          effectivePlan={menu.tenant.effectivePlan}
+          onNewOrder={() => setCompletedOrder(null)}
+        />
+      </Suspense>
     )
   }
 
@@ -270,42 +286,54 @@ function StorefrontContent({ slug }: { slug: string }) {
         onOpenCart={() => setCartOpen(true)}
       />
 
-      <ProductDetailScreen
-        product={selectedProduct?.product ?? null}
-        categoryName={selectedProduct?.categoryName ?? ""}
-        onClose={() => setSelectedProduct(null)}
-      />
+      <Suspense fallback={null}>
+        {mountProduct && (
+          <ProductDetailScreen
+            product={selectedProduct?.product ?? null}
+            categoryName={selectedProduct?.categoryName ?? ""}
+            onClose={() => setSelectedProduct(null)}
+          />
+        )}
 
-      <CategoryOrderScreen category={selectedCategory} onClose={() => setSelectedCategory(null)} />
+        {mountCategory && (
+          <CategoryOrderScreen category={selectedCategory} onClose={() => setSelectedCategory(null)} />
+        )}
 
-      <CartSheet
-        open={cartOpen}
-        onOpenChange={setCartOpen}
-        slug={slug}
-        deliveryFee={menu.tenant.deliveryFee}
-        minimumOrderValue={menu.tenant.minimumOrderValue}
-        pixKey={menu.tenant.pixKey}
-        onOrderCreated={handleOrderCreated}
-      />
+        {mountCart && (
+          <CartSheet
+            open={cartOpen}
+            onOpenChange={setCartOpen}
+            slug={slug}
+            deliveryFee={menu.tenant.deliveryFee}
+            minimumOrderValue={menu.tenant.minimumOrderValue}
+            pixKey={menu.tenant.pixKey}
+            onOrderCreated={handleOrderCreated}
+          />
+        )}
 
-      <NavMenuSheet
-        open={navOpen}
-        onOpenChange={setNavOpen}
-        tenant={menu.tenant}
-        onOpenCart={() => setCartOpen(true)}
-        onOpenLoyalty={() => setLoyaltyOpen(true)}
-        onOpenAccount={() => setAccountOpen(true)}
-        onOpenOrders={() => setOrdersOpen(true)}
-      />
+        {mountNav && (
+          <NavMenuSheet
+            open={navOpen}
+            onOpenChange={setNavOpen}
+            tenant={menu.tenant}
+            onOpenCart={() => setCartOpen(true)}
+            onOpenLoyalty={() => setLoyaltyOpen(true)}
+            onOpenAccount={() => setAccountOpen(true)}
+            onOpenOrders={() => setOrdersOpen(true)}
+          />
+        )}
 
-      <LoyaltySheet open={loyaltyOpen} onOpenChange={setLoyaltyOpen} slug={slug} />
-      <AccountSheet open={accountOpen} onOpenChange={setAccountOpen} slug={slug} />
-      <OrdersSheet
-        open={ordersOpen}
-        onOpenChange={setOrdersOpen}
-        slug={slug}
-        effectivePlan={menu.tenant.effectivePlan}
-      />
+        {mountLoyalty && <LoyaltySheet open={loyaltyOpen} onOpenChange={setLoyaltyOpen} slug={slug} />}
+        {mountAccount && <AccountSheet open={accountOpen} onOpenChange={setAccountOpen} slug={slug} />}
+        {mountOrders && (
+          <OrdersSheet
+            open={ordersOpen}
+            onOpenChange={setOrdersOpen}
+            slug={slug}
+            effectivePlan={menu.tenant.effectivePlan}
+          />
+        )}
+      </Suspense>
     </div>
   )
 }
