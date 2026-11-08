@@ -31,3 +31,11 @@ export class AddressNotFoundError extends AppError {
         Object.setPrototypeOf(this, AddressNotFoundError.prototype);
     }
 }
+
+export class FavoriteLimitReachedError extends AppError {
+    constructor() {
+        super("Limite de favoritos atingido", 422);
+        this.name = "FavoriteLimitReachedError";
+        Object.setPrototypeOf(this, FavoriteLimitReachedError.prototype);
+    }
+}

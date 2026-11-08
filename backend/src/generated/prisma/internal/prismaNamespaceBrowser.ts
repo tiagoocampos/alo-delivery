@@ -70,6 +70,7 @@ export const ModelName = {
   OrderItemExtra: 'OrderItemExtra',
   LoyaltyPoint: 'LoyaltyPoint',
   Customer: 'Customer',
+  CustomerFavorite: 'CustomerFavorite',
   Address: 'Address'
 } as const
 
@@ -341,6 +342,16 @@ export const CustomerScalarFieldEnum = {
 } as const
 
 export type CustomerScalarFieldEnum = (typeof CustomerScalarFieldEnum)[keyof typeof CustomerScalarFieldEnum]
+
+
+export const CustomerFavoriteScalarFieldEnum = {
+  id: 'id',
+  customerId: 'customerId',
+  productId: 'productId',
+  createdAt: 'createdAt'
+} as const
+
+export type CustomerFavoriteScalarFieldEnum = (typeof CustomerFavoriteScalarFieldEnum)[keyof typeof CustomerFavoriteScalarFieldEnum]
 
 
 export const AddressScalarFieldEnum = {

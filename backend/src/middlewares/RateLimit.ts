@@ -23,3 +23,12 @@ export const storeSearchRateLimiter = rateLimit({
     legacyHeaders: false,
     message: { error: "Muitas buscas em pouco tempo. Aguarde um instante." }
 });
+
+// Favoritos: cada toque no coração é uma chamada, então o limite é folgado.
+export const customerAccountRateLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: "Muitas ações em pouco tempo. Aguarde um instante." }
+});

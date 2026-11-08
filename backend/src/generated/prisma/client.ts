@@ -137,6 +137,11 @@ export type LoyaltyPoint = Prisma.LoyaltyPointModel
  */
 export type Customer = Prisma.CustomerModel
 /**
+ * Model CustomerFavorite
+ * 
+ */
+export type CustomerFavorite = Prisma.CustomerFavoriteModel
+/**
  * Model Address
  * 
  */

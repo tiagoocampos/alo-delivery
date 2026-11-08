@@ -9,7 +9,7 @@ import { requireActiveSubscription } from "./middlewares/RequireActiveSubscripti
 import { authorize } from "./middlewares/Authorize.js";
 import { authenticateCustomer } from "./middlewares/AuthenticateCustomer.js";
 import { optionalAuthenticateCustomer } from "./middlewares/OptionalAuthenticateCustomer.js";
-import { authRateLimiter, publicOrderRateLimiter, storeSearchRateLimiter } from "./middlewares/RateLimit.js";
+import { authRateLimiter, customerAccountRateLimiter, publicOrderRateLimiter, storeSearchRateLimiter } from "./middlewares/RateLimit.js";
 
 import { RegisterTenantController } from "./controllers/tenant/RegisterTenantController.js";
 import { LoginTenantController } from "./controllers/tenant/LoginTenantController.js";
@@ -67,6 +67,10 @@ import { UpdateAddressController } from "./controllers/customer/UpdateAddressCon
 import { DeleteAddressController } from "./controllers/customer/DeleteAddressController.js";
 import { ListCustomerOrdersController } from "./controllers/customer/ListCustomerOrdersController.js";
 import { CancelCustomerOrderController } from "./controllers/customer/CancelCustomerOrderController.js";
+import { ListFavoritesController } from "./controllers/customer/ListFavoritesController.js";
+import { AddFavoriteController } from "./controllers/customer/AddFavoriteController.js";
+import { RemoveFavoriteController } from "./controllers/customer/RemoveFavoriteController.js";
+import { MergeFavoritesController } from "./controllers/customer/MergeFavoritesController.js";
 import { ListAdminTenantsController } from "./controllers/admin/ListAdminTenantsController.js";
 import { GetAdminTenantDetailController } from "./controllers/admin/GetAdminTenantDetailController.js";
 import { UpsertSubscriptionController } from "./controllers/admin/UpsertSubscriptionController.js";
@@ -150,7 +154,11 @@ import {
     updateAddressSchema,
     deleteAddressSchema,
     listCustomerOrdersSchema,
-    cancelCustomerOrderSchema
+    cancelCustomerOrderSchema,
+    listFavoritesSchema,
+    addFavoriteSchema,
+    removeFavoriteSchema,
+    mergeFavoritesSchema
 } from "./schemas/customerSchema.js";
 import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController.js";
 import { UpdateCategoryController } from "./controllers/category/UpdateCategoryController.js";
@@ -212,6 +220,12 @@ router.delete("/store/:slug/customer/addresses/:id", authenticateCustomer, valid
 
 router.get("/store/:slug/customer/orders", authenticateCustomer, validateSchema(listCustomerOrdersSchema), new ListCustomerOrdersController().handle);
 router.patch("/store/:slug/customer/orders/:orderId/cancel", authenticateCustomer, validateSchema(cancelCustomerOrderSchema), new CancelCustomerOrderController().handle);
+
+// Favoritos da conta. "merge" vem antes de ":productId" para não ser lido como id.
+router.get("/store/:slug/customer/favorites", customerAccountRateLimiter, authenticateCustomer, validateSchema(listFavoritesSchema), new ListFavoritesController().handle);
+router.post("/store/:slug/customer/favorites/merge", customerAccountRateLimiter, authenticateCustomer, validateSchema(mergeFavoritesSchema), new MergeFavoritesController().handle);
+router.post("/store/:slug/customer/favorites/:productId", customerAccountRateLimiter, authenticateCustomer, validateSchema(addFavoriteSchema), new AddFavoriteController().handle);
+router.delete("/store/:slug/customer/favorites/:productId", customerAccountRateLimiter, authenticateCustomer, validateSchema(removeFavoriteSchema), new RemoveFavoriteController().handle);
 
 /* ---------------------------------------------------------------------------
  * Painel do lojista — tenantId sempre vem do JWT (req.auth), nunca da request

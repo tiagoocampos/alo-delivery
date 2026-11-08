@@ -276,6 +276,7 @@ model Product {
   extras           ProductExtra[]
   orderItems       OrderItem[]
   orderItemFlavors OrderItemFlavor[]
+  favoritedBy      CustomerFavorite[]
 
   @@index([tenantId])
   @@index([categoryId])
@@ -484,10 +485,30 @@ model Customer {
   tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   addresses Address[]
   orders    Order[]
+  favorites CustomerFavorite[]
 
   @@unique([tenantId, phone])
   @@index([tenantId])
   @@map("customers")
+}
+
+// =========================================================
+// CUSTOMER FAVORITE — produtos favoritos salvos na conta do cliente
+// (por loja, igual à conta). Apagar o cliente ou o produto apaga o favorito.
+// =========================================================
+
+model CustomerFavorite {
+  id         String   @id @default(uuid())
+  customerId String   @map("customer_id")
+  productId  String   @map("product_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([customerId, productId])
+  @@index([customerId, createdAt])
+  @@map("customer_favorites")
 }
 
 // =========================================================

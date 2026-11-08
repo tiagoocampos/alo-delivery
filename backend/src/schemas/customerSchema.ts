@@ -86,3 +86,28 @@ export const cancelCustomerOrderSchema =
             reason: z.string().min(1, { message: "Informe o motivo do cancelamento" }),
         })
     })
+
+const favoriteProductId = z.string().uuid({ message: "Produto inválido" });
+
+export const listFavoritesSchema =
+    z.object({
+        params: slugParam
+    })
+
+export const addFavoriteSchema =
+    z.object({
+        params: slugParam.extend({ productId: favoriteProductId })
+    })
+
+export const removeFavoriteSchema =
+    z.object({
+        params: slugParam.extend({ productId: favoriteProductId })
+    })
+
+export const mergeFavoritesSchema =
+    z.object({
+        params: slugParam,
+        body: z.object({
+            productIds: z.array(z.string().min(1).max(64)).max(100, { message: "Envie no máximo 100 favoritos" }),
+        })
+    })
