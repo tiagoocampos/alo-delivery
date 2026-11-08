@@ -89,7 +89,7 @@ export function FindStorePage() {
     <div className="flex min-h-svh flex-col items-center bg-brand px-4 py-12 text-brand-foreground sm:py-20">
       <div className="flex w-full max-w-md flex-col items-center gap-3 text-center">
         <img src="/brand/symbol.png" alt="" className="size-20 sm:size-24" />
-        <h1 className="font-heading text-5xl text-accent-title sm:text-6xl">Alô Delivery</h1>
+        <h1 className="font-heading text-4xl text-accent-title sm:text-5xl">Alô Delivery</h1>
         <p className="max-w-xs text-sm text-brand-foreground/70 sm:max-w-sm sm:text-base">
           Encontre sua loja favorita no Alô Delivery
         </p>

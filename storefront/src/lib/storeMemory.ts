@@ -18,6 +18,8 @@ function write(key: string, value: string) {
 }
 
 const orderedKey = (slug: string) => `pediu:${slug}`
+const installDismissedKey = (slug: string) => `instalar-dispensado:${slug}`
+const INSTALL_SNOOZE_MS = 7 * 24 * 60 * 60 * 1000
 const favoritesKey = (slug: string) => `favoritos:${slug}`
 
 // O cliente já fez pedido nesta loja neste aparelho? Usado para recolher a
@@ -41,4 +43,15 @@ export function readFavorites(slug: string): string[] {
 
 export function writeFavorites(slug: string, ids: string[]) {
   write(favoritesKey(slug), JSON.stringify(ids))
+}
+
+// "Agora não" no convite de instalar o app: não volta a aparecer por 7 dias.
+export function isInstallPromptDismissed(slug: string): boolean {
+  const dismissedAt = Number(read(installDismissedKey(slug)))
+
+  return Number.isFinite(dismissedAt) && dismissedAt > 0 && Date.now() - dismissedAt < INSTALL_SNOOZE_MS
+}
+
+export function dismissInstallPrompt(slug: string) {
+  write(installDismissedKey(slug), String(Date.now()))
 }

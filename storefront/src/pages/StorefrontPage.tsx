@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import { StoreHeader } from "@/components/StoreHeader"
 import { StoreHero } from "@/components/StoreHero"
 import { StoreInfoCards } from "@/components/StoreInfoCards"
+import { InstallAppCard } from "@/components/InstallAppCard"
 import { MenuTitle } from "@/components/MenuTitle"
 import { SearchBar } from "@/components/SearchBar"
 import { CategoryList } from "@/components/CategoryList"
@@ -212,7 +213,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   if (notFound || !menu) {
     return (
       <div className="flex min-h-svh flex-col items-center justify-center gap-2 bg-background p-6 text-center">
-        <h1 className="font-heading text-4xl text-accent-heading">Loja não encontrada</h1>
+        <h1 className="font-heading text-3xl text-accent-heading">Loja não encontrada</h1>
         <p className="text-sm text-muted-foreground">
           Verifique o link ou entre em contato com a loja.
         </p>
@@ -250,6 +251,8 @@ function StorefrontContent({ slug }: { slug: string }) {
       />
 
       <StoreHero tenant={menu.tenant} collapsed={returning} onViewMenu={() => scrollToId("cardapio")} />
+
+      <InstallAppCard tenant={menu.tenant} slug={slug} />
 
       <main className="bg-dots flex flex-1 flex-col pb-4">
         {!returning && <StoreInfoCards tenant={menu.tenant} />}

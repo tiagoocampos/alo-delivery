@@ -3,11 +3,13 @@
 // "pular". Pedimos as fontes já no início (durante o skeleton) e a página só
 // aparece quando estiverem prontas — com um limite de tempo para nunca travar.
 const FACES = [
-  '400 1em "Bebas Neue"',
-  '400 1em "Plus Jakarta Sans Variable"',
-  '700 1em "Plus Jakarta Sans Variable"',
-  '800 1em "Plus Jakarta Sans Variable"',
-  '400 1em "Caveat Variable"',
+  '700 1em "Outfit Variable"',
+  '800 1em "Outfit Variable"',
+  '400 1em "Inter Variable"',
+  '500 1em "Inter Variable"',
+  '700 1em "Inter Variable"',
+  '800 1em "Inter Variable"',
+  '400 1em "Patrick Hand"',
 ]
 const SAMPLE_TEXT = "Aa Çã Éé Õõ 0123456789 R$ ,.-"
 const TIMEOUT_MS = 1500

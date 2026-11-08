@@ -10,7 +10,7 @@ interface ProductListProps {
   onSelectCategory: (category: Category) => void
 }
 
-const HEADING_CLASS = "pb-3 pt-6 font-heading text-3xl leading-none text-accent-heading"
+const HEADING_CLASS = "pb-3 pt-6 font-heading text-2xl text-accent-heading"
 const GRID_CLASS = "grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
 
 export function ProductList({
@@ -53,7 +53,7 @@ export function ProductList({
               className="flex min-h-20 w-full items-center justify-between gap-3 rounded-3xl bg-surface px-5 py-4 text-left text-on-dark shadow-md shadow-black/10 transition-transform active:scale-[0.99] sm:max-w-md"
             >
               <span className="flex flex-col gap-0.5">
-                <span className="font-heading text-[1.75rem] leading-none text-accent-title">
+                <span className="font-heading text-xl text-accent-title">
                   Monte sua {category.name}
                 </span>
                 <span className="text-sm text-on-dark-muted">Escolha o tamanho e os sabores</span>

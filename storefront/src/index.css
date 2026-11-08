@@ -1,16 +1,16 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/plus-jakarta-sans";
-@import "@fontsource/bebas-neue/latin-400.css";
-@import "@fontsource-variable/caveat";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/outfit";
+@import "@fontsource/patrick-hand/latin-400.css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-    --font-heading: 'Bebas Neue', 'Plus Jakarta Sans Variable', sans-serif;
-    --font-sans: 'Plus Jakarta Sans Variable', sans-serif;
-    --font-script: 'Caveat Variable', cursive;
+    --font-heading: 'Outfit Variable', 'Inter Variable', sans-serif;
+    --font-sans: 'Inter Variable', sans-serif;
+    --font-script: 'Patrick Hand', cursive;
     --color-brand-dark: var(--brand-dark);
     --color-surface: var(--surface);
     --color-paper: var(--paper);
@@ -169,12 +169,14 @@
   }
 }
 
-/* Bebas Neue só existe no peso 400: sem negrito sintético, sempre maiúsculo. */
+/* Títulos: Outfit em maiúsculas. Peso 800 por padrão; títulos pequenos usam
+   [--heading-weight:700]. Espaçamento e altura de linha ficam só aqui. */
 .font-heading {
-  font-weight: 400;
+  font-weight: var(--heading-weight, 800);
   font-synthesis: none;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
 }
 
 .font-script {

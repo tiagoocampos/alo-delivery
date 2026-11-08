@@ -51,7 +51,7 @@ export function ItemModal({ label, title, description, onClose, headerActions, f
         <div className="flex items-start gap-1 px-4 pb-3 pt-4">
           <div className="min-w-0 flex-1">
             <span className="text-[11px] font-bold uppercase tracking-widest text-accent-title">{label}</span>
-            <h1 id="item-modal-title" className="mt-1 font-heading text-4xl leading-[1.02] text-on-dark">
+            <h1 id="item-modal-title" className="mt-1 font-heading break-words text-2xl text-on-dark">
               {title}
             </h1>
             {description && <p className="mt-1.5 text-sm leading-relaxed text-on-dark-muted">{description}</p>}
@@ -127,7 +127,7 @@ export function OptionButton({ kind, selected, disabled, onClick, children, trai
         {selected && <Check className="size-4" strokeWidth={3.5} />}
       </span>
       <span className="flex min-w-0 flex-1 items-center gap-3 font-semibold">{children}</span>
-      {trailing && <span className="shrink-0 text-sm font-bold text-accent-title">{trailing}</span>}
+      {trailing && <span className="shrink-0 text-sm font-bold tabular-nums text-accent-title">{trailing}</span>}
     </button>
   )
 }
@@ -183,7 +183,7 @@ export function AddButton({ label, shortLabel, price, disabled, onClick }: AddBu
       ) : (
         <span className="truncate">{label}</span>
       )}
-      {price && <span className="shrink-0 font-extrabold">{price}</span>}
+      {price && <span className="shrink-0 font-extrabold tabular-nums">{price}</span>}
     </button>
   )
 }

@@ -27,7 +27,8 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
   // Foto quebrada cai sozinha no formato de texto.
   const showImage = Boolean(product.imageUrl) && !imageFailed
   const hasVariants = product.variants.length > 0
-  const customizable = hasVariants || product.extras.length > 0
+  // "Montar" quando há algo para escolher/tirar; senão adiciona direto.
+  const customizable = hasVariants || product.extras.length > 0 || (product.ingredients?.length ?? 0) > 0
   const favorite = isFavorite(product.id)
   const badge = product.badge ? BADGE_CONFIG[product.badge] : null
 
@@ -110,25 +111,25 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
           </button>
         </div>
 
-        <h3 className="font-heading text-[1.75rem] leading-[1.05] text-accent-title">{product.name}</h3>
+        <h3 className="font-heading line-clamp-2 break-words text-xl text-accent-title">{product.name}</h3>
 
         {product.description && (
           <p className="line-clamp-3 text-sm leading-relaxed text-on-dark-muted">{product.description}</p>
         )}
 
-        <div className="mt-auto flex items-end justify-between gap-3 border-t border-white/10 pt-3">
+        <div className="mt-auto flex flex-wrap items-end justify-between gap-x-3 gap-y-2 border-t border-white/10 pt-3">
           <div className="flex flex-col leading-none">
             <span className="text-[10px] font-bold uppercase tracking-widest text-on-dark-muted">
               {hasVariants ? "A partir de" : "Valor"}
             </span>
-            <span className="mt-1 text-2xl font-extrabold text-on-dark">{formatCents(product.basePrice ?? 0)}</span>
+            <span className="mt-1 text-2xl font-extrabold tabular-nums text-on-dark">{formatCents(product.basePrice ?? 0)}</span>
           </div>
 
           <button
             type="button"
             onClick={handleAction}
             aria-label={`${customizable ? "Montar" : "Adicionar"} ${product.name}`}
-            className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground transition-transform active:scale-95"
+            className="ml-auto inline-flex min-h-11 shrink-0 items-center gap-1.5 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground transition-transform active:scale-95"
           >
             <Plus className="size-4" strokeWidth={3} aria-hidden />
             {customizable ? "Montar" : "Adicionar"}

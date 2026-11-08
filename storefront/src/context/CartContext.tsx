@@ -15,6 +15,7 @@ interface AddItemInput {
   flavorProductNames?: string[]
   extraIds?: string[]
   extraNames?: string[]
+  removedIngredients?: string[]
   unitPrice: number
   quantity: number
   note?: string
@@ -44,7 +45,12 @@ function buildKey(input: AddItemInput) {
   const variantPart = input.variantId ? `:${input.variantId}` : ""
   const extrasPart =
     input.extraIds && input.extraIds.length > 0 ? `:e(${[...input.extraIds].sort().join(",")})` : ""
-  return `${input.productId}${variantPart}${extrasPart}`
+  // Mesmo produto com remoções diferentes são linhas separadas.
+  const removedPart =
+    input.removedIngredients && input.removedIngredients.length > 0
+      ? `:r(${[...input.removedIngredients].sort().join("|")})`
+      : ""
+  return `${input.productId}${variantPart}${extrasPart}${removedPart}`
 }
 
 export const CartContext = createContext<CartContextValue | null>(null)

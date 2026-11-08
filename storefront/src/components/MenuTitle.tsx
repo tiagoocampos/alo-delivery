@@ -8,9 +8,9 @@ export function MenuTitle() {
         <BookOpen className="size-3.5" aria-hidden />
         Cardápio
       </span>
-      <h2 className="font-heading text-4xl leading-none text-accent-heading sm:text-5xl">Escolha o seu pedido</h2>
+      <h2 className="font-heading text-3xl text-accent-heading sm:text-4xl">Escolha o seu pedido</h2>
       <p className="font-script text-xl leading-tight text-muted-foreground">
-        Tudo feito na hora, do jeito que você gosta
+        Bateu a fome? Chama a gente que a gente resolve
       </p>
     </div>
   )

@@ -3,7 +3,7 @@ import { Bell, BellRing, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { formatCents } from "@/lib/money"
-import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
+import { formatOrderItemTitle, getOrderItemNote } from "@/lib/orderItemDisplay"
 import { isPushSupported, subscribeToOrderPush } from "@/lib/pushSubscription"
 import type { Order } from "@/types"
 
@@ -37,7 +37,7 @@ export function OrderConfirmation({ order, slug, effectivePlan, onNewOrder }: Or
     <div className="mx-auto flex w-full max-w-md flex-col gap-4 p-3">
       <div className="flex flex-col items-center gap-1.5 pt-4 text-center">
         <CheckCircle2 className="size-10 text-accent-heading" />
-        <h1 className="font-heading text-4xl text-accent-heading">Pedido enviado!</h1>
+        <h1 className="font-heading text-3xl text-accent-heading">Pedido enviado!</h1>
         <p className="text-sm text-muted-foreground">
           A loja já recebeu seu pedido e vai confirmar em instantes.
         </p>
@@ -59,8 +59,16 @@ export function OrderConfirmation({ order, slug, effectivePlan, onNewOrder }: Or
                 {item.categoryCrust && (
                   <span className="text-muted-foreground"> · Borda: {item.categoryCrust.name}</span>
                 )}
+                {getOrderItemNote(item).removed.length > 0 && (
+                  <span className="block text-xs font-medium text-destructive">
+                    Sem: {getOrderItemNote(item).removed.join(", ")}
+                  </span>
+                )}
+                {getOrderItemNote(item).observation && (
+                  <span className="text-muted-foreground"> · Obs: {getOrderItemNote(item).observation}</span>
+                )}
               </span>
-              <span className="text-muted-foreground">{formatCents(item.unitPrice * item.quantity)}</span>
+              <span className="tabular-nums text-muted-foreground">{formatCents(item.unitPrice * item.quantity)}</span>
             </div>
           ))}
         </div>

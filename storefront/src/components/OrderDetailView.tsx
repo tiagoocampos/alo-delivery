@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { formatCents } from "@/lib/money"
 import { getVisibleOrderStatusLabel } from "@/lib/orderStatus"
-import { formatOrderItemTitle } from "@/lib/orderItemDisplay"
+import { formatOrderItemTitle, getOrderItemNote } from "@/lib/orderItemDisplay"
 import { cancelCustomerOrder } from "@/services/customer"
 import type { CustomerOrder } from "@/types"
 
@@ -87,9 +87,16 @@ export function OrderDetailView({ order, slug, effectivePlan, onOrderUpdated }: 
               {item.categoryCrust && (
                 <span className="text-muted-foreground"> · Borda: {item.categoryCrust.name}</span>
               )}
-              {item.note && <span className="text-muted-foreground"> · Obs: {item.note}</span>}
+              {getOrderItemNote(item).removed.length > 0 && (
+                <span className="block text-xs font-medium text-destructive">
+                  Sem: {getOrderItemNote(item).removed.join(", ")}
+                </span>
+              )}
+              {getOrderItemNote(item).observation && (
+                <span className="text-muted-foreground"> · Obs: {getOrderItemNote(item).observation}</span>
+              )}
             </span>
-            <span className="text-muted-foreground">{formatCents(item.unitPrice * item.quantity)}</span>
+            <span className="tabular-nums text-muted-foreground">{formatCents(item.unitPrice * item.quantity)}</span>
           </div>
         ))}
       </div>

@@ -42,7 +42,7 @@ export function StoreHeader({ tenant, cartCount, onOpenMenu, onOpenCart }: Store
         )}
 
         <div className="flex min-w-0 flex-1 flex-col leading-tight">
-          <span className="truncate font-heading text-xl text-accent-title">{tenant.name}</span>
+          <span className="font-heading truncate text-sm [--heading-weight:700] min-[400px]:text-base text-accent-title">{tenant.name}</span>
           {openStatus && (
             <span className="flex items-center gap-1.5 text-xs text-on-dark-muted">
               <span

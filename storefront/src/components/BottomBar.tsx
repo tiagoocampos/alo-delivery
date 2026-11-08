@@ -65,7 +65,7 @@ export function BottomBar({ phone, count, subtotal, onOpenCart }: BottomBarProps
             </span>
             Pedido
           </span>
-          <span className="text-base font-extrabold">{formatCents(subtotal)}</span>
+          <span className="text-base font-extrabold tabular-nums">{formatCents(subtotal)}</span>
         </button>
       </div>
     </div>

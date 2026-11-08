@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator"
 import { CheckoutForm, type CheckoutFormValues } from "@/components/CheckoutForm"
 import { formatAddressLine } from "@/lib/address"
 import { formatCents } from "@/lib/money"
+import { buildItemNote } from "@/lib/itemNote"
 import { useCart } from "@/hooks/useCart"
 import { useCustomerAuth } from "@/hooks/useCustomerAuth"
 import { createOrder } from "@/services/storefront"
@@ -79,7 +80,8 @@ export function CartSheet({
                 variantId: item.variantId,
                 extraIds: item.extraIds,
                 quantity: item.quantity,
-                note: item.note,
+                // Ingredientes retirados vão na 1ª linha do note ("SEM: ...").
+                note: buildItemNote(item.removedIngredients, item.note),
               }
         ),
       })
@@ -123,6 +125,11 @@ export function CartSheet({
                       {item.variantName && (
                         <span className="text-xs text-muted-foreground">{item.variantName}</span>
                       )}
+                      {item.removedIngredients && item.removedIngredients.length > 0 && (
+                        <span className="text-xs font-medium text-destructive">
+                          Sem: {item.removedIngredients.join(", ")}
+                        </span>
+                      )}
                       {item.extraNames && item.extraNames.length > 0 && (
                         <span className="text-xs text-muted-foreground">{item.extraNames.join(", ")}</span>
                       )}
@@ -133,7 +140,7 @@ export function CartSheet({
                         <span className="text-xs text-muted-foreground">Borda: {item.categoryCrustName}</span>
                       )}
                       {item.note && <span className="text-xs text-muted-foreground">Obs: {item.note}</span>}
-                      <span className="text-sm font-extrabold text-accent-heading">
+                      <span className="text-sm font-extrabold tabular-nums text-accent-heading">
                         {formatCents(item.unitPrice * item.quantity)}
                       </span>
                     </div>
@@ -175,7 +182,7 @@ export function CartSheet({
             {items.length > 0 && (
               <SheetFooter className="gap-3">
                 <Separator />
-                <div className="flex flex-col gap-1 text-sm">
+                <div className="flex flex-col gap-1 text-sm tabular-nums">
                   <div className="flex justify-between text-muted-foreground">
                     <span>Subtotal</span>
                     <span>{formatCents(subtotal)}</span>

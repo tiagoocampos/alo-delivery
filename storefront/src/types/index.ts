@@ -24,6 +24,8 @@ export interface Product {
   imageUrl: string | null
   basePrice: number | null
   badge: ProductBadge | null
+  // Ingredientes padrão que o cliente pode tirar. Respostas antigas podem não trazer: tratar como [].
+  ingredients?: string[]
   variants: ProductVariant[]
   extras: ProductExtra[]
 }
@@ -97,6 +99,8 @@ export interface CartItem {
   flavorProductNames?: string[]
   extraIds?: string[]
   extraNames?: string[]
+  // Ingredientes que o cliente tirou, na ordem do produto. Não mudam o preço.
+  removedIngredients?: string[]
   unitPrice: number
   quantity: number
   note?: string

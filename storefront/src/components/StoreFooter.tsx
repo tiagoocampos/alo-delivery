@@ -19,7 +19,7 @@ export function StoreFooter({ tenant }: StoreFooterProps) {
     <footer className="mt-12 bg-brand-dark text-on-dark">
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-2">
         <div className="flex flex-col gap-2">
-          <span className="font-heading text-3xl leading-none text-accent-title">{tenant.name}</span>
+          <span className="font-heading break-words text-2xl text-accent-title">{tenant.name}</span>
           {tenant.description && (
             <p className="line-clamp-4 max-w-md text-sm leading-relaxed text-on-dark-muted">{tenant.description}</p>
           )}

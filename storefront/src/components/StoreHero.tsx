@@ -20,9 +20,9 @@ const ACTION =
 const LONG_DESCRIPTION = 140
 
 function headlineSize(name: string) {
-  if (name.length > 22) return "text-[2rem] sm:text-5xl"
-  if (name.length > 14) return "text-[2.5rem] sm:text-6xl"
-  return "text-[3rem] sm:text-7xl"
+  if (name.length > 22) return "text-[1.5rem] sm:text-4xl"
+  if (name.length > 14) return "text-[1.75rem] sm:text-5xl"
+  return "text-[2rem] sm:text-6xl"
 }
 
 // Só afirmações verdadeiras: cada selo vem de um dado real da loja.
@@ -63,10 +63,17 @@ export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
   return (
     <section className="relative isolate overflow-hidden bg-brand-dark text-on-dark">
       {bannerUrl ? (
-        <>
-          <img src={bannerUrl} alt="" className="absolute inset-0 -z-20 size-full object-cover" />
-          <div className="absolute inset-0 -z-10 bg-linear-to-t from-brand-dark via-brand-dark/80 to-brand-dark/50" />
-        </>
+        // O banner entra inteiro, na proporção dele, em qualquer largura de tela
+        // (antes era fundo com object-cover e o hero alto cortava as laterais).
+        <div className="relative mx-auto w-full max-w-6xl lg:px-4 lg:pt-4">
+          <img
+            src={bannerUrl}
+            alt=""
+            fetchPriority="high"
+            className="block h-auto min-h-24 w-full bg-surface lg:rounded-3xl"
+          />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-brand-dark to-transparent lg:inset-x-4 lg:rounded-b-3xl" />
+        </div>
       ) : logoUrl ? (
         <>
           <img
@@ -81,8 +88,13 @@ export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
         <div className="absolute inset-0 -z-10 bg-linear-to-br from-brand-dark via-brand-dark to-surface" />
       )}
 
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-6 pt-7 sm:pb-8 sm:pt-10">
-        <h1 className={cn("font-heading leading-[0.92]", headlineSize(tenant.name))}>
+      <div
+        className={cn(
+          "mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-6 sm:pb-8",
+          bannerUrl ? "relative -mt-8 pt-0 sm:-mt-12" : "pt-7 sm:pt-10"
+        )}
+      >
+        <h1 className={cn("font-heading", headlineSize(tenant.name))}>
           <span className="block text-white">Faça seu pedido</span>
           <span className="line-clamp-2 block break-words text-balance text-accent-title">na {tenant.name}</span>
         </h1>
