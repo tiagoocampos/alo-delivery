@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UpdateProductService } from '../../services/product/UpdateProductService.js';
+import { readIngredientsField } from '../../utils/ingredients.js';
 
 class UpdateProductController {
     async handle(req: Request, res: Response) {
@@ -17,6 +18,7 @@ class UpdateProductController {
             isActive: isActive === undefined ? undefined : isActive === "true",
             badge,
             availability,
+            ingredients: readIngredientsField(req.body.ingredients),
             imageBuffer: req.file?.buffer,
             imageName: req.file?.originalname
         });

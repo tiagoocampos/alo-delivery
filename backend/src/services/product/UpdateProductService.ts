@@ -15,6 +15,7 @@ interface UpdateProductServiceProps {
     isActive?: boolean | undefined;
     badge?: ProductBadge | null | undefined;
     availability?: ProductAvailability | undefined;
+    ingredients?: string[] | undefined;
     imageBuffer?: Buffer | undefined;
     imageName?: string | undefined;
 }
@@ -30,6 +31,7 @@ class UpdateProductService {
         isActive,
         badge,
         availability,
+        ingredients,
         imageBuffer,
         imageName
     }: UpdateProductServiceProps) {
@@ -123,6 +125,8 @@ class UpdateProductService {
                 ...(isActive === undefined ? {} : { isActive }),
                 ...(badge === undefined ? {} : { badge }),
                 ...(availability === undefined ? {} : { availability }),
+                // Não enviado = mantém a lista; [] = limpa.
+                ...(ingredients === undefined ? {} : { ingredients }),
                 ...(imageUrl === undefined ? {} : { imageUrl }),
             },
             select: {
@@ -136,6 +140,7 @@ class UpdateProductService {
                 isActive: true,
                 badge: true,
                 availability: true,
+                ingredients: true,
                 createdAt: true,
                 updatedAt: true
             }

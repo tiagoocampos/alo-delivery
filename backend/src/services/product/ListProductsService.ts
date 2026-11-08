@@ -32,6 +32,7 @@ class ListProductsService {
                 isActive: true,
                 badge: true,
                 availability: true,
+                ingredients: true,
                 createdAt: true,
                 updatedAt: true,
                 category: {

@@ -13,6 +13,7 @@ interface CreateProductServiceProps {
     categoryId: string;
     badge?: ProductBadge | null | undefined;
     availability?: ProductAvailability | undefined;
+    ingredients?: string[] | undefined;
     imageBuffer?: Buffer | undefined;
     imageName?: string | undefined;
 }
@@ -26,6 +27,7 @@ class CreateProductService {
         categoryId,
         badge,
         availability,
+        ingredients,
         imageBuffer,
         imageName
     }: CreateProductServiceProps) {
@@ -99,7 +101,8 @@ class CreateProductService {
                 imageUrl,
                 basePrice: basePrice ?? null,
                 badge: badge ?? null,
-                availability: availability ?? "ambos"
+                availability: availability ?? "ambos",
+                ingredients: ingredients ?? []
             },
             select: {
                 id: true,
@@ -112,6 +115,7 @@ class CreateProductService {
                 isActive: true,
                 badge: true,
                 availability: true,
+                ingredients: true,
                 createdAt: true
             }
         });

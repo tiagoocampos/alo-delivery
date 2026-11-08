@@ -67,6 +67,7 @@ class GetStoreMenuService {
                         imageUrl: true,
                         basePrice: true,
                         badge: true,
+                        ingredients: true,
                         variants: {
                             select: {
                                 id: true,

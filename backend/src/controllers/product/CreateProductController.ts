@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { CreateProductService } from '../../services/product/CreateProductService.js';
 import { ProductImageRequiredError } from '../../errors/product/ProductErrors.js';
+import { readIngredientsField } from '../../utils/ingredients.js';
 
 class CreateProductController {
     async handle(req: Request, res: Response) {
@@ -20,6 +21,7 @@ class CreateProductController {
             categoryId,
             badge,
             availability,
+            ingredients: readIngredientsField(req.body.ingredients),
             imageBuffer: req.file?.buffer,
             imageName: req.file?.originalname
         });

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parseIngredients } from "../utils/ingredients.js";
 
 // As rotas de criar/editar produto chegam como multipart/form-data (Multer),
 // então todo campo do body vem como string e é convertido no controller.
@@ -10,6 +11,19 @@ const productAvailability = z.enum(["ambos", "delivery", "balcao"], {
     message: "Disponibilidade inválida"
 });
 
+// Chega como texto JSON (multipart). A normalização (trim, duplicados) acontece
+// nos controllers com parseIngredients; aqui só validamos.
+const ingredientsField = z
+    .string()
+    .superRefine((value, ctx) => {
+        const result = parseIngredients(value);
+
+        if (!result.ok) {
+            ctx.addIssue({ code: "custom", message: result.message });
+        }
+    })
+    .optional();
+
 export const createProductSchema =
     z.object({
         body: z.object({
@@ -19,6 +33,7 @@ export const createProductSchema =
             categoryId: z.string().uuid({ message: "Categoria inválida" }),
             badge: z.enum(["mais_pedido", "promocao", "novo"]).nullable().optional(),
             availability: productAvailability.optional(),
+            ingredients: ingredientsField,
         })
     })
 
@@ -44,6 +59,7 @@ export const updateProductSchema =
             isActive: z.enum(["true", "false"]).optional(),
             badge: z.enum(["mais_pedido", "promocao", "novo"]).nullable().optional(),
             availability: productAvailability.optional(),
+            ingredients: ingredientsField,
         })
     })
 

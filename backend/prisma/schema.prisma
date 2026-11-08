@@ -266,6 +266,7 @@ model Product {
   isActive     Boolean             @default(true) @map("is_active")
   badge        ProductBadge?
   availability ProductAvailability @default(ambos)
+  ingredients  String[]            @default([]) // ingredientes padrão, ex: Pão, Hambúrguer, Alface
   createdAt    DateTime            @default(now()) @map("created_at")
   updatedAt    DateTime            @updatedAt @map("updated_at")
 
