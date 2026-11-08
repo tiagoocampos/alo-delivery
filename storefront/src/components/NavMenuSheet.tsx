@@ -1,194 +1,143 @@
-import { useCustomerTour } from "@/tour/useCustomerTour"
-import { Award, CircleHelp, Download, ListOrdered, LogIn, Phone, ShoppingCart, User, UtensilsCrossed } from "lucide-react"
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Separator } from "@/components/ui/separator"
+import { Award, CircleHelp, Download, Heart, ListOrdered, LogIn, Phone, ShoppingCart, User, UtensilsCrossed } from "lucide-react"
+import { SheetTitle } from "@/components/ui/sheet"
+import { SheetShell } from "@/components/shell/SheetShell"
+import { MenuRow, SheetGroup, SheetSectionTitle } from "@/components/shell/SheetParts"
 import { StoreBrandLogo } from "@/components/StoreBrandLogo"
 import { AloDeliveryBrandBadge } from "@/components/AloDeliveryBrandBadge"
+import { cn } from "@/lib/utils"
 import { getInitials } from "@/lib/text"
 import { getStoreBranding } from "@/lib/storeBranding"
+import { formatOpenStatus, getStoreOpenStatus } from "@/lib/storeHours"
+import { telUrl } from "@/lib/contact"
+import { useCart } from "@/hooks/useCart"
 import { useCustomerAuth } from "@/hooks/useCustomerAuth"
 import { useInstallPrompt } from "@/hooks/useInstallPrompt"
+import { useCustomerTour } from "@/tour/useCustomerTour"
 import type { Tenant } from "@/types"
 
 interface NavMenuSheetProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   tenant: Tenant
+  // Favoritos que ainda existem no cardápio (o contador do menu).
+  favoritesCount: number
   onOpenCart: () => void
   onOpenLoyalty: () => void
   onOpenAccount: () => void
   onOpenOrders: () => void
+  onOpenFavorites: () => void
 }
 
 export function NavMenuSheet({
   open,
   onOpenChange,
   tenant,
+  favoritesCount,
   onOpenCart,
   onOpenLoyalty,
   onOpenAccount,
   onOpenOrders,
+  onOpenFavorites,
 }: NavMenuSheetProps) {
   const { isAuthenticated } = useCustomerAuth()
   const { canInstall, promptInstall } = useInstallPrompt()
+  const { totalCount } = useCart()
   const { startTour } = useCustomerTour()
+  const { isBasico, logoUrl } = getStoreBranding(tenant)
+  const openStatus = getStoreOpenStatus(tenant.businessHours)
+  const tel = telUrl(tenant.phone)
+
   const close = () => onOpenChange(false)
-  const { isBasico, logoUrl, bannerUrl } = getStoreBranding(tenant)
-  const hasBanner = Boolean(bannerUrl)
+  // Fecha o menu e então abre a outra tela (ou inicia o tutorial).
+  const go = (action: () => void) => () => {
+    close()
+    action()
+  }
 
-  const itemClass =
-    "flex items-center gap-3 px-4 py-2.5 text-sm text-brand-foreground/90 transition-colors hover:bg-brand-foreground/10"
-
+  const avatarClass = "size-11 shrink-0 rounded-full object-cover ring-2 ring-white/15"
   const avatar = isBasico ? (
-    <StoreBrandLogo className="size-8 shrink-0 rounded-full object-cover ring-2 ring-white/30" />
+    <StoreBrandLogo className={avatarClass} />
   ) : logoUrl ? (
-    <img
-      src={logoUrl}
-      alt=""
-      className="size-8 shrink-0 rounded-full object-cover ring-2 ring-white/30"
-    />
+    <img src={logoUrl} alt="" width={44} height={44} className={avatarClass} />
   ) : (
-    <span className="flex size-8 shrink-0 items-center justify-center rounded-sm bg-primary text-xs font-bold text-primary-foreground">
+    <span
+      aria-hidden
+      className={cn("flex items-center justify-center bg-primary text-sm font-bold text-primary-foreground", avatarClass)}
+    >
       {getInitials(tenant.name)}
     </span>
   )
 
-  const titleRow = (
-    <SheetHeader
-      className={
-        hasBanner
-          ? "flex-row items-center gap-2.5 px-4 py-3"
-          : "flex-row items-center gap-2.5 border-b border-brand-foreground/10 px-4 py-3"
-      }
-    >
+  // Identidade compacta: logo, nome (até 2 linhas) e se está aberto. Sem banner.
+  const header = (
+    <div className="flex min-w-0 items-center gap-3">
       {avatar}
-      <SheetTitle
-        className={hasBanner ? "text-sm font-semibold text-white" : "text-sm font-semibold text-brand-foreground"}
-      >
-        {tenant.name}
-      </SheetTitle>
-    </SheetHeader>
+      <div className="flex min-w-0 flex-col leading-tight">
+        <SheetTitle className="font-heading line-clamp-2 break-words text-base text-accent-title [--heading-weight:700]">
+          {tenant.name}
+        </SheetTitle>
+        {openStatus && (
+          <span className="mt-0.5 flex items-center gap-1.5 text-xs text-on-dark-muted">
+            <span
+              aria-hidden
+              className={cn("size-2 shrink-0 rounded-full", openStatus.isOpen ? "bg-status-open" : "bg-status-closed")}
+            />
+            <span className="truncate">{formatOpenStatus(openStatus)}</span>
+          </span>
+        )}
+      </div>
+    </div>
   )
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="left"
-        showCloseButton={false}
-        className="flex w-full flex-col border-none bg-brand text-brand-foreground sm:max-w-xs"
-      >
-        {hasBanner ? (
-          <div className="relative w-full border-b border-brand-foreground/10">
-            <img src={bannerUrl!} alt="" className="h-28 w-full object-cover" />
-            <div className="absolute inset-x-0 top-0 bg-linear-to-b from-black/60 to-transparent">{titleRow}</div>
-          </div>
-        ) : (
-          titleRow
-        )}
-
-        {isBasico && (
-          <div className="px-4 pt-3">
-            <AloDeliveryBrandBadge size="lg" />
-          </div>
-        )}
-
-        <nav className="flex flex-1 flex-col py-1">
-          <button type="button" onClick={close} className={itemClass}>
-            <UtensilsCrossed className="size-4.5" strokeWidth={1.75} />
-            Cardápio
-          </button>
-
-          {canInstall && !isBasico && (
-            <button type="button" onClick={promptInstall} className={itemClass}>
-              <Download className="size-4.5" strokeWidth={1.75} />
-              Instalar app
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={() => {
-              close()
-              onOpenCart()
-            }}
-            className={itemClass}
-          >
-            <ShoppingCart className="size-4.5" strokeWidth={1.75} />
-            Meu carrinho
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              close()
-              onOpenLoyalty()
-            }}
-            className={itemClass}
-          >
-            <Award className="size-4.5" strokeWidth={1.75} />
-            Programa de fidelidade
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              close()
+    <SheetShell
+      open={open}
+      onOpenChange={onOpenChange}
+      side="left"
+      title={tenant.name}
+      header={header}
+      bodyClassName="gap-4 pb-4"
+      footerClassName="border-white/10 bg-brand-dark"
+      footer={<AloDeliveryBrandBadge size={isBasico ? "lg" : "sm"} className={isBasico ? undefined : "py-1"} />}
+    >
+      <nav aria-label="Menu da loja" className="flex flex-col gap-4">
+        <section aria-labelledby="menu-loja" className="flex flex-col">
+          <SheetSectionTitle>
+            <span id="menu-loja">Loja</span>
+          </SheetSectionTitle>
+          <SheetGroup>
+            <MenuRow icon={UtensilsCrossed} label="Cardápio" onClick={close} />
+            <MenuRow icon={ShoppingCart} label="Meu carrinho" count={totalCount} onClick={go(onOpenCart)} />
+            {canInstall && !isBasico && <MenuRow icon={Download} label="Instalar app" onClick={() => void promptInstall()} />}
+            <MenuRow
+              icon={CircleHelp}
+              label="Como pedir?"
               // Espera o menu terminar de fechar antes de abrir o tour.
-              window.setTimeout(startTour, 350)
-            }}
-            className={itemClass}
-          >
-            <CircleHelp className="size-4.5" strokeWidth={1.75} />
-            Como pedir?
-          </button>
-
-          <Separator className="my-1 bg-brand-foreground/10" />
-
-          <button
-            type="button"
-            onClick={() => {
-              close()
-              onOpenAccount()
-            }}
-            className={itemClass}
-          >
-            {isAuthenticated ? (
-              <User className="size-4.5" strokeWidth={1.75} />
-            ) : (
-              <LogIn className="size-4.5" strokeWidth={1.75} />
-            )}
-            {isAuthenticated ? "Minha conta" : "Entrar / Criar conta"}
-          </button>
-
-          {isAuthenticated && (
-            <button
-              type="button"
               onClick={() => {
                 close()
-                onOpenOrders()
+                window.setTimeout(startTour, 350)
               }}
-              className={itemClass}
-            >
-              <ListOrdered className="size-4.5" strokeWidth={1.75} />
-              Meus pedidos
-            </button>
-          )}
+            />
+            <MenuRow icon={Award} label="Programa de fidelidade" onClick={go(onOpenLoyalty)} />
+            {tel && tenant.phone && <MenuRow icon={Phone} label={tenant.phone} href={tel} chevron={false} />}
+          </SheetGroup>
+        </section>
 
-          {tenant.phone && (
-            <>
-              <Separator className="my-1 bg-brand-foreground/10" />
-              <a href={`tel:${tenant.phone}`} className={itemClass}>
-                <Phone className="size-4.5" strokeWidth={1.75} />
-                {tenant.phone}
-              </a>
-            </>
-          )}
-        </nav>
-
-        {!isBasico && (
-          <AloDeliveryBrandBadge size="sm" className="border-t border-brand-foreground/10 px-4 py-2.5" />
-        )}
-      </SheetContent>
-    </Sheet>
+        <section aria-labelledby="menu-conta" className="flex flex-col">
+          <SheetSectionTitle>
+            <span id="menu-conta">Minha conta</span>
+          </SheetSectionTitle>
+          <SheetGroup>
+            <MenuRow
+              icon={isAuthenticated ? User : LogIn}
+              label={isAuthenticated ? "Minha conta" : "Entrar / Criar conta"}
+              onClick={go(onOpenAccount)}
+            />
+            {isAuthenticated && <MenuRow icon={ListOrdered} label="Meus pedidos" onClick={go(onOpenOrders)} />}
+            <MenuRow icon={Heart} label="Meus favoritos" count={favoritesCount} onClick={go(onOpenFavorites)} />
+          </SheetGroup>
+        </section>
+      </nav>
+    </SheetShell>
   )
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { PackageOpen } from "lucide-react"
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { SheetShell } from "@/components/shell/SheetShell"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
@@ -39,11 +39,7 @@ export function OrdersSheet({ open, onOpenChange, slug, effectivePlan }: OrdersS
   }
 
   return (
-    <Sheet open={open} onOpenChange={handleClose}>
-      <SheetContent side="right" className="flex w-full flex-col overflow-y-auto sm:max-w-md">
-        <SheetHeader>
-          <SheetTitle>{selectedOrder ? "Detalhe do pedido" : "Meus pedidos"}</SheetTitle>
-        </SheetHeader>
+    <SheetShell open={open} onOpenChange={handleClose} title={selectedOrder ? "Detalhe do pedido" : "Meus pedidos"}>
 
         {selectedOrder ? (
           <div className="flex flex-col gap-4 px-4 pb-4">
@@ -119,7 +115,6 @@ export function OrdersSheet({ open, onOpenChange, slug, effectivePlan }: OrdersS
               ))}
           </div>
         )}
-      </SheetContent>
-    </Sheet>
+    </SheetShell>
   )
 }

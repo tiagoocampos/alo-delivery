@@ -67,3 +67,19 @@ export function hasOrderedAnywhere(): boolean {
   }
   return false
 }
+
+// Dica "entre na conta para guardar seus favoritos": aparece uma vez por loja.
+// Sem armazenamento não dá para lembrar que já apareceu, então não mostra.
+const favoritesHintKey = (slug: string) => `favoritos-dica:${slug}`
+
+export function canShowFavoritesHint(slug: string): boolean {
+  try {
+    return localStorage.getItem(favoritesHintKey(slug)) !== "1"
+  } catch {
+    return false
+  }
+}
+
+export function markFavoritesHintShown(slug: string) {
+  write(favoritesHintKey(slug), "1")
+}

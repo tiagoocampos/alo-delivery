@@ -88,3 +88,38 @@ export async function cancelCustomerOrder(
   )
   return data
 }
+
+// Favoritos da conta. Sem toast automático: o FavoritesContext decide a mensagem.
+export async function getFavoriteIds(slug: string): Promise<string[]> {
+  const { data } = await api.get<{ productIds: string[] }>(`/store/${slug}/customer/favorites`, {
+    headers: authHeaders(slug),
+    silent: true,
+  })
+  return data.productIds
+}
+
+export async function addFavorite(slug: string, productId: string): Promise<string[]> {
+  const { data } = await api.post<{ productIds: string[] }>(
+    `/store/${slug}/customer/favorites/${productId}`,
+    undefined,
+    { headers: authHeaders(slug), silent: true }
+  )
+  return data.productIds
+}
+
+export async function removeFavorite(slug: string, productId: string): Promise<string[]> {
+  const { data } = await api.delete<{ productIds: string[] }>(`/store/${slug}/customer/favorites/${productId}`, {
+    headers: authHeaders(slug),
+    silent: true,
+  })
+  return data.productIds
+}
+
+export async function mergeFavorites(slug: string, productIds: string[]): Promise<string[]> {
+  const { data } = await api.post<{ productIds: string[] }>(
+    `/store/${slug}/customer/favorites/merge`,
+    { productIds: productIds.slice(0, 100) },
+    { headers: authHeaders(slug), silent: true }
+  )
+  return data.productIds
+}

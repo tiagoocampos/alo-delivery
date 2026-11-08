@@ -3,7 +3,6 @@ import { Check, MapPin, MessageCircle, UtensilsCrossed } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { formatCents } from "@/lib/money"
 import { mapsUrl, whatsappUrl } from "@/lib/contact"
-import { formatBusinessHoursSummary } from "@/lib/storeHours"
 import { getStoreBranding } from "@/lib/storeBranding"
 import type { Tenant } from "@/types"
 
@@ -19,12 +18,6 @@ const ACTION =
 
 const LONG_DESCRIPTION = 140
 
-function headlineSize(name: string) {
-  if (name.length > 22) return "text-[1.5rem] sm:text-4xl"
-  if (name.length > 14) return "text-[1.75rem] sm:text-5xl"
-  return "text-[2rem] sm:text-6xl"
-}
-
 // Só afirmações verdadeiras: cada selo vem de um dado real da loja.
 function trustBadges(tenant: Tenant): string[] {
   const badges: string[] = []
@@ -37,13 +30,36 @@ function trustBadges(tenant: Tenant): string[] {
   return badges
 }
 
+// O banner é um bloco próprio, na proporção 2:1. Imagem quase 2:1 (±8%) preenche
+// o bloco; muito diferente aparece inteira (sem cortar o texto que ela tenha).
+function BannerBlock({ src }: { src: string }) {
+  const [fit, setFit] = useState<"cover" | "contain">("cover")
+
+  return (
+    <div className="mx-auto w-full max-w-6xl px-4 pt-4">
+      <div className="aspect-2/1 overflow-hidden rounded-3xl bg-surface ring-1 ring-white/10">
+        <img
+          src={src}
+          alt=""
+          fetchPriority="high"
+          onLoad={(event) => {
+            const { naturalWidth, naturalHeight } = event.currentTarget
+            const ratio = naturalHeight > 0 ? naturalWidth / naturalHeight : 2
+            setFit(ratio >= 1.85 && ratio <= 2.15 ? "cover" : "contain")
+          }}
+          className={cn("size-full", fit === "cover" ? "object-cover" : "object-contain")}
+        />
+      </div>
+    </div>
+  )
+}
+
 export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
   const [expanded, setExpanded] = useState(false)
   const { logoUrl, bannerUrl } = getStoreBranding(tenant)
 
   const whatsapp = whatsappUrl(tenant.phone)
   const maps = mapsUrl(tenant.address)
-  const hoursSummary = formatBusinessHoursSummary(tenant.businessHours)
   const description = tenant.description?.trim()
   const isLongDescription = (description?.length ?? 0) > LONG_DESCRIPTION
 
@@ -63,18 +79,9 @@ export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
   return (
     <section className="relative isolate overflow-hidden bg-brand-dark text-on-dark">
       {bannerUrl ? (
-        // O banner entra inteiro, na proporção dele, em qualquer largura de tela
-        // (antes era fundo com object-cover e o hero alto cortava as laterais).
-        <div className="relative mx-auto w-full max-w-6xl lg:px-4 lg:pt-4">
-          <img
-            src={bannerUrl}
-            alt=""
-            fetchPriority="high"
-            className="block h-auto min-h-24 w-full bg-surface lg:rounded-3xl"
-          />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-brand-dark to-transparent lg:inset-x-4 lg:rounded-b-3xl" />
-        </div>
+        <BannerBlock src={bannerUrl} />
       ) : logoUrl ? (
+        // Sem banner: logo grande sobre o degradê do tema.
         <>
           <img
             src={logoUrl}
@@ -83,20 +90,26 @@ export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
             className="absolute -right-16 -top-16 -z-20 size-80 scale-125 object-cover opacity-25 blur-2xl"
           />
           <div className="absolute inset-0 -z-10 bg-linear-to-b from-brand-dark/60 to-brand-dark" />
+          <div className="flex justify-center pt-6">
+            <img
+              src={logoUrl}
+              alt=""
+              width={112}
+              height={112}
+              fetchPriority="high"
+              className="size-28 rounded-full object-cover shadow-lg ring-4 ring-white/15"
+            />
+          </div>
         </>
       ) : (
         <div className="absolute inset-0 -z-10 bg-linear-to-br from-brand-dark via-brand-dark to-surface" />
       )}
 
-      <div
-        className={cn(
-          "mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-6 sm:pb-8",
-          bannerUrl ? "relative -mt-8 pt-0 sm:-mt-12" : "pt-7 sm:pt-10"
-        )}
-      >
-        <h1 className={cn("font-heading", headlineSize(tenant.name))}>
-          <span className="block text-white">Faça seu pedido</span>
-          <span className="line-clamp-2 block break-words text-balance text-accent-title">na {tenant.name}</span>
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-6 pt-5 sm:pb-8">
+        {/* O nome da loja já está no cabeçalho: aqui só a chamada, abaixo do banner. */}
+        <h1 className="font-heading text-[2rem] sm:text-5xl">
+          <span className="block text-on-dark">Faça seu pedido</span>
+          <span className="block text-accent-title">É rápido e fácil</span>
         </h1>
 
         {description && (
@@ -162,8 +175,6 @@ export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
             </a>
           )}
         </div>
-
-        {hoursSummary && <p className="text-xs font-medium text-on-dark-muted">{hoursSummary}</p>}
       </div>
     </section>
   )

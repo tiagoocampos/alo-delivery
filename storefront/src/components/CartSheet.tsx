@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react"
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react"
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
+import { SheetShell } from "@/components/shell/SheetShell"
+import { SheetFooter } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { CheckoutForm, type CheckoutFormValues } from "@/components/CheckoutForm"
@@ -97,11 +92,7 @@ export function CartSheet({
   }
 
   return (
-    <Sheet open={open} onOpenChange={handleClose}>
-      <SheetContent side="right" className="flex w-full flex-col overflow-y-auto sm:max-w-md">
-        <SheetHeader>
-          <SheetTitle>{step === "cart" ? "Seu pedido" : "Dados para entrega"}</SheetTitle>
-        </SheetHeader>
+    <SheetShell open={open} onOpenChange={handleClose} title={step === "cart" ? "Seu pedido" : "Dados para entrega"}>
 
         {step === "cart" ? (
           <>
@@ -230,7 +221,6 @@ export function CartSheet({
             </Button>
           </div>
         )}
-      </SheetContent>
-    </Sheet>
+    </SheetShell>
   )
 }

@@ -1,37 +1,25 @@
-import { AtSign, Bike, CreditCard, MapPin, type LucideIcon } from "lucide-react"
-import { formatCents } from "@/lib/money"
+import { AtSign, Clock, MapPin } from "lucide-react"
+import { InfoRow } from "@/components/shell/SheetParts"
 import { mapsUrl } from "@/lib/contact"
+import { formatBusinessHoursList, formatBusinessHoursSummary } from "@/lib/storeHours"
 import type { Tenant } from "@/types"
 
 interface InfoCard {
   key: string
-  icon: LucideIcon
+  icon: typeof Clock
   title: string
   text: string
   href?: string
+  full?: boolean
 }
 
-// Cartões pequenos só com dados reais da loja; o que não existe não aparece.
+// Só o que os selos da abertura não dizem: horário, endereço e Instagram.
+// Pagamento, entrega e pedido mínimo já estão nos selos. O que não existe não aparece.
 function buildCards(tenant: Tenant): InfoCard[] {
-  const cards: InfoCard[] = [
-    {
-      key: "pagamento",
-      icon: CreditCard,
-      title: "Pagamento",
-      text: tenant.pixKey ? "Pix ou na entrega" : "Na entrega",
-    },
-    {
-      key: "entrega",
-      icon: Bike,
-      title: "Entrega",
-      text: [
-        tenant.deliveryFee > 0 ? `Taxa ${formatCents(tenant.deliveryFee)}` : "Entrega grátis",
-        tenant.minimumOrderValue > 0 ? `mínimo ${formatCents(tenant.minimumOrderValue)}` : null,
-      ]
-        .filter(Boolean)
-        .join(" · "),
-    },
-  ]
+  const cards: InfoCard[] = []
+
+  const hours = formatBusinessHoursSummary(tenant.businessHours) ?? formatBusinessHoursList(tenant.businessHours).join("\n")
+  if (hours) cards.push({ key: "horario", icon: Clock, title: "Horário", text: hours, full: true })
 
   const maps = mapsUrl(tenant.address)
   if (tenant.address && maps) {
@@ -48,36 +36,24 @@ function buildCards(tenant: Tenant): InfoCard[] {
 export function StoreInfoCards({ tenant }: { tenant: Tenant }) {
   const cards = buildCards(tenant)
 
+  if (cards.length === 0) return null
+
+  // Grade sem rolagem lateral: 2 colunas no celular (1 se houver só um cartão);
+  // o último cartão ímpar ocupa a largura toda.
   return (
     <div className="mx-auto w-full max-w-6xl px-4 pt-4">
-      <ul className="no-scrollbar -mx-4 flex snap-x gap-2.5 overflow-x-auto px-4 pb-1 lg:mx-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:px-0">
-        {cards.map(({ key, icon: Icon, title, text, href }) => {
-          const content = (
-            <>
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-accent-title">
-                <Icon className="size-[18px]" strokeWidth={2} aria-hidden />
-              </span>
-              <span className="flex min-w-0 flex-col leading-tight">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-accent-title">{title}</span>
-                <span className="line-clamp-2 text-sm font-medium text-on-dark">{text}</span>
-              </span>
-            </>
-          )
-          const className =
-            "flex min-h-14 w-56 shrink-0 snap-start items-center gap-3 rounded-2xl bg-surface p-3 shadow-sm lg:w-auto"
-
-          return (
-            <li key={key} className="contents">
-              {href ? (
-                <a href={href} target="_blank" rel="noreferrer" className={className}>
-                  {content}
-                </a>
-              ) : (
-                <div className={className}>{content}</div>
-              )}
-            </li>
-          )
-        })}
+      <ul
+        className={
+          cards.length === 1
+            ? "grid grid-cols-1 gap-2.5"
+            : "grid grid-cols-2 gap-2.5 max-sm:[&>li:last-child:nth-child(odd)]:col-span-2 sm:grid-cols-3"
+        }
+      >
+        {cards.map(({ key, icon, title, text, href, full }) => (
+          <li key={key} className="min-w-0">
+            <InfoRow icon={icon} title={title} text={text} href={href} full={full} className="h-full whitespace-pre-line" />
+          </li>
+        ))}
       </ul>
     </div>
   )

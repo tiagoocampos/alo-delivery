@@ -1,6 +1,13 @@
 import axios, { AxiosError } from "axios"
 import { toast } from "sonner"
 
+declare module "axios" {
+  interface AxiosRequestConfig {
+    // Quem chama trata o erro por conta própria (toast amigável ou silêncio).
+    silent?: boolean
+  }
+}
+
 interface ValidationErrorBody {
   error: string
   details?: { message: string; path: string }[]
@@ -27,7 +34,7 @@ function extractErrorMessage(error: AxiosError<ValidationErrorBody>): string {
 api.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ValidationErrorBody>) => {
-    toast.error(extractErrorMessage(error))
+    if (!error.config?.silent) toast.error(extractErrorMessage(error))
     return Promise.reject(error)
   }
 )

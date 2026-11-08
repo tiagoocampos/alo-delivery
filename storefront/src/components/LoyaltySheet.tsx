@@ -1,12 +1,6 @@
 import { useState, type FormEvent } from "react"
 import { Award } from "lucide-react"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
+import { SheetShell } from "@/components/shell/SheetShell"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -49,12 +43,13 @@ export function LoyaltySheet({ open, onOpenChange, slug }: LoyaltySheetProps) {
   }
 
   return (
-    <Sheet open={open} onOpenChange={handleClose}>
-      <SheetContent side="bottom" className="rounded-t-2xl">
-        <SheetHeader>
-          <SheetTitle>Programa de fidelidade</SheetTitle>
-          <SheetDescription>Consulte seus pontos informando o telefone usado nos pedidos.</SheetDescription>
-        </SheetHeader>
+    <SheetShell
+      open={open}
+      onOpenChange={handleClose}
+      side="bottom"
+      title="Programa de fidelidade"
+      description="Consulte seus pontos informando o telefone usado nos pedidos."
+    >
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 px-4 pb-4">
           <div className="flex flex-col gap-1.5">
@@ -85,7 +80,6 @@ export function LoyaltySheet({ open, onOpenChange, slug }: LoyaltySheetProps) {
             </div>
           )}
         </form>
-      </SheetContent>
-    </Sheet>
+    </SheetShell>
   )
 }

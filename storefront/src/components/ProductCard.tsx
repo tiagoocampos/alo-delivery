@@ -1,10 +1,9 @@
 import { useState } from "react"
-import { Heart, Plus } from "lucide-react"
-import { toast } from "sonner"
+import { Plus } from "lucide-react"
+import { FavoriteHeart } from "@/components/FavoriteHeart"
 import { cn } from "@/lib/utils"
 import { formatCents } from "@/lib/money"
-import { useCart } from "@/hooks/useCart"
-import { useFavorites } from "@/hooks/useFavorites"
+import { useProductAction } from "@/hooks/useProductAction"
 import type { Product, ProductBadge } from "@/types"
 
 interface ProductCardProps {
@@ -20,16 +19,13 @@ const BADGE_CONFIG: Record<ProductBadge, { label: string; className: string }> =
 }
 
 export function ProductCard({ product, categoryName, onSelect }: ProductCardProps) {
-  const { addItem } = useCart()
-  const { isFavorite, toggleFavorite } = useFavorites()
   const [imageFailed, setImageFailed] = useState(false)
 
   // Foto quebrada cai sozinha no formato de texto.
   const showImage = Boolean(product.imageUrl) && !imageFailed
   const hasVariants = product.variants.length > 0
   // "Montar" quando há algo para escolher/tirar; senão adiciona direto.
-  const customizable = hasVariants || product.extras.length > 0 || (product.ingredients?.length ?? 0) > 0
-  const favorite = isFavorite(product.id)
+  const { customizable, run: handleAction } = useProductAction(product, categoryName, onSelect)
   const badge = product.badge ? BADGE_CONFIG[product.badge] : null
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -40,30 +36,6 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
       event.preventDefault()
       onSelect()
     }
-  }
-
-  const handleAction = (event: React.MouseEvent) => {
-    event.stopPropagation()
-
-    if (customizable) {
-      onSelect()
-      return
-    }
-
-    addItem({
-      productId: product.id,
-      productName: product.name,
-      categoryName,
-      unitPrice: product.basePrice ?? 0,
-      quantity: 1,
-      imageUrl: product.imageUrl,
-    })
-    toast.success(`${product.name} adicionado ao carrinho`)
-  }
-
-  const handleFavorite = (event: React.MouseEvent) => {
-    event.stopPropagation()
-    toggleFavorite(product.id)
   }
 
   return (
@@ -102,15 +74,7 @@ export function ProductCard({ product, categoryName, onSelect }: ProductCardProp
               {badge.label}
             </span>
           )}
-          <button
-            type="button"
-            onClick={handleFavorite}
-            aria-pressed={favorite}
-            aria-label={favorite ? `Remover ${product.name} dos favoritos` : `Favoritar ${product.name}`}
-            className="-my-3 -mr-3 ml-auto flex size-11 shrink-0 items-center justify-center rounded-full text-on-dark-muted transition-colors hover:text-accent-title"
-          >
-            <Heart className={cn("size-5", favorite && "fill-current text-accent-title")} />
-          </button>
+          <FavoriteHeart productId={product.id} productName={product.name} className="-my-3 -mr-3 ml-auto" />
         </div>
 
         <h3 className="font-heading line-clamp-2 break-words text-xl text-accent-title">{product.name}</h3>

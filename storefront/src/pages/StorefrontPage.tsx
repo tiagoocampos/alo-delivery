@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react"
+import { toast } from "sonner"
 import { useParams } from "react-router-dom"
 import { StoreHeader } from "@/components/StoreHeader"
 import { StoreHero } from "@/components/StoreHero"
@@ -44,6 +45,7 @@ const CartSheet = lazy(() => import("@/components/CartSheet").then((m) => ({ def
 const NavMenuSheet = lazy(() => import("@/components/NavMenuSheet").then((m) => ({ default: m.NavMenuSheet })))
 const LoyaltySheet = lazy(() => import("@/components/LoyaltySheet").then((m) => ({ default: m.LoyaltySheet })))
 const AccountSheet = lazy(() => import("@/components/AccountSheet").then((m) => ({ default: m.AccountSheet })))
+const FavoritesSheet = lazy(() => import("@/components/FavoritesSheet").then((m) => ({ default: m.FavoritesSheet })))
 const OrdersSheet = lazy(() => import("@/components/OrdersSheet").then((m) => ({ default: m.OrdersSheet })))
 const OrderConfirmation = lazy(() => import("@/components/OrderConfirmation").then((m) => ({ default: m.OrderConfirmation })))
 
@@ -67,11 +69,12 @@ function StorefrontContent({ slug }: { slug: string }) {
   const [loyaltyOpen, setLoyaltyOpen] = useState(false)
   const [accountOpen, setAccountOpen] = useState(false)
   const [ordersOpen, setOrdersOpen] = useState(false)
+  const [favoritesOpen, setFavoritesOpen] = useState(false)
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null)
   const [installCardVisible, setInstallCardVisible] = useState(false)
 
   const { totalCount, subtotal } = useCart()
-  const { favoriteIds, isFavorite } = useFavorites()
+  const { orderedIds, isFavorite, guestHintPending, acknowledgeGuestHint } = useFavorites()
   const { ready: themeReady, themeColor } = useStoreTheme(menu?.tenant ?? null)
   const fontsReady = useFontsReady()
 
@@ -82,6 +85,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   const mountLoyalty = useMountOnFirstOpen(loyaltyOpen)
   const mountAccount = useMountOnFirstOpen(accountOpen)
   const mountOrders = useMountOnFirstOpen(ordersOpen)
+  const mountFavorites = useMountOnFirstOpen(favoritesOpen)
 
   useEffect(() => {
     let active = true
@@ -103,6 +107,17 @@ function StorefrontContent({ slug }: { slug: string }) {
       active = false
     }
   }, [slug])
+
+  // Primeiro favorito de quem não tem conta: dica única, com atalho para entrar.
+  useEffect(() => {
+    if (!guestHintPending) return
+
+    toast("Entre na sua conta para guardar seus favoritos em qualquer aparelho.", {
+      duration: 6000,
+      action: { label: "Entrar", onClick: () => setAccountOpen(true) },
+    })
+    acknowledgeGuestHint()
+  }, [guestHintPending, acknowledgeGuestHint])
 
   useEffect(() => {
     if (!menu?.tenant) return
@@ -150,10 +165,24 @@ function StorefrontContent({ slug }: { slug: string }) {
 
   const priceCeiling = useMemo(() => (menu ? getPriceCeiling(menu.categories) : null), [menu])
 
-  const hasFavorites = useMemo(
-    () => (menu ? menu.categories.some((category) => category.products.some((product) => favoriteIds.has(product.id))) : false),
-    [menu, favoriteIds]
-  )
+  // Favoritos que ainda existem no cardápio (produto removido ou desativado some
+  // da lista), do mais recente para o mais antigo.
+  const favoriteEntries = useMemo(() => {
+    if (!menu) return []
+
+    const byId = new Map<string, { product: Product; categoryName: string }>()
+    for (const category of menu.categories) {
+      if (category.sizes.length > 0) continue
+      for (const product of category.products) byId.set(product.id, { product, categoryName: category.name })
+    }
+
+    return orderedIds.flatMap((id) => {
+      const entry = byId.get(id)
+      return entry ? [entry] : []
+    })
+  }, [menu, orderedIds])
+
+  const hasFavorites = favoriteEntries.length > 0
 
   const quickOptions = useMemo(
     () => (menu ? getQuickFilterOptions(menu.categories, priceCeiling, hasFavorites, formatCents) : []),
@@ -244,11 +273,13 @@ function StorefrontContent({ slug }: { slug: string }) {
   }
 
   const filtering = search.trim() !== "" || activeCategoryId !== null || activeQuickFilter !== "todos"
+  // "Seus favoritos" só na visão "Tudo": sem busca, categoria nem filtro ativos.
+  const favoritesVisible = !filtering
 
   return (
     <CustomerTourProvider
       menu={menu}
-      panelOpen={navOpen || cartOpen || loyaltyOpen || accountOpen || ordersOpen}
+      panelOpen={navOpen || cartOpen || loyaltyOpen || accountOpen || ordersOpen || favoritesOpen}
       productOpen={selectedProduct !== null || selectedCategory !== null}
       installCardVisible={installCardVisible}
     >
@@ -263,6 +294,8 @@ function StorefrontContent({ slug }: { slug: string }) {
       <StoreHero tenant={menu.tenant} collapsed={returning} onViewMenu={() => scrollToId("cardapio")} />
 
       <InstallAppCard tenant={menu.tenant} slug={slug} onVisibleChange={setInstallCardVisible} />
+
+      <CustomerTourInvite />
 
       <main className="bg-dots flex flex-1 flex-col pb-4">
         {!returning && <StoreInfoCards tenant={menu.tenant} />}
@@ -283,6 +316,7 @@ function StorefrontContent({ slug }: { slug: string }) {
 
         <ProductList
           categories={filteredCategories}
+          favorites={favoritesVisible ? favoriteEntries : []}
           mostOrdered={mostOrdered}
           emptyMessage={filtering ? "Nenhum produto encontrado com esses filtros." : "O cardápio ainda está vazio."}
           onSelectProduct={(product, categoryName) => setSelectedProduct({ product, categoryName })}
@@ -333,6 +367,18 @@ function StorefrontContent({ slug }: { slug: string }) {
             onOpenLoyalty={() => setLoyaltyOpen(true)}
             onOpenAccount={() => setAccountOpen(true)}
             onOpenOrders={() => setOrdersOpen(true)}
+            onOpenFavorites={() => setFavoritesOpen(true)}
+            favoritesCount={favoriteEntries.length}
+          />
+        )}
+
+        {mountFavorites && (
+          <FavoritesSheet
+            open={favoritesOpen}
+            onOpenChange={setFavoritesOpen}
+            entries={favoriteEntries}
+            onSelectProduct={(product, categoryName) => setSelectedProduct({ product, categoryName })}
+            onOpenAccount={() => setAccountOpen(true)}
           />
         )}
 
@@ -348,7 +394,6 @@ function StorefrontContent({ slug }: { slug: string }) {
         )}
       </Suspense>
 
-      <CustomerTourInvite />
       <CustomerTourOverlay />
     </div>
     </CustomerTourProvider>

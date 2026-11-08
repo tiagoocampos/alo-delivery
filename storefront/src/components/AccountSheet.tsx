@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { LogOut, Mail, MapPin, Pencil, Phone, Plus, Star, Trash2, User } from "lucide-react"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
+import { SheetShell } from "@/components/shell/SheetShell"
+import { InfoRow } from "@/components/shell/SheetParts"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { AddressForm } from "@/components/AddressForm"
@@ -91,11 +87,7 @@ export function AccountSheet({ open, onOpenChange, slug }: AccountSheetProps) {
   }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="flex w-full flex-col overflow-y-auto sm:max-w-md">
-        <SheetHeader>
-          <SheetTitle>{isAuthenticated ? "Minha conta" : "Entrar ou criar conta"}</SheetTitle>
-        </SheetHeader>
+    <SheetShell open={open} onOpenChange={onOpenChange} title={isAuthenticated ? "Minha conta" : "Entrar ou criar conta"}>
 
         {!isAuthenticated ? (
           <div className="flex flex-col gap-4 px-4 pb-4">
@@ -138,21 +130,10 @@ export function AccountSheet({ open, onOpenChange, slug }: AccountSheetProps) {
           </div>
         ) : (
           <div className="flex flex-col gap-5 px-4 pb-4">
-            <div className="flex flex-col gap-1.5 rounded-xl border border-border p-3">
-              <span className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <User className="size-4 text-muted-foreground" />
-                {customer?.name}
-              </span>
-              <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Phone className="size-4" />
-                {customer?.phone}
-              </span>
-              {customer?.email && (
-                <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Mail className="size-4" />
-                  {customer.email}
-                </span>
-              )}
+            <div className="flex flex-col gap-2">
+              <InfoRow icon={User} title="Nome" text={customer?.name ?? ""} />
+              <InfoRow icon={Phone} title="Telefone" text={customer?.phone ?? ""} />
+              {customer?.email && <InfoRow icon={Mail} title="E-mail" text={customer.email} />}
             </div>
 
             <Separator />
@@ -231,7 +212,6 @@ export function AccountSheet({ open, onOpenChange, slug }: AccountSheetProps) {
             </Button>
           </div>
         )}
-      </SheetContent>
-    </Sheet>
+    </SheetShell>
   )
 }
