@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 import { CategoryNotFoundError } from "../../errors/category/CategoryErrors.js";
-import { ImageUploadError, ProductImageRequiredError, ProductNotFoundError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
+import { ImageUploadError, ProductNotFoundError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 import cloudinary from "../../config/cloudinary.js";
 import type { ProductAvailability, ProductBadge } from "../../generated/prisma/enums.js";
@@ -16,6 +16,8 @@ interface UpdateProductServiceProps {
     badge?: ProductBadge | null | undefined;
     availability?: ProductAvailability | undefined;
     ingredients?: string[] | undefined;
+    // true = apaga a imagem atual do produto (ignorado se vier uma imagem nova).
+    removeImage?: boolean | undefined;
     imageBuffer?: Buffer | undefined;
     imageName?: string | undefined;
 }
@@ -32,6 +34,7 @@ class UpdateProductService {
         badge,
         availability,
         ingredients,
+        removeImage,
         imageBuffer,
         imageName
     }: UpdateProductServiceProps) {
@@ -74,14 +77,6 @@ class UpdateProductService {
         const effectiveBasePrice = basePrice === undefined ? product.basePrice : basePrice;
         if (!categoryHasSizes && (effectiveBasePrice === undefined || effectiveBasePrice === null)) {
             throw new ProductPriceRequiredError();
-        }
-
-        // Saindo de "balcao" (ou já fora dele) o produto aparece no storefront,
-        // que exige imagem — ou já existe uma, ou vem uma nova neste update.
-        const effectiveAvailability = availability ?? product.availability;
-        const hasNewImage = Boolean(imageBuffer && imageName);
-        if (effectiveAvailability !== "balcao" && !product.imageUrl && !hasNewImage) {
-            throw new ProductImageRequiredError();
         }
 
         let imageUrl: string | undefined;
@@ -127,7 +122,8 @@ class UpdateProductService {
                 ...(availability === undefined ? {} : { availability }),
                 // Não enviado = mantém a lista; [] = limpa.
                 ...(ingredients === undefined ? {} : { ingredients }),
-                ...(imageUrl === undefined ? {} : { imageUrl }),
+                // Imagem nova vence; senão, "remover imagem" zera; senão, mantém.
+                ...(imageUrl !== undefined ? { imageUrl } : removeImage ? { imageUrl: null } : {}),
             },
             select: {
                 id: true,

@@ -32,14 +32,6 @@ export class ProductPriceRequiredError extends AppError {
     }
 }
 
-export class ProductImageRequiredError extends AppError {
-    constructor() {
-        super("A imagem do produto é obrigatória", 400);
-        this.name = "ProductImageRequiredError";
-        Object.setPrototypeOf(this, ProductImageRequiredError.prototype);
-    }
-}
-
 export class InvalidImageTypeError extends AppError {
     constructor() {
         super("Tipo de arquivo inválido, envie JPEG, JPG ou PNG", 400);

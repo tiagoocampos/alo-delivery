@@ -60,6 +60,7 @@ export const updateProductSchema =
             badge: z.enum(["mais_pedido", "promocao", "novo"]).nullable().optional(),
             availability: productAvailability.optional(),
             ingredients: ingredientsField,
+            removeImage: z.enum(["true", "false"], { message: "Valor inválido para remover a imagem" }).optional(),
         })
     })
 

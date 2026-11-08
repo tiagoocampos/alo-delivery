@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 import { CategoryNotFoundError } from "../../errors/category/CategoryErrors.js";
-import { ImageUploadError, ProductImageRequiredError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
+import { ImageUploadError, ProductPriceRequiredError } from "../../errors/product/ProductErrors.js";
 import prismaClient from "../../prisma/index.js";
 import cloudinary from "../../config/cloudinary.js";
 import type { ProductAvailability, ProductBadge } from "../../generated/prisma/enums.js";
@@ -58,11 +58,7 @@ class CreateProductService {
             throw new ProductPriceRequiredError();
         }
 
-        // Produto só de balcão pode ficar sem imagem (nunca vai pro storefront).
-        if ((!imageBuffer || !imageName) && availability !== "balcao") {
-            throw new ProductImageRequiredError();
-        }
-
+        // A imagem é opcional: sem ela o storefront mostra o cartão de texto.
         let imageUrl: string | null = null;
         if (imageBuffer && imageName) {
             try {

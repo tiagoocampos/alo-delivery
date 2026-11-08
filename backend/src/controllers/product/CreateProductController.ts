@@ -1,16 +1,10 @@
 import { Request, Response } from 'express';
 import { CreateProductService } from '../../services/product/CreateProductService.js';
-import { ProductImageRequiredError } from '../../errors/product/ProductErrors.js';
 import { readIngredientsField } from '../../utils/ingredients.js';
 
 class CreateProductController {
     async handle(req: Request, res: Response) {
         const { name, description, basePrice, categoryId, badge, availability } = req.body;
-
-        // Produto só de balcão não aparece no storefront, então não precisa de imagem.
-        if (!req.file && availability !== "balcao") {
-            throw new ProductImageRequiredError();
-        }
 
         const createProductService = new CreateProductService();
         const product = await createProductService.execute({
