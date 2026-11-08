@@ -23,6 +23,8 @@ import { useCart } from "@/hooks/useCart"
 import { useFavorites } from "@/hooks/useFavorites"
 import { useStoreTheme } from "@/hooks/useStoreTheme"
 import { useFontsReady } from "@/hooks/useFontsReady"
+import { useBannerInfo } from "@/hooks/useBannerInfo"
+import { getStoreBranding } from "@/lib/storeBranding"
 import { useMountOnFirstOpen } from "@/hooks/useMountOnFirstOpen"
 import { getStoreMenu } from "@/services/storefront"
 import { applyTenantManifest } from "@/lib/pwaManifest"
@@ -77,6 +79,9 @@ function StorefrontContent({ slug }: { slug: string }) {
   const { orderedIds, isFavorite, guestHintPending, acknowledgeGuestHint } = useFavorites()
   const { ready: themeReady, themeColor } = useStoreTheme(menu?.tenant ?? null)
   const fontsReady = useFontsReady()
+  // Proporção e cor das bordas do banner: lidas antes de mostrar a página, para a capa não deslocar o layout.
+  const bannerUrl = menu ? getStoreBranding(menu.tenant).bannerUrl : null
+  const banner = useBannerInfo(bannerUrl)
 
   const mountProduct = useMountOnFirstOpen(selectedProduct !== null)
   const mountCategory = useMountOnFirstOpen(selectedCategory !== null)
@@ -239,7 +244,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   // Enquanto o tema da loja (derivado da logo) e as fontes não estão prontos,
   // segue o skeleton — assim a cor e a fonte certas já aparecem na primeira
   // pintura, sem piscar nem "pular".
-  if (loading || !fontsReady || (menu && !themeReady)) {
+  if (loading || !fontsReady || (menu && (!themeReady || !banner.ready))) {
     return <MenuSkeleton />
   }
 
@@ -291,7 +296,7 @@ function StorefrontContent({ slug }: { slug: string }) {
         onOpenCart={() => setCartOpen(true)}
       />
 
-      <StoreHero tenant={menu.tenant} collapsed={returning} onViewMenu={() => scrollToId("cardapio")} />
+      <StoreHero tenant={menu.tenant} collapsed={returning} banner={banner} onViewMenu={() => scrollToId("cardapio")} />
 
       <InstallAppCard tenant={menu.tenant} slug={slug} onVisibleChange={setInstallCardVisible} />
 

@@ -4,12 +4,15 @@ import { cn } from "@/lib/utils"
 import { formatCents } from "@/lib/money"
 import { mapsUrl, whatsappUrl } from "@/lib/contact"
 import { getStoreBranding } from "@/lib/storeBranding"
+import type { BannerInfo } from "@/lib/bannerInfo"
 import type { Tenant } from "@/types"
 
 interface StoreHeroProps {
   tenant: Tenant
   // Cliente que já pediu aqui: só o botão de ver o cardápio, sem a apresentação.
   collapsed: boolean
+  // Proporção e cores de borda do banner (já lidas antes de desenhar a página).
+  banner: BannerInfo
   onViewMenu: () => void
 }
 
@@ -30,31 +33,75 @@ function trustBadges(tenant: Tenant): string[] {
   return badges
 }
 
-// O banner é um bloco próprio, na proporção 2:1. Imagem quase 2:1 (±8%) preenche
-// o bloco; muito diferente aparece inteira (sem cortar o texto que ela tenha).
-function BannerBlock({ src }: { src: string }) {
-  const [fit, setFit] = useState<"cover" | "contain">("cover")
+const NATURAL_MIN = 1.6
+const NATURAL_MAX = 3.5
+const MAX_HEIGHT = "max-h-[220px] sm:max-h-[320px]"
+
+// Capa de ponta a ponta, sem caixa nem moldura. O fundo do bloco tem a cor das
+// bordas da imagem (amostrada), então não há emenda nem faixa vazia; as pontas
+// de cima e de baixo se dissolvem no cabeçalho e no conteúdo.
+function BannerCover({ src, alt, banner }: { src: string; alt: string; banner: BannerInfo }) {
+  const { ratio, top, bottom } = banner
+  // Proporção natural quando é razoável; fora disso 2:1 recortando (nunca "contain").
+  const natural = ratio !== null && ratio >= NATURAL_MIN && ratio <= NATURAL_MAX
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pt-4">
-      <div className="aspect-2/1 overflow-hidden rounded-3xl bg-surface ring-1 ring-white/10">
+    <div
+      className="relative"
+      style={{ background: `linear-gradient(to bottom, ${top ?? "var(--brand-dark)"}, ${bottom ?? "var(--brand-dark)"})` }}
+    >
+      <div className="mx-auto w-full max-w-[960px]">
         <img
           src={src}
-          alt=""
+          alt={alt}
           fetchPriority="high"
-          onLoad={(event) => {
-            const { naturalWidth, naturalHeight } = event.currentTarget
-            const ratio = naturalHeight > 0 ? naturalWidth / naturalHeight : 2
-            setFit(ratio >= 1.85 && ratio <= 2.15 ? "cover" : "contain")
-          }}
-          className={cn("size-full", fit === "cover" ? "object-cover" : "object-contain")}
+          decoding="async"
+          width={1200}
+          height={Math.round(1200 / (natural ? ratio! : 2))}
+          style={{ aspectRatio: natural ? ratio! : 2 }}
+          className={cn("block h-auto w-full object-cover object-center", MAX_HEIGHT)}
         />
       </div>
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-4 bg-linear-to-b from-brand-dark to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-linear-to-b from-transparent to-brand-dark" />
     </div>
   )
 }
 
-export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
+// Sem banner (ou plano básico): o mesmo bloco de ponta a ponta, com o degradê
+// da marca e, se a loja puder usar logo, ela centralizada.
+function PlainCover({ logoUrl }: { logoUrl: string | null }) {
+  return (
+    <div
+      className={cn(
+        "relative isolate flex items-center justify-center overflow-hidden bg-linear-to-br from-brand-dark via-brand-dark to-surface",
+        logoUrl ? "h-40 sm:h-52" : "h-24 sm:h-32"
+      )}
+    >
+      {logoUrl && (
+        <>
+          <img
+            src={logoUrl}
+            alt=""
+            aria-hidden
+            className="absolute -right-16 -top-16 -z-10 size-80 scale-125 object-cover opacity-25 blur-2xl"
+          />
+          <img
+            src={logoUrl}
+            alt=""
+            width={112}
+            height={112}
+            fetchPriority="high"
+            className="size-24 rounded-full object-cover shadow-lg ring-4 ring-white/15 sm:size-28"
+          />
+        </>
+      )}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-b from-transparent to-brand-dark" />
+    </div>
+  )
+}
+
+export function StoreHero({ tenant, collapsed, banner, onViewMenu }: StoreHeroProps) {
   const [expanded, setExpanded] = useState(false)
   const { logoUrl, bannerUrl } = getStoreBranding(tenant)
 
@@ -77,35 +124,14 @@ export function StoreHero({ tenant, collapsed, onViewMenu }: StoreHeroProps) {
   }
 
   return (
-    <section className="relative isolate overflow-hidden bg-brand-dark text-on-dark">
+    <section className="relative isolate overflow-hidden rounded-b-[28px] bg-brand-dark text-on-dark dark:rounded-b-none">
       {bannerUrl ? (
-        <BannerBlock src={bannerUrl} />
-      ) : logoUrl ? (
-        // Sem banner: logo grande sobre o degradê do tema.
-        <>
-          <img
-            src={logoUrl}
-            alt=""
-            aria-hidden
-            className="absolute -right-16 -top-16 -z-20 size-80 scale-125 object-cover opacity-25 blur-2xl"
-          />
-          <div className="absolute inset-0 -z-10 bg-linear-to-b from-brand-dark/60 to-brand-dark" />
-          <div className="flex justify-center pt-6">
-            <img
-              src={logoUrl}
-              alt=""
-              width={112}
-              height={112}
-              fetchPriority="high"
-              className="size-28 rounded-full object-cover shadow-lg ring-4 ring-white/15"
-            />
-          </div>
-        </>
+        <BannerCover src={bannerUrl} alt={`Banner da ${tenant.name}`} banner={banner} />
       ) : (
-        <div className="absolute inset-0 -z-10 bg-linear-to-br from-brand-dark via-brand-dark to-surface" />
+        <PlainCover logoUrl={logoUrl} />
       )}
 
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pb-6 pt-5 sm:pb-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 pb-7 pt-2 sm:gap-4 sm:pb-9 sm:pt-4">
         {/* O nome da loja já está no cabeçalho: aqui só a chamada, abaixo do banner. */}
         <h1 className="font-heading text-[2rem] sm:text-5xl">
           <span className="block text-on-dark">Faça seu pedido</span>
