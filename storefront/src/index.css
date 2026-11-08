@@ -165,7 +165,7 @@
   }
   html {
     @apply font-sans;
-    scroll-padding-top: 9rem; /* cabeçalho + faixa de categorias fixos */
+    scroll-padding-top: 7.5rem; /* cabeçalho (56px) + faixa de categorias fixos */
   }
 }
 

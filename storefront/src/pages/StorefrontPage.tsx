@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from "react"
 import { useParams } from "react-router-dom"
-import { X } from "lucide-react"
 import { StoreHeader } from "@/components/StoreHeader"
+import { StoreHero } from "@/components/StoreHero"
+import { StoreInfoCards } from "@/components/StoreInfoCards"
+import { MenuTitle } from "@/components/MenuTitle"
 import { SearchBar } from "@/components/SearchBar"
 import { CategoryList } from "@/components/CategoryList"
+import { QuickFilters } from "@/components/QuickFilters"
 import { ProductList } from "@/components/ProductList"
 import { ProductDetailScreen } from "@/components/ProductDetailScreen"
 import { CategoryOrderScreen } from "@/components/CategoryOrderScreen"
-import { CartBar } from "@/components/CartBar"
+import { BottomBar } from "@/components/BottomBar"
 import { CartSheet } from "@/components/CartSheet"
 import { StoreFooter } from "@/components/StoreFooter"
 import { NavMenuSheet } from "@/components/NavMenuSheet"
@@ -18,10 +21,22 @@ import { OrderConfirmation } from "@/components/OrderConfirmation"
 import { MenuSkeleton } from "@/components/MenuSkeleton"
 import { CartProvider } from "@/context/CartContext"
 import { CustomerAuthProvider } from "@/context/CustomerAuthContext"
+import { FavoritesProvider } from "@/context/FavoritesContext"
 import { useCart } from "@/hooks/useCart"
+import { useFavorites } from "@/hooks/useFavorites"
 import { useStoreTheme } from "@/hooks/useStoreTheme"
 import { getStoreMenu } from "@/services/storefront"
 import { applyTenantManifest } from "@/lib/pwaManifest"
+import { formatCents } from "@/lib/money"
+import { scrollToId } from "@/lib/scroll"
+import { hasOrderedBefore, markOrdered } from "@/lib/storeMemory"
+import {
+  buildSearchPlaceholder,
+  getPriceCeiling,
+  getQuickFilterOptions,
+  matchesQuickFilter,
+  type QuickFilter,
+} from "@/lib/menuFilters"
 import type { Category, Order, Product, StoreMenu } from "@/types"
 
 function StorefrontContent({ slug }: { slug: string }) {
@@ -31,6 +46,9 @@ function StorefrontContent({ slug }: { slug: string }) {
 
   const [search, setSearch] = useState("")
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
+  const [quickFilter, setQuickFilter] = useState<QuickFilter>("todos")
+  // Cliente que já pediu aqui vê a apresentação da loja recolhida.
+  const [returning] = useState(() => hasOrderedBefore(slug))
 
   const [selectedProduct, setSelectedProduct] = useState<{ product: Product; categoryName: string } | null>(
     null
@@ -44,6 +62,7 @@ function StorefrontContent({ slug }: { slug: string }) {
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null)
 
   const { totalCount, subtotal } = useCart()
+  const { favoriteIds, isFavorite } = useFavorites()
   const { ready: themeReady, themeColor } = useStoreTheme(menu?.tenant ?? null)
 
   useEffect(() => {
@@ -111,10 +130,24 @@ function StorefrontContent({ slug }: { slug: string }) {
     }
   }, [menu?.tenant, slug, themeColor])
 
-  const activeCategoryName = useMemo(
-    () => menu?.categories.find((category) => category.id === activeCategoryId)?.name ?? null,
-    [menu, activeCategoryId]
+  const priceCeiling = useMemo(() => (menu ? getPriceCeiling(menu.categories) : null), [menu])
+
+  const hasFavorites = useMemo(
+    () => (menu ? menu.categories.some((category) => category.products.some((product) => favoriteIds.has(product.id))) : false),
+    [menu, favoriteIds]
   )
+
+  const quickOptions = useMemo(
+    () => (menu ? getQuickFilterOptions(menu.categories, priceCeiling, hasFavorites, formatCents) : []),
+    [menu, priceCeiling, hasFavorites]
+  )
+
+  // Se o filtro escolhido deixou de existir (ex.: removeu o último favorito), volta para "Todos".
+  const activeQuickFilter: QuickFilter = quickOptions.some((option) => option.id === quickFilter)
+    ? quickFilter
+    : "todos"
+
+  const searchPlaceholder = useMemo(() => (menu ? buildSearchPlaceholder(menu.categories) : undefined), [menu])
 
   const filteredCategories = useMemo(() => {
     if (!menu) return []
@@ -125,12 +158,14 @@ function StorefrontContent({ slug }: { slug: string }) {
       .filter((category) => activeCategoryId === null || category.id === activeCategoryId)
       .map((category) => {
         // Categorias com tamanho não têm produtos com preço próprio — o card
-        // de chamada aparece sempre, independente da busca por texto.
-        if (category.sizes.length > 0) return category
+        // de chamada aparece sempre, independente da busca por texto. Com um
+        // filtro rápido ligado, ele sai (não há o que filtrar nele).
+        if (category.sizes.length > 0) return activeQuickFilter === "todos" ? category : { ...category, products: [] }
 
         return {
           ...category,
           products: category.products.filter((product) => {
+            if (!matchesQuickFilter(activeQuickFilter, product, priceCeiling, isFavorite)) return false
             if (!query) return true
             return (
               product.name.toLowerCase().includes(query) ||
@@ -139,11 +174,11 @@ function StorefrontContent({ slug }: { slug: string }) {
           }),
         }
       })
-      .filter((category) => category.sizes.length > 0 || category.products.length > 0)
-  }, [menu, activeCategoryId, search])
+      .filter((category) => category.sizes.length > 0 ? activeQuickFilter === "todos" : category.products.length > 0)
+  }, [menu, activeCategoryId, search, activeQuickFilter, priceCeiling, isFavorite])
 
   const mostOrdered = useMemo(() => {
-    if (!menu || search.trim() || activeCategoryId !== null) return []
+    if (!menu || search.trim() || activeCategoryId !== null || activeQuickFilter !== "todos") return []
 
     return menu.categories
       .filter((category) => category.sizes.length === 0)
@@ -152,7 +187,7 @@ function StorefrontContent({ slug }: { slug: string }) {
           .filter((product) => product.badge === "mais_pedido")
           .map((product) => ({ product, categoryName: category.name }))
       )
-  }, [menu, activeCategoryId, search])
+  }, [menu, activeCategoryId, search, activeQuickFilter])
 
   // Enquanto o tema da loja (derivado da logo) não está pronto, segue o
   // skeleton — assim a cor certa já aparece na primeira pintura, sem piscar.
@@ -162,8 +197,8 @@ function StorefrontContent({ slug }: { slug: string }) {
 
   if (notFound || !menu) {
     return (
-      <div className="flex min-h-svh flex-col items-center justify-center gap-2 p-6 text-center">
-        <h1 className="font-heading text-lg font-semibold text-foreground">Loja não encontrada</h1>
+      <div className="flex min-h-svh flex-col items-center justify-center gap-2 bg-background p-6 text-center">
+        <h1 className="font-heading text-4xl text-accent-heading">Loja não encontrada</h1>
         <p className="text-sm text-muted-foreground">
           Verifique o link ou entre em contato com a loja.
         </p>
@@ -182,8 +217,15 @@ function StorefrontContent({ slug }: { slug: string }) {
     )
   }
 
+  const handleOrderCreated = (order: Order) => {
+    markOrdered(slug)
+    setCompletedOrder(order)
+  }
+
+  const filtering = search.trim() !== "" || activeCategoryId !== null || activeQuickFilter !== "todos"
+
   return (
-    <div className="flex min-h-svh flex-col pb-14">
+    <div className="flex min-h-svh flex-col">
       <StoreHeader
         tenant={menu.tenant}
         cartCount={totalCount}
@@ -191,9 +233,15 @@ function StorefrontContent({ slug }: { slug: string }) {
         onOpenCart={() => setCartOpen(true)}
       />
 
-      <main className="flex flex-1 flex-col">
-        <div className="p-4">
-          <SearchBar value={search} onChange={setSearch} />
+      <StoreHero tenant={menu.tenant} collapsed={returning} onViewMenu={() => scrollToId("cardapio")} />
+
+      <main className="bg-dots flex flex-1 flex-col pb-4">
+        {!returning && <StoreInfoCards tenant={menu.tenant} />}
+
+        <MenuTitle />
+
+        <div className="mx-auto w-full max-w-6xl px-4 pb-3">
+          <SearchBar value={search} onChange={setSearch} placeholder={searchPlaceholder} />
         </div>
 
         <CategoryList
@@ -202,22 +250,12 @@ function StorefrontContent({ slug }: { slug: string }) {
           onSelect={setActiveCategoryId}
         />
 
-        {activeCategoryName && (
-          <button
-            type="button"
-            onClick={() => setActiveCategoryId(null)}
-            className="flex items-center justify-between border-b border-border px-3 py-2 text-sm text-foreground"
-          >
-            <span className="font-medium">{activeCategoryName}</span>
-            <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              Ver tudo <X className="size-3.5" />
-            </span>
-          </button>
-        )}
+        <QuickFilters options={quickOptions} active={activeQuickFilter} onChange={setQuickFilter} />
 
         <ProductList
           categories={filteredCategories}
           mostOrdered={mostOrdered}
+          emptyMessage={filtering ? "Nenhum produto encontrado com esses filtros." : "O cardápio ainda está vazio."}
           onSelectProduct={(product, categoryName) => setSelectedProduct({ product, categoryName })}
           onSelectCategory={setSelectedCategory}
         />
@@ -225,7 +263,12 @@ function StorefrontContent({ slug }: { slug: string }) {
 
       <StoreFooter tenant={menu.tenant} />
 
-      <CartBar count={totalCount} subtotal={subtotal} onClick={() => setCartOpen(true)} />
+      <BottomBar
+        phone={menu.tenant.phone}
+        count={totalCount}
+        subtotal={subtotal}
+        onOpenCart={() => setCartOpen(true)}
+      />
 
       <ProductDetailScreen
         product={selectedProduct?.product ?? null}
@@ -242,7 +285,7 @@ function StorefrontContent({ slug }: { slug: string }) {
         deliveryFee={menu.tenant.deliveryFee}
         minimumOrderValue={menu.tenant.minimumOrderValue}
         pixKey={menu.tenant.pixKey}
-        onOrderCreated={setCompletedOrder}
+        onOrderCreated={handleOrderCreated}
       />
 
       <NavMenuSheet
@@ -275,7 +318,9 @@ export function StorefrontPage() {
   return (
     <CustomerAuthProvider slug={slug}>
       <CartProvider>
-        <StorefrontContent slug={slug} />
+        <FavoritesProvider slug={slug}>
+          <StorefrontContent slug={slug} />
+        </FavoritesProvider>
       </CartProvider>
     </CustomerAuthProvider>
   )

@@ -36,8 +36,8 @@ export function OrderConfirmation({ order, slug, effectivePlan, onNewOrder }: Or
   return (
     <div className="mx-auto flex w-full max-w-md flex-col gap-4 p-3">
       <div className="flex flex-col items-center gap-1.5 pt-4 text-center">
-        <CheckCircle2 className="size-9 text-primary" />
-        <h1 className="font-heading text-lg font-semibold text-foreground">Pedido enviado!</h1>
+        <CheckCircle2 className="size-10 text-accent-heading" />
+        <h1 className="font-heading text-4xl text-accent-heading">Pedido enviado!</h1>
         <p className="text-sm text-muted-foreground">
           A loja já recebeu seu pedido e vai confirmar em instantes.
         </p>

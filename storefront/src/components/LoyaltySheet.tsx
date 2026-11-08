@@ -73,7 +73,7 @@ export function LoyaltySheet({ open, onOpenChange, slug }: LoyaltySheetProps) {
 
           {result && (
             <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4">
-              <Award className="size-8 text-primary" />
+              <Award className="size-8 text-accent-heading" />
               <div className="flex flex-col">
                 <span className="text-lg font-semibold text-foreground">{result.points} pontos</span>
                 <span className="text-xs text-muted-foreground">

@@ -189,7 +189,7 @@ export function AccountSheet({ open, onOpenChange, slug }: AccountSheetProps) {
                       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                         <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                           {address.label || "Endereço"}
-                          {address.isDefault && <Star className="size-3.5 fill-primary text-primary" />}
+                          {address.isDefault && <Star className="size-3.5 fill-accent-heading text-accent-heading" />}
                         </span>
                         <span className="text-xs text-muted-foreground">{formatAddressLine(address)}</span>
                       </div>

@@ -87,7 +87,7 @@ export function InstallAppPage() {
   if (notFound || !tenant) {
     return (
       <div className="flex min-h-svh flex-col items-center justify-center gap-2 p-6 text-center">
-        <h1 className="font-heading text-lg font-semibold text-foreground">Loja não encontrada</h1>
+        <h1 className="font-heading text-4xl text-accent-heading">Loja não encontrada</h1>
         <p className="text-sm text-muted-foreground">Verifique o link ou entre em contato com a loja.</p>
       </div>
     )
@@ -126,7 +126,7 @@ export function InstallAppPage() {
       )}
 
       <div className="flex flex-col gap-1.5">
-        <h1 className="font-heading text-xl font-bold text-foreground">{tenant.name}</h1>
+        <h1 className="font-heading text-4xl text-foreground">{tenant.name}</h1>
         <p className="max-w-xs text-sm text-muted-foreground">
           Instale o app da {tenant.name} e peça mais rápido, direto da tela inicial do seu celular.
         </p>

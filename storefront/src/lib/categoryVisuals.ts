@@ -8,7 +8,6 @@ import {
   UtensilsCrossed,
   type LucideIcon,
 } from "lucide-react"
-import type { Category } from "@/types"
 
 const KEYWORD_ICONS: { keywords: string[]; icon: LucideIcon }[] = [
   { keywords: ["pizza"], icon: Pizza },
@@ -26,10 +25,4 @@ export function getCategoryIcon(categoryName: string): LucideIcon {
   )
 
   return match?.icon ?? UtensilsCrossed
-}
-
-// Usa a foto do primeiro produto com imagem cadastrada nessa categoria — só
-// recorre à ilustração (ícone) quando a loja ainda não tem nenhuma foto ali.
-export function getCategoryThumbnail(category: Category): string | null {
-  return category.products.find((product) => product.imageUrl)?.imageUrl ?? null
 }

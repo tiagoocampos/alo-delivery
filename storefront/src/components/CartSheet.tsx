@@ -109,6 +109,9 @@ export function CartSheet({
                   <ShoppingBag className="size-10 text-muted-foreground/50" strokeWidth={1.5} />
                   <p className="text-sm font-medium text-foreground">Seu carrinho está vazio</p>
                   <p className="text-xs text-muted-foreground">Adicione itens do cardápio para começar</p>
+                  <Button className="mt-3" onClick={() => handleClose(false)}>
+                    Ver cardápio
+                  </Button>
                 </div>
               ) : (
                 items.map((item) => (
@@ -130,7 +133,7 @@ export function CartSheet({
                         <span className="text-xs text-muted-foreground">Borda: {item.categoryCrustName}</span>
                       )}
                       {item.note && <span className="text-xs text-muted-foreground">Obs: {item.note}</span>}
-                      <span className="text-sm font-semibold text-primary">
+                      <span className="text-sm font-extrabold text-accent-heading">
                         {formatCents(item.unitPrice * item.quantity)}
                       </span>
                     </div>

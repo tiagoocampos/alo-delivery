@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react"
-import { ArrowLeft, Check, Minus, Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { Heart } from "lucide-react"
+import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
+import { AddButton, ItemModal, OptionButton, QuantityStepper, SectionTitle } from "@/components/ItemModal"
+import { modalTextareaClass } from "@/lib/modalStyles"
 import { cn } from "@/lib/utils"
 import { formatCents } from "@/lib/money"
 import { useCart } from "@/hooks/useCart"
-import { toast } from "sonner"
+import { useFavorites } from "@/hooks/useFavorites"
 import type { Product } from "@/types"
 
 interface ProductDetailScreenProps {
@@ -16,45 +17,27 @@ interface ProductDetailScreenProps {
 }
 
 export function ProductDetailScreen({ product, categoryName, onClose }: ProductDetailScreenProps) {
-  useEffect(() => {
-    if (!product) return
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose()
-    }
-
-    document.addEventListener("keydown", onKeyDown)
-    document.body.style.overflow = "hidden"
-
-    return () => {
-      document.removeEventListener("keydown", onKeyDown)
-      document.body.style.overflow = ""
-    }
-  }, [product, onClose])
-
   if (!product) return null
 
-  return (
-    <div role="dialog" aria-modal="true" className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-background">
-      <ProductDetailBody key={product.id} product={product} categoryName={categoryName} onAdded={onClose} onBack={onClose} />
-    </div>
-  )
+  return <ProductDetailBody key={product.id} product={product} categoryName={categoryName} onClose={onClose} />
 }
 
 interface ProductDetailBodyProps {
   product: Product
   categoryName: string
-  onAdded: () => void
-  onBack: () => void
+  onClose: () => void
 }
 
-function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDetailBodyProps) {
+function ProductDetailBody({ product, categoryName, onClose }: ProductDetailBodyProps) {
   const { addItem } = useCart()
+  const { isFavorite, toggleFavorite } = useFavorites()
   const [variantId, setVariantId] = useState<string | undefined>(product.variants[0]?.id)
   const [extraIds, setExtraIds] = useState<string[]>([])
   const [quantity, setQuantity] = useState(1)
   const [note, setNote] = useState("")
+  const [imageFailed, setImageFailed] = useState(false)
 
+  const favorite = isFavorite(product.id)
   const selectedVariant = product.variants.find((variant) => variant.id === variantId)
   const selectedExtras = product.extras.filter((extra) => extraIds.includes(extra.id))
   const extrasTotal = selectedExtras.reduce((sum, extra) => sum + extra.price, 0)
@@ -82,138 +65,96 @@ function ProductDetailBody({ product, categoryName, onAdded, onBack }: ProductDe
       imageUrl: product.imageUrl,
     })
     toast.success(`${product.name} adicionado ao carrinho`)
-    onAdded()
+    onClose()
   }
 
   return (
-    <>
-      <div className="sticky top-0 z-10 flex items-center gap-3 bg-brand px-2 py-2.5 text-brand-foreground">
-        <Button variant="ghost" size="icon" onClick={onBack} aria-label="Voltar" className="text-brand-foreground hover:bg-brand-foreground/10 hover:text-brand-foreground">
-          <ArrowLeft />
-        </Button>
-        <span className="truncate font-heading text-sm font-semibold">{product.name}</span>
-      </div>
-
-      {product.imageUrl && (
-        <div className="relative flex h-50 w-full items-center justify-center">
-          <img src={product.imageUrl} alt="" className="aspect-square w-50 object-cover" /></div>
-        
+    <ItemModal
+      label="Personalizar item"
+      title={product.name}
+      description={product.description}
+      onClose={onClose}
+      headerActions={
+        <button
+          type="button"
+          onClick={() => toggleFavorite(product.id)}
+          aria-pressed={favorite}
+          aria-label={favorite ? "Remover dos favoritos" : "Favoritar"}
+          className="flex size-11 items-center justify-center rounded-full text-on-dark hover:bg-white/10"
+        >
+          <Heart className={cn("size-5", favorite && "fill-current text-accent-title")} />
+        </button>
+      }
+      footer={
+        <>
+          <QuantityStepper value={quantity} onChange={setQuantity} />
+          <AddButton label="Adicionar ao pedido" shortLabel="Adicionar" price={formatCents(total)} onClick={handleAdd} />
+        </>
+      }
+    >
+      {product.imageUrl && !imageFailed && (
+        <img
+          src={product.imageUrl}
+          alt=""
+          decoding="async"
+          onError={() => setImageFailed(true)}
+          className="aspect-video max-h-44 w-full shrink-0 rounded-2xl object-cover"
+        />
       )}
 
-      <div className="flex flex-1 flex-col gap-5 p-4 pb-28">
-        <div className="flex flex-col gap-1.5">
-          <h1 className="font-heading text-xl font-bold text-foreground">{product.name}</h1>
-          {product.description && <p className="text-sm text-muted-foreground">{product.description}</p>}
-          <span className="text-lg font-bold text-primary">{formatCents(product.basePrice ?? 0)}</span>
-        </div>
+      {product.variants.length > 0 && (
+        <section className="flex flex-col gap-2" aria-label="Opções">
+          <SectionTitle>Escolha uma opção</SectionTitle>
+          <div role="radiogroup" className="flex flex-col gap-2">
+            {product.variants.map((variant) => (
+              <OptionButton
+                key={variant.id}
+                kind="radio"
+                selected={variantId === variant.id}
+                onClick={() => setVariantId(variant.id)}
+                trailing={
+                  variant.priceDelta !== 0
+                    ? `${variant.priceDelta > 0 ? "+" : ""}${formatCents(variant.priceDelta)}`
+                    : undefined
+                }
+              >
+                {variant.name}
+              </OptionButton>
+            ))}
+          </div>
+        </section>
+      )}
 
-        {product.variants.length > 0 && (
+      {product.extras.length > 0 && (
+        <section className="flex flex-col gap-2" aria-label="Adicionais">
+          <SectionTitle hint="Opcional">Adicionais</SectionTitle>
           <div className="flex flex-col gap-2">
-            <Label>Escolha uma opção</Label>
-            <div className="flex flex-col gap-2">
-              {product.variants.map((variant) => (
-                <button
-                  key={variant.id}
-                  type="button"
-                  onClick={() => setVariantId(variant.id)}
-                  className={cn(
-                    "flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors",
-                    variantId === variant.id
-                      ? "border-primary bg-accent text-accent-foreground"
-                      : "border-border text-foreground"
-                  )}
-                >
-                  <span>{variant.name}</span>
-                  {variant.priceDelta !== 0 && (
-                    <span className="text-xs text-muted-foreground">
-                      {variant.priceDelta > 0 ? "+" : ""}
-                      {formatCents(variant.priceDelta)}
-                    </span>
-                  )}
-                </button>
-              ))}
-            </div>
+            {product.extras.map((extra) => (
+              <OptionButton
+                key={extra.id}
+                kind="check"
+                selected={extraIds.includes(extra.id)}
+                onClick={() => toggleExtra(extra.id)}
+                trailing={`+${formatCents(extra.price)}`}
+              >
+                {extra.name}
+              </OptionButton>
+            ))}
           </div>
-        )}
+        </section>
+      )}
 
-        {product.extras.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <Label>Adicionais</Label>
-            <div className="flex flex-col gap-2">
-              {product.extras.map((extra) => (
-                <button
-                  key={extra.id}
-                  type="button"
-                  onClick={() => toggleExtra(extra.id)}
-                  className={cn(
-                    "flex items-center justify-between rounded-lg border px-3 py-2.5 text-sm transition-colors",
-                    extraIds.includes(extra.id)
-                      ? "border-primary bg-accent text-accent-foreground"
-                      : "border-border text-foreground"
-                  )}
-                >
-                  <span className="flex items-center gap-2">
-                    <span
-                      aria-hidden
-                      className={cn(
-                        "flex size-4 items-center justify-center rounded border",
-                        extraIds.includes(extra.id)
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-border"
-                      )}
-                    >
-                      {extraIds.includes(extra.id) && <Check className="size-3" strokeWidth={3} />}
-                    </span>
-                    {extra.name}
-                  </span>
-                  <span className="text-xs text-muted-foreground">+{formatCents(extra.price)}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="note">Observação (opcional)</Label>
-          <Textarea
-            id="note"
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            placeholder="Ex: sem cebola, ponto da carne, etc."
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <Label>Quantidade</Label>
-          <div className="flex items-center gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              aria-label="Diminuir quantidade"
-            >
-              <Minus />
-            </Button>
-            <span className="w-6 text-center text-sm font-medium">{quantity}</span>
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              onClick={() => setQuantity((q) => q + 1)}
-              aria-label="Aumentar quantidade"
-            >
-              <Plus />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="fixed inset-x-0 bottom-0 border-t border-border bg-background p-3">
-        <Button onClick={handleAdd} size="lg" className="w-full">
-          Adicionar · {formatCents(total)}
-        </Button>
-      </div>
-    </>
+      <section className="flex flex-col gap-2">
+        <SectionTitle hint="Opcional">Observação</SectionTitle>
+        <Textarea
+          id="note"
+          value={note}
+          onChange={(event) => setNote(event.target.value)}
+          placeholder="Ex: sem cebola, ponto da carne, etc."
+          aria-label="Observação do item"
+          className={modalTextareaClass}
+        />
+      </section>
+    </ItemModal>
   )
 }
