@@ -1,6 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 import uploadConfig from "./config/multer.js";
+import { importUpload } from "./config/importMulter.js";
 
 import { validateSchema } from "./middlewares/ValidateSchema.js";
 import { authenticate } from "./middlewares/Authenticate.js";
@@ -9,7 +10,7 @@ import { requireActiveSubscription } from "./middlewares/RequireActiveSubscripti
 import { authorize } from "./middlewares/Authorize.js";
 import { authenticateCustomer } from "./middlewares/AuthenticateCustomer.js";
 import { optionalAuthenticateCustomer } from "./middlewares/OptionalAuthenticateCustomer.js";
-import { authRateLimiter, customerAccountRateLimiter, publicOrderRateLimiter, storeSearchRateLimiter } from "./middlewares/RateLimit.js";
+import { authRateLimiter, customerAccountRateLimiter, productImportRateLimiter, publicOrderRateLimiter, storeSearchRateLimiter } from "./middlewares/RateLimit.js";
 
 import { RegisterTenantController } from "./controllers/tenant/RegisterTenantController.js";
 import { LoginTenantController } from "./controllers/tenant/LoginTenantController.js";
@@ -67,6 +68,8 @@ import { UpdateAddressController } from "./controllers/customer/UpdateAddressCon
 import { DeleteAddressController } from "./controllers/customer/DeleteAddressController.js";
 import { ListCustomerOrdersController } from "./controllers/customer/ListCustomerOrdersController.js";
 import { CancelCustomerOrderController } from "./controllers/customer/CancelCustomerOrderController.js";
+import { PreviewProductImportController } from "./controllers/product/PreviewProductImportController.js";
+import { ConfirmProductImportController } from "./controllers/product/ConfirmProductImportController.js";
 import { ListFavoritesController } from "./controllers/customer/ListFavoritesController.js";
 import { AddFavoriteController } from "./controllers/customer/AddFavoriteController.js";
 import { RemoveFavoriteController } from "./controllers/customer/RemoveFavoriteController.js";
@@ -160,6 +163,7 @@ import {
     removeFavoriteSchema,
     mergeFavoritesSchema
 } from "./schemas/customerSchema.js";
+import { previewProductImportSchema, confirmProductImportSchema } from "./schemas/productImportSchema.js";
 import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController.js";
 import { UpdateCategoryController } from "./controllers/category/UpdateCategoryController.js";
 
@@ -242,6 +246,11 @@ router.delete("/categories/:id/sizes/:sizeId", authenticate, requireTenant, requ
 router.post("/categories/:id/crusts", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(createCategoryCrustSchema), new CreateCategoryCrustController().handle);
 router.put("/categories/:id/crusts/:crustId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(updateCategoryCrustSchema), new UpdateCategoryCrustController().handle);
 router.delete("/categories/:id/crusts/:crustId", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(deleteCategoryCrustSchema), new DeleteCategoryCrustController().handle);
+
+// Importar/atualizar cardápio com IA (plano completo). O preview chama o Gemini e compara com o
+// cadastro sem gravar nada; o confirm grava em lote, sem IA.
+router.post("/products/import/preview", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), productImportRateLimiter, importUpload.single("file"), validateSchema(previewProductImportSchema), new PreviewProductImportController().handle);
+router.post("/products/import/confirm", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), validateSchema(confirmProductImportSchema), new ConfirmProductImportController().handle);
 
 router.post("/products", authenticate, requireTenant, requireActiveSubscription, authorize("store_owner"), upload.single("file"), validateSchema(createProductSchema), new CreateProductController().handle);
 router.get("/products", authenticate, requireTenant, requireActiveSubscription, validateSchema(listProductsSchema), new ListProductsController().handle);

@@ -32,3 +32,15 @@ export const customerAccountRateLimiter = rateLimit({
     legacyHeaders: false,
     message: { error: "Muitas ações em pouco tempo. Aguarde um instante." }
 });
+
+// Importação de cardápio com IA: cada chamada custa uma consulta ao Gemini,
+// então o limite é por loja (tenant do JWT), não por IP.
+export const productImportRateLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    limit: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (req) => `import:${req.auth?.tenantId ?? "anon"}`,
+    validate: { keyGeneratorIpFallback: false },
+    message: { error: "Você já importou muitos cardápios nesta hora. Tente novamente mais tarde." }
+});
